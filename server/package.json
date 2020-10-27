@@ -1,7 +1,7 @@
 {
-  "name": "parrai-n-7",
+  "name": "parrain7",
   "description": "Application de parrainage des 1ère année de l'ENSEEIHT",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "homepage": "",
   "private": true,
   "main": "src",
