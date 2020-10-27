@@ -17,6 +17,9 @@ export default function (app: Application): Knex {
                 table.string('email').unique().notNullable();
                 table.string('password').notNullable();
 
+                table.string('firstname').notNullable();
+                table.string('lastname').notNullable();
+
                 table.boolean('isGodfather').notNullable();
                 table.boolean('isAdmin').notNullable();
 
