@@ -8,16 +8,19 @@ import Knex from 'knex';
 export default function (app: Application): Knex {
   const db: Knex = app.get('knexClient');
   const tableName = 'users';
-  
+
   db.schema.hasTable(tableName).then(exists => {
     if(!exists) {
       db.schema.createTable(tableName, table => {
         table.increments('id');
-      
-        table.string('email').unique();
-        table.string('password');
-      
-      
+
+        table.string('email').unique().notNullable();
+        table.string('password').notNullable();
+
+        table.boolean('isGodfather').notNullable();
+        table.boolean('isAdmin').notNullable();
+
+
       })
         .then(() => console.log(`Created ${tableName} table`))
         .catch(e => console.error(`Error creating ${tableName} table`, e));
