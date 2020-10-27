@@ -32,7 +32,7 @@
   sudo systemctl enable postgresql
   ```
 
-- Optionnel : Déclarer compte utilisateur en tant qu'admin de la DB
+- Déclarer compte utilisateur en tant qu'admin de la DB
 
   ```bash
   sudo -u postgres -s
