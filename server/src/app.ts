@@ -10,13 +10,13 @@ import express from '@feathersjs/express';
 import socketio from '@feathersjs/socketio';
 
 
-import { Application } from './declarations';
+import {Application} from './declarations';
 import logger from './logger';
 import middleware from './middleware';
 import services from './services';
 import appHooks from './app.hooks';
 import channels from './channels';
-import { HookContext as FeathersHookContext } from '@feathersjs/feathers';
+import {HookContext as FeathersHookContext} from '@feathersjs/feathers';
 import authentication from './authentication';
 import knex from './knex';
 // Don't remove this comment. It's needed to format import lines nicely.
@@ -28,12 +28,12 @@ export type HookContext<T = any> = { app: Application } & FeathersHookContext<T>
 app.configure(configuration());
 // Enable security, CORS, compression, favicon and body parsing
 app.use(helmet({
-  contentSecurityPolicy: false
+    contentSecurityPolicy: false
 }));
 app.use(cors());
 app.use(compress());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 app.use(favicon(path.join(app.get('public'), 'favicon.ico')));
 // Host the public folder
 app.use('/', express.static(app.get('public')));
@@ -54,7 +54,7 @@ app.configure(channels);
 
 // Configure a middleware for 404s and the error handler
 app.use(express.notFound());
-app.use(express.errorHandler({ logger } as any));
+app.use(express.errorHandler({logger} as any));
 
 app.hooks(appHooks);
 

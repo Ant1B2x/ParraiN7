@@ -2,7 +2,7 @@
 //
 // See http://knexjs.org/
 // for more of what you can do here.
-import { Application } from '../declarations';
+import {Application} from '../declarations';
 import Knex from 'knex';
 
 export default function (app: Application): Knex {
@@ -10,7 +10,7 @@ export default function (app: Application): Knex {
     const tableName = 'answers';
 
     db.schema.hasTable(tableName).then(exists => {
-        if(!exists) {
+        if (!exists) {
             db.schema.createTable(tableName, table => {
                 table.uuid('userId').references('id').inTable('users');
                 table.uuid('questionId').references('id').inTable('questions');
