@@ -21,7 +21,7 @@ export default function (app: Application): Knex {
                 table.string('lastname');
 
                 table.boolean('isGodfather').notNullable();
-                table.boolean('isAdmin').notNullable();
+                table.boolean('isAdmin').defaultTo(0).notNullable();
 
 
             })
