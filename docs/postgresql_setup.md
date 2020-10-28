@@ -6,7 +6,7 @@
 
   ```shell
   # sudo pacman -Syu postgresql postgresql-libs
-  sudo apt install postgresql postgresql-libs
+  sudo apt install postgresql postgresql-contrib
   ```
 
 - Créer dossier `data`

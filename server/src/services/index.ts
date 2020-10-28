@@ -5,5 +5,5 @@ import questions from './questions/questions.service'
 
 export default function (app: Application): void {
     app.configure(users);
-    app.configure(questions)
+    app.configure(questions);
 }
