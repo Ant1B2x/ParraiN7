@@ -28,7 +28,7 @@ build/Release
 .lock-wscript
 
 # IDEs and editors (shamelessly copied from @angular/cli's .gitignore)
-*/.idea
+*.idea
 .project
 .classpath
 .c9/
@@ -37,7 +37,7 @@ build/Release
 *.sublime-workspace
 
 # IDE - VSCode
-.vscode/*
+*.vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
