@@ -29,9 +29,6 @@ export class Users extends Service<UserData> {
     }
 
     async create(data: UserData, params? : Params) {
-        // user isn't admin by default
-        data = this.unsetAdmin(data);
-
         return super.create(data, params);
     }
 
