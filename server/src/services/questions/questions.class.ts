@@ -1,7 +1,11 @@
 import {Service, KnexServiceOptions} from 'feathers-knex';
 import {Application} from '../../declarations';
 
-export class Questions extends Service {
+interface QuestionData {
+    content: string;
+}
+
+export class Questions extends Service<QuestionData> {
     //eslint-disable-next-line @typescript-eslint/no-unused-vars
     constructor(options: Partial<KnexServiceOptions>, app: Application) {
         super({
