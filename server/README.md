@@ -1,4 +1,4 @@
-# parrai-n-7
+# ParraiN7
 
 > Application de parrainage des 1ère année de l&#39;ENSEEIHT
 

@@ -20,8 +20,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="52c93867-eecd-427a-97e7-97fbab392713" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/server/src/services/users/users.class.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/services/users/users.class.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/services/users/users.hooks.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/services/users/users.hooks.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/client/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/server/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,7 +64,7 @@
     <property name="node.js.selected.package.standard" value="" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="Errors" />
-    <property name="ts.external.directory.path" value="$PROJECT_DIR$/server/node_modules/typescript/lib" />
+    <property name="ts.external.directory.path" value="$PROJECT_DIR$/client/node_modules/typescript/lib" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RunManager" selected="npm.dev">
@@ -114,7 +116,7 @@
       <workItem from="1603816042236" duration="5350000" />
       <workItem from="1603900110354" duration="2375000" />
       <workItem from="1603907993301" duration="5500000" />
-      <workItem from="1603963327007" duration="4075000" />
+      <workItem from="1603963327007" duration="4716000" />
     </task>
     <servers />
   </component>
