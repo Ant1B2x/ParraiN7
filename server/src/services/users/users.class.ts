@@ -5,7 +5,6 @@ import {Params} from '@feathersjs/feathers';
 const institutionalEmail = '@etu.toulouse-inp.fr'
 
 interface UserData {
-    _id?: number;
     email: string;
     password: string;
     firstname?: string;
@@ -33,6 +32,8 @@ export class Users extends Service<UserData> {
 
     create(data: UserData, params? : Params) {
         data = this.unsetAdmin(data); // user isn't admin by default
+
+        console.log("user created", data);
 
         return super.create(data, params);
     }

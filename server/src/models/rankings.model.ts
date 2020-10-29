@@ -14,7 +14,6 @@ export default function (app: Application): Knex {
                 table.uuid('godfatherId').references('id').inTable('users');
                 table.uuid('godsonId').references('id').inTable('users');
                 table.primary(['godfatherId', 'godsonId']);
-
                 table.integer('rank').notNullable();
             })
                 .then(() => console.log(`Created ${tableName} table`))
