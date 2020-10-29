@@ -5,13 +5,23 @@ import * as local from '@feathersjs/authentication-local';
 const {authenticate} = feathersAuthentication.hooks;
 const {hashPassword, protect} = local.hooks;
 
+const institutionalEmailRegexp = RegExp('^.*@etu\.toulouse-inp\.fr');
+function check_email(email : string) : void {
+    if (!institutionalEmailRegexp.test(email))
+        throw new Error('Email does not respect instutional email regexp');
+}
+
+/*function unset_admin(isAdmin : boolean) : void {
+    isAdmin = false;
+}*/
+
 export default {
     before: {
         // all: [authenticate('jwt')], TODO : implement authentication
         all: [],
         find: [],
         get: [],
-        create: [hashPassword('password')],
+        create: [check_email('email'), hashPassword('password')],
         update: [hashPassword('password')],
         patch: [hashPassword('password')],
         remove: []

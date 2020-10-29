@@ -2,8 +2,6 @@ import {Service, KnexServiceOptions} from 'feathers-knex';
 import {Application} from '../../declarations';
 import {Params} from '@feathersjs/feathers';
 
-const institutionalEmail = '@etu.toulouse-inp.fr'
-
 interface UserData {
     email: string;
     password: string;
@@ -30,10 +28,9 @@ export class Users extends Service<UserData> {
         return {...data, 'isAdmin':false};
     }
 
-    create(data: UserData, params? : Params) {
-        data = this.unsetAdmin(data); // user isn't admin by default
-
-        console.log("user created", data);
+    async create(data: UserData, params? : Params) {
+        // user isn't admin by default
+        data = this.unsetAdmin(data);
 
         return super.create(data, params);
     }
