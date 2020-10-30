@@ -1,28 +1,11 @@
 import * as feathersAuthentication from '@feathersjs/authentication';
 import * as local from '@feathersjs/authentication-local';
-import {HookContext} from "@feathersjs/feathers";
+import checkEmail from '../../hooks/users/check-email';
+import unsetAdmin from '../../hooks/users/unset-admin';
 // Don't remove this comment. It's needed to format import lines nicely.
 
 const {authenticate} = feathersAuthentication.hooks;
 const {hashPassword, protect} = local.hooks;
-
-// check that user has entered an institutional email
-const institutionalEmailRegexp = RegExp('^.*@etu\.toulouse-inp\.fr');
-const checkEmail = () => {
-    return async (context : HookContext) => {
-        if (!institutionalEmailRegexp.test(context.data['email']))
-            throw new Error('Email does not respect institutional email regexp');
-
-        return context;
-    }
-}
-
-// a user shouldn't be admin by default
-const unsetAdmin = () => {
-    return async (context : HookContext) => {
-        context.data['isAdmin'] = false;
-    }
-}
 
 export default {
     before: {
