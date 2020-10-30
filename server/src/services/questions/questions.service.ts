@@ -22,7 +22,7 @@ export default function (app: Application): void {
     app.use('/questions', new Questions(options, app));
 
     // Get our initialized service so that we can register hooks
-    const service = app.service('users');
+    const service = app.service('questions');
 
     service.hooks(hooks);
 }

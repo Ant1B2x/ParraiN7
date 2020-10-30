@@ -7,7 +7,7 @@ interface UserData {
     firstname?: string;
     lastname?: string;
     isGodFather: boolean;
-    isAdmin: boolean;
+    isAdmin?: boolean;
 }
 
 export class Users extends Service<UserData> {
