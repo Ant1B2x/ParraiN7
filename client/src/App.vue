@@ -1,12 +1,19 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
+    <MenuParrain7/>
     <router-view/>
   </div>
 </template>
+
+<script>
+import MenuParrain7 from '@/components/MenuParrain7.vue';
+
+export default {
+  components: {
+    MenuParrain7
+  }
+}
+</script>
 
 <style>
 #app {
