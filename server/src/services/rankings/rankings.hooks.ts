@@ -1,23 +1,8 @@
+import * as feathersAuthentication from '@feathersjs/authentication';
 import {HookContext} from "@feathersjs/feathers";
-import Knex from 'knex'
-import app from "../../app";
+// Don't remove this comment. It's needed to format import lines nicely.
 
-// check that the godfather doesn't already gave the same rank to a godson
-const checkUniqueRank = () => {
-    return async (context : HookContext) => {
-        const db: Knex = app.get('knexClient');
-        const godfatherId: number = context.data['godfatherId'];
-        const rank: number = context.data['rank'];
-        const lines = db.from('rankings').select('godfatherId')
-            .where({godfatherId : godfatherId}).andWhere({rank : rank});
-
-        if (lines)
-            throw Error('Godfather already voted for a godson with the same rank')
-
-
-        return context;
-    }
-}
+const {authenticate} = feathersAuthentication.hooks;
 
 // check that a rank is between 1 and 5
 const checkRankRange = () => {
@@ -31,7 +16,7 @@ const checkRankRange = () => {
 
 export default {
   before: {
-    all: [],
+    all: [authenticate('jwt')],
     find: [],
     get: [],
     create: [checkRankRange()],

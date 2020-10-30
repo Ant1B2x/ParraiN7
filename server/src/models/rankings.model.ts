@@ -8,12 +8,13 @@ import {Application} from '../declarations';
 export default function (app: Application): Knex {
     const db: Knex = app.get('knexClient');
     const tableName = 'rankings';
+
     db.schema.hasTable(tableName).then(exists => {
         if (!exists) {
             db.schema.createTable(tableName, table => {
                 table.increments('id');
-                table.uuid('godfatherId').references('id').inTable('users');
-                table.uuid('godsonId').references('id').inTable('users');
+                table.integer('godfatherId').notNullable();
+                table.integer('godsonId').notNullable();
                 table.unique(['godfatherId', 'godsonId']);
                 table.integer('rank').notNullable();
             })
@@ -21,7 +22,6 @@ export default function (app: Application): Knex {
                 .catch(e => console.error(`Error creating ${tableName} table`, e));
         }
     });
-
 
     return db;
 }

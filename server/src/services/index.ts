@@ -10,4 +10,5 @@ export default function (app: Application): void {
     app.configure(questions);
     app.configure(answers);
     app.configure(rankings);
+
 }

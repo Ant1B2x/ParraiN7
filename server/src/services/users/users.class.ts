@@ -1,6 +1,5 @@
 import {Service, KnexServiceOptions} from 'feathers-knex';
 import {Application} from '../../declarations';
-import {Params} from '@feathersjs/feathers';
 
 interface UserData {
     email: string;
@@ -19,18 +18,4 @@ export class Users extends Service<UserData> {
             name: 'users'
         });
     }
-
-    setAdmin(data: UserData) : UserData {
-        return {...data, 'isAdmin':true};
-    }
-
-    unsetAdmin(data: UserData) : UserData {
-        return {...data, 'isAdmin':false};
-    }
-
-    async create(data: UserData, params? : Params) {
-        return super.create(data, params);
-    }
-
-
 }
