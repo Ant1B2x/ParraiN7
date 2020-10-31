@@ -2,9 +2,10 @@ import {Service, KnexServiceOptions} from 'feathers-knex';
 import {Application} from '../../declarations';
 
 interface RankingData {
-    godfatherId : number;
-    godsonId : number;
-    rank? : number;
+    id?: number;
+    godfatherId: number;
+    godsonId: number;
+    rank?: number;
 }
 
 export class Rankings extends Service<RankingData> {

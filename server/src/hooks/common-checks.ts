@@ -16,10 +16,3 @@ export const checkGodfather = (context: HookContext): boolean => {
 export const checkGodson = (context: HookContext): boolean => {
     return !checkGodfather(context);
 };
-
-export const checkLoggedUser = (context: HookContext): boolean => {
-    const loggedUser: UserData = context.params.user;
-    const currentUser: UserData = context.data;
-
-    return loggedUser.email === currentUser.email;
-};

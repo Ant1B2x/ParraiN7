@@ -2,6 +2,7 @@ import { Service, KnexServiceOptions } from 'feathers-knex';
 import { Application } from '../../declarations';
 
 interface AnswerData {
+    id?: number;
     userId: number;
     questionId: number;
     content?: string;
