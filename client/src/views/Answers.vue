@@ -2,7 +2,7 @@
     <div class="questionArea">
         <!-- Afficher questions existantes -->
         <div class="questionList">
-            <div class="card hover-translate-y-n10 hover-shadow-lg" v-for="answer in answers" :key="answer">
+            <div class="card hover-translate-y-n10 hover-shadow-lg" v-for="answer in answers" :key="answer.question.idQuestion">
                 <div class="card-body">
                     <div class="pb-4">
                         <div class="icon bg-dark text-white rounded-circle icon-shape shadow">
@@ -22,10 +22,8 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1">¿</span>
                                 </div>
-                                <label>
-                                    <textarea type="text" class="form-control" placeholder="Votre réponse"
-                                    v-model="answer.content"></textarea>
-                                </label>
+                                <textarea type="text" class="form-control" placeholder="Votre réponse"
+                                v-model="answer.content"></textarea>
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="basic-addon2">?</span>
                                 </div>
