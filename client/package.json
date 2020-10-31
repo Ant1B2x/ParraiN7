@@ -17,7 +17,8 @@
     "vue-class-component": "^7.2.3",
     "vue-feather-icons": "^5.1.0",
     "vue-property-decorator": "^8.4.2",
-    "vue-router": "^3.2.0"
+    "vue-router": "^3.2.0",
+    "webpack": "^4.44.0"
   },
   "devDependencies": {
     "@types/vue-feather-icons": "^5.0.1",
@@ -31,6 +32,8 @@
     "@vue/eslint-config-typescript": "^5.0.2",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
+    "node-sass": "^5.0.0",
+    "sass-loader": "^10.0.4",
     "typescript": "~3.9.3",
     "vue-template-compiler": "^2.6.11"
   },

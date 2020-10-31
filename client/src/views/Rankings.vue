@@ -20,6 +20,11 @@
         <!-- Ligne séparatrice -->
         <hr class="separator"/>
 
+        <div v-if="selectedPoulain">
+            <h2 style="color: #152c5b;">{{selectedPoulain.name}}</h2>
+            <Rating :grade="selectedPoulain.rank" :maxStars="5" :hasCounter="true" @updatedStars="changeRating"/>
+        </div>
+
         <!-- Afficher questions existantes -->
         <div class="questionList" v-if="selectedPoulain">
             <div class="card hover-translate-y-n10 hover-shadow-lg" v-for="answer in selectedPoulain.answers"
@@ -113,24 +118,32 @@
 import {Component, Vue} from 'vue-property-decorator';
 import {Answer} from "@/views/Answers.vue";
 import {Question} from "@/views/Questions.vue";
+import Rating from "@/components/Rating.vue"
 
 export class Poulain {
     idUser: number;
     name: string;
+    rank: number;
     answers: Answer[];
 
-    constructor(idQuestion: number, name: string, answers: Answer[]) {
+    constructor(idQuestion: number, name: string, rank: number, answers: Answer[]) {
         this.idUser = idQuestion;
         this.name = name;
+        this.rank = rank;
         this.answers = answers;
     }
 }
 
-@Component
+@Component({
+    components: {
+        Rating
+    }
+})
 export default class Rankins extends Vue {
     poulains = [
         new Poulain(1,
             'Moi',
+            1,
             [
                 new Answer('Moi', new Question(1, 'Yvan', 'Comment tu t\'appelles ?'), 'Je suis moi, et toi ?'),
                 new Answer('Moi', new Question(2, 'Antoine', 'Veux-tu niquer ta mère ?'), 'Lui veux bien, mais il n\'est pas là.'),
@@ -139,6 +152,7 @@ export default class Rankins extends Vue {
         ),
         new Poulain(2,
             'Toi',
+            2,
             [
                 new Answer('Toi', new Question(1, 'Yvan', 'Comment tu t\'appelles ?'), 'Eh bien je suis toi ! Commennt ça va ?'),
                 new Answer('Toi', new Question(2, 'Antoine', 'Veux-tu niquer ta mère ?'), 'Ne demande pas, ça ...'),
@@ -147,6 +161,7 @@ export default class Rankins extends Vue {
         ),
         new Poulain(3,
             'Ça',
+            3,
             [
                 new Answer('Ça', new Question(1, 'Yvan', 'Comment tu t\'appelles ?'), 'Eh bien, je vais bien, merci de demander.'),
                 new Answer('Ça', new Question(2, 'Antoine', 'Veux-tu niquer ta mère ?'), 'Toi, tu veux ?'),
@@ -158,15 +173,19 @@ export default class Rankins extends Vue {
     selectedPoulain: Poulain = this.poulains[0];
 
     nextPoulain() {
-        console.log(this.poulains.indexOf(this.selectedPoulain));
         this.selectedPoulain = this.poulains[(this.poulains.indexOf(this.selectedPoulain) + 1) % this.poulains.length];
-        console.log(this.poulains.indexOf(this.selectedPoulain));
     }
 
     previousPoulain() {
-        console.log(this.poulains.indexOf(this.selectedPoulain));
-        this.selectedPoulain = this.poulains[(this.poulains.indexOf(this.selectedPoulain) - 1) % this.poulains.length];
-        console.log(this.poulains.indexOf(this.selectedPoulain));
+        this.selectedPoulain = this.poulains[this.mod(this.poulains.indexOf(this.selectedPoulain) - 1, this.poulains.length)];
+    }
+
+    mod(n: number, m: number) {
+        return ((n % m) + m) % m;
+    }
+
+    changeRating(e: number) {
+        this.selectedPoulain.rank = e;
     }
 }
 </script>
