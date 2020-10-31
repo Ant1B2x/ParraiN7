@@ -8,8 +8,8 @@ const institutionalEmailRegexp = RegExp('^.*@etu\.toulouse-inp\.fr');
 export default (options = {}): Hook => {
     return async (context: HookContext): Promise<HookContext> => {
         if (!institutionalEmailRegexp.test(context.data['email']))
-            throw new Error('Email does not respect institutional email regexp');
+            throw new Error('Email does not respect institutional email regexp!');
 
         return context;
-    }
+    };
 };

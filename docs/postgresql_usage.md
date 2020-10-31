@@ -4,9 +4,15 @@
 
 - Lancer le service si il ne l'est pas déjà
 
-  ```bash
+  ```shell
   sudo systemctl status postgresql
   sudo systemctl start postgresql
+  ```
+
+- Exécuter un script SQL dans la base
+
+  ```shell
+  psql parrain7 < <script.sql>
   ```
 
 - Se connecter à la base `parrain7`
@@ -15,5 +21,5 @@
   psql parrain7
   ```
 
-Une fois ici, vous aurez une console permettant de saisir toutes les commandes SQL (`INSERT`, `SELECT`, `DROP`, etc...).
+  Une fois ici, vous aurez une console permettant de saisir toutes les commandes SQL (`INSERT`, `SELECT`, `DROP`, etc...).
 
