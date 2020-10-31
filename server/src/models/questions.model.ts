@@ -13,6 +13,7 @@ export default function (app: Application): Knex {
         if (!exists) {
             db.schema.createTable(tableName, table => {
                 table.increments('id');
+                table.uuid('author').references('id').inTable('users');
                 table.string('content').notNullable();
             })
                 .then(() => console.log(`Created ${tableName} table`))
