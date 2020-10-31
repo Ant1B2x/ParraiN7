@@ -42,7 +42,7 @@
         <!-- Afficher questions existantes -->
         <div class="questionList">
             <div class="card hover-translate-y-n10 hover-shadow-lg" v-for="question in filteredList"
-                 :key="question.content">
+                 :key="question.idQuestion">
                 <div class="card-body">
                     <div class="pb-4">
                         <div class="icon bg-dark text-white rounded-circle icon-shape shadow">
@@ -114,11 +114,13 @@
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator';
 
-class Question {
+export class Question {
+    idQuestion: number;
     author: string;
     content: string;
 
-    constructor(author: string, content: string) {
+    constructor(idQuestion: number, author: string, content: string) {
+        this.idQuestion = idQuestion;
         this.author = author;
         this.content = content;
     }
@@ -127,9 +129,9 @@ class Question {
 @Component
 export default class Questions extends Vue {
     questions = [
-        new Question('Yvan', 'Comment tu t\'appelles ?'),
-        new Question('Antoine', 'Veux-tu niquer ta mère ?'),
-        new Question('Esteban', 'Quel âge as-tu ?'),
+        new Question(1, 'Yvan', 'Comment tu t\'appelles ?'),
+        new Question(2, 'Antoine', 'Veux-tu niquer ta mère ?'),
+        new Question(3, 'Esteban', 'Quel âge as-tu ?'),
     ]
 
     filteredList: Question[] = this.questions;
@@ -139,13 +141,15 @@ export default class Questions extends Vue {
 
     filterByQuestion() {
         this.filteredList = this.questions.filter(post =>
-            post.content.toLowerCase().includes(this.searchByQuestion.toLowerCase())
+            post.content.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                .includes(this.searchByQuestion.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))
         )
     }
 
     filterByAuthor() {
         this.filteredList = this.questions.filter(post =>
-            post.author.toLowerCase().includes(this.searchByAuthor.toLowerCase())
+            post.author.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                .includes(this.searchByAuthor.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))
         )
     }
 
