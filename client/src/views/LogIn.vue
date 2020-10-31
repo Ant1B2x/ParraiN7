@@ -16,7 +16,7 @@
                                 </div>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text"><i data-feather="user"></i></span>
+                                        <span class="input-group-text"><font-awesome-icon icon="user" /></span>
                                     </div>
                                     <input type="email" class="form-control" id="input-email" placeholder="name@etu.toulouse-inp.fr">
                                 </div>
@@ -32,7 +32,7 @@
                                 </div>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text"><i data-feather="key"></i></span>
+                                        <span class="input-group-text"><font-awesome-icon icon="key" /></span>
                                     </div>
                                     <input type="password" class="form-control" id="input-password" placeholder="Mot de passe">
                                 </div>
