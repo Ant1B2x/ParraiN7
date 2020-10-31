@@ -2,7 +2,7 @@
     <div class="questionArea">
         <!-- Afficher questions existantes -->
         <div class="questionList">
-            <div class="card hover-translate-y-n10 hover-shadow-lg" v-for="question in questions" :key="question">
+            <div class="card hover-translate-y-n10 hover-shadow-lg" v-for="answer in answers" :key="answer">
                 <div class="card-body">
                     <div class="pb-4">
                         <div class="icon bg-dark text-white rounded-circle icon-shape shadow">
@@ -10,9 +10,9 @@
                         </div>
                     </div>
                     <div class="pt-2 pb-3">
-                        <h5>{{ question.author }}</h5>
+                        <h5>{{ /*answer.question.author*/ }} ¿?¿ </h5>
                         <p class="text-muted mb-0">
-                            {{ question.content }}
+                            {{ answer.question.content }}
                         </p>
                     </div>
 
@@ -22,7 +22,8 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1">¿</span>
                                 </div>
-                                <textarea type="text" class="form-control" placeholder="Votre réponse"></textarea>
+                                <textarea type="text" class="form-control" placeholder="Votre réponse"
+                                v-model="answer.content"></textarea>
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="basic-addon2">?</span>
                                 </div>
@@ -83,13 +84,26 @@
 
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator';
+import {Question} from "@/views/Questions.vue";
+
+class Answer {
+    author: string;
+    question: Question;
+    content: string;
+
+    constructor(author: string, question: Question, content: string) {
+        this.author = author;
+        this.question = question;
+        this.content = content;
+    }
+}
 
 @Component
 export default class Answers extends Vue {
-    questions = [
-        {author: 'Yvan', content: 'Comment tu t\'appelles ?'},
-        {author: 'Antoine', content: 'Veux-tu niquer ta mère ?'},
-        {author: 'Esteban', content: 'Quel âge as-tu ?'},
+    answers = [
+        new Answer('Moi', new Question(1, 'Yvan', 'Comment tu t\'appelles ?'), ''),
+        new Answer('Moi', new Question(2, 'Antoine', 'Veux-tu niquer ta mère ?'), ''),
+        new Answer('Moi', new Question(3, 'Esteban', 'Quel âge as-tu ?'), 'On ne demande pas ça à une dame, malotru !'),
     ]
 }
 </script>
