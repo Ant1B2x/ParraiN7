@@ -7,5 +7,5 @@ export default (options = {}): Hook => {
     return async (context: HookContext): Promise<HookContext> => {
         context.data['isAdmin'] = false;
         return context;
-    }
+    };
 };

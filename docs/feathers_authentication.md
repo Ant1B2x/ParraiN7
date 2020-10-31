@@ -31,5 +31,3 @@ Cette documentation expliquera comment s'authentifier côté serveur et côté c
 
 https://youtu.be/V-G9UDKa5Do
 
-
-
