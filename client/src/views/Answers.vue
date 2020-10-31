@@ -22,8 +22,10 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1">¿</span>
                                 </div>
-                                <textarea type="text" class="form-control" placeholder="Votre réponse"
-                                v-model="answer.content"></textarea>
+                                <label>
+                                    <textarea type="text" class="form-control" placeholder="Votre réponse"
+                                    v-model="answer.content"></textarea>
+                                </label>
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="basic-addon2">?</span>
                                 </div>
@@ -57,14 +59,6 @@
 .questionArea form button {
     float: right;
     max-width: 150px;
-}
-
-.questionArea .separator {
-    width: 100%;
-    background-color: lightgrey;
-    border-top: 1px solid rgba(0,0,0,.1);
-    margin-top: 50px;
-    margin-bottom: 50px;
 }
 
 .questionArea .questionList {
