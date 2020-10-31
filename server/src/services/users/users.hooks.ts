@@ -2,7 +2,6 @@ import * as feathersAuthentication from '@feathersjs/authentication';
 import * as local from '@feathersjs/authentication-local';
 import checkEmail from '../../hooks/users/check-email';
 import unsetAdmin from '../../hooks/users/unset-admin';
-import checkAdmin from '../../hooks/check-admin';
 import checkModifyingUser from '../../hooks/users/check-modifying-user';
 import checkSettingAdminUser from '../../hooks/users/check-setting-admin-user';
 // Don't remove this comment. It's needed to format import lines nicely.

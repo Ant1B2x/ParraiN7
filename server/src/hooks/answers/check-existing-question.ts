@@ -4,8 +4,7 @@ import {Hook, HookContext} from '@feathersjs/feathers';
 import {AnswerData} from '../../services/answers/answers.class';
 import {QuestionData} from '../../services/questions/questions.class';
 
-// set logged user as author of the question
-// warning : has to be included AFTER authenticate hook
+// check if the provided questionId exists or not in questions table
 export default (options = {}): Hook => {
     return async (context: HookContext): Promise<HookContext> => {
         let answer: AnswerData = context.data;
