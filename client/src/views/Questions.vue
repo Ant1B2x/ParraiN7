@@ -26,14 +26,14 @@
                 <div class="form-row form-row-search">
                     <div class="col-md-3 mb-3 ng-star-inserted">
                         <label class="form-control-label" for="searchByQuestionInput">Recherche par question</label>
-                        <input type="text" v-model="searchByQuestion" placeholder="Question"
-                               v-bind="filterByQuestion()" id="searchByQuestionInput"
+                        <input type="text" placeholder="Question" v-model="searchByQuestion"
+                               @keyup="filterByQuestion()" id="searchByQuestionInput"
                                class="form-control ng-dirty ng-valid ng-touched"/>
                     </div>
                     <div class="col-md-3 mb-3 ng-star-inserted">
                         <label class="form-control-label" for="searchByAuthorInput">Recherche par auteur</label>
-                        <input type="text" v-model="searchByAuthor" placeholder="Auteur"
-                               v-bind="filterByAuthor()" id="searchByAuthorInput"
+                        <input type="text" placeholder="Auteur" v-model="searchByAuthor"
+                               @keyup="filterByAuthor()" id="searchByAuthorInput"
                                class="form-control ng-dirty ng-valid ng-touched"/>
                     </div>
                 </div>
@@ -132,7 +132,7 @@ export default class Questions extends Vue {
         new Question('Esteban', 'Quel âge as-tu ?'),
     ]
 
-    filteredList: Question[] = [];
+    filteredList: Question[] = this.questions;
 
     searchByQuestion = '';
     searchByAuthor = '';
