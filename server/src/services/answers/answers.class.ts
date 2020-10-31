@@ -1,7 +1,7 @@
-import { Service, KnexServiceOptions } from 'feathers-knex';
-import { Application } from '../../declarations';
+import {Service, KnexServiceOptions} from 'feathers-knex';
+import {Application} from '../../declarations';
 
-interface AnswerData {
+export interface AnswerData {
     id?: number;
     userId: number;
     questionId: number;
@@ -9,11 +9,11 @@ interface AnswerData {
 }
 
 export class Answers extends Service<AnswerData> {
-  //eslint-disable-next-line @typescript-eslint/no-unused-vars
-  constructor(options: Partial<KnexServiceOptions>, app: Application) {
-    super({
-      ...options,
-      name: 'answers'
-    });
-  }
+    //eslint-disable-next-line @typescript-eslint/no-unused-vars
+    constructor(options: Partial<KnexServiceOptions>, app: Application) {
+        super({
+            ...options,
+            name: 'answers'
+        });
+    }
 }
