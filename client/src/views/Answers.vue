@@ -44,7 +44,7 @@
 .questionArea {
     margin: auto;
     width: 80%;
-    max-width: 1024px;
+    /*max-width: 1024px;*/
     display: flex;
     flex-flow: column;
 }
@@ -60,9 +60,16 @@
 }
 
 .questionArea .questionList {
-    width: fit-content;
     min-width: 500px;
     margin: auto;
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+}
+
+.questionArea .questionList .card {
+    width: 49%;
 }
 
 .questionArea .card .pb-4 {
@@ -72,13 +79,23 @@
 .questionArea .card .pt-2 h5 {
     padding-bottom: 1.5rem !important
 }
+
+@media (max-width: 600px) {
+    .questionArea .questionList {
+        min-width: unset;
+    }
+    .questionArea .questionList .card {
+        width: 100%;
+        max-width: 500px;
+    }
+}
 </style>
 
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator';
 import {Question} from "@/views/Questions.vue";
 
-class Answer {
+export class Answer {
     author: string;
     question: Question;
     content: string;

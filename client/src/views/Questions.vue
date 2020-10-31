@@ -90,9 +90,16 @@
 }
 
 .questionArea .questionList {
-    width: fit-content;
     min-width: 500px;
     margin: auto;
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+}
+
+.questionArea .questionList .card {
+    width: 49%;
 }
 
 .questionArea .form-row-search {
@@ -108,6 +115,16 @@
 
 .questionArea .card .pt-2 h5 {
     padding-bottom: 1.5rem !important
+}
+
+@media (max-width: 600px) {
+    .questionArea .questionList {
+        min-width: unset;
+    }
+    .questionArea .questionList .card {
+        width: 100%;
+        max-width: 500px;
+    }
 }
 </style>
 

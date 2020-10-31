@@ -20,3 +20,6 @@ indent_size = 4
 
 [*.vue]
 indent_size = 4
+
+[*.html]
+indent_size = 4

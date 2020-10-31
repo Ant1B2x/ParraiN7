@@ -28,6 +28,16 @@ const routes: Array<RouteConfig> = [
         name: 'answers',
         component: () => import(/* webpackChunkName: "about" */ '../views/Answers.vue')
     },
+    {
+        path: '/login',
+        name: 'login',
+        component: () => import(/* webpackChunkName: "about" */ '../views/LogIn.vue')
+    },
+    {
+        path: '/rankings',
+        name: 'ranking',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Rankings.vue')
+    },
 ]
 
 const router = new VueRouter({

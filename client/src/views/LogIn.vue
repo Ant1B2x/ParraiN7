@@ -1,0 +1,106 @@
+<template>
+    <div class="container d-flex flex-column">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-md-6 col-lg-5 col-xl-5 py-6 py-md-0">
+                <div class="card shadow zindex-100 mb-0">
+                    <div class="card-body px-md-5 py-5">
+                        <div class="mb-5">
+                            <h6 class="h3">Login</h6>
+                            <p class="text-muted mb-0">Connectez-vous à votre compte pour continuer</p>
+                        </div>
+                        <span class="clearfix"></span>
+                        <form>
+                            <div class="form-group">
+                                <div class="d-flex align-items-center justify-content-between">
+                                <label class="form-control-label">Adresse email</label>
+                                </div>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i data-feather="user"></i></span>
+                                    </div>
+                                    <input type="email" class="form-control" id="input-email" placeholder="name@etu.toulouse-inp.fr">
+                                </div>
+                            </div>
+                            <div class="form-group mb-0">
+                                <div class="d-flex align-items-center justify-content-between">
+
+                                        <label class="form-control-label">Mot de passe</label>
+
+                                    <!--div class="mb-2">
+                                        <a href="#" class="small text-muted text-underline--dashed border-primary" data-toggle="password-text" data-target="#input-password">Afficher le mot de passe</a>
+                                    </div-->
+                                </div>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i data-feather="key"></i></span>
+                                    </div>
+                                    <input type="password" class="form-control" id="input-password" placeholder="Mot de passe">
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <button type="button" class="btn btn-block btn-primary">Se connecter</button></div>
+                        </form>
+                    </div>
+                    <div class="card-footer px-md-5"><small>Pas encore enregistré?</small>
+                        <a href="#" class="small font-weight-bold"> Tant pis</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<style scoped>
+
+@keyframes hidePreloader {
+    0% {
+        width: 100%;
+        height: 100%;
+    }
+
+    100% {
+        width: 0;
+        height: 0;
+    }
+}
+
+body>div.preloader {
+    position: fixed;
+    background: white;
+    width: 100%;
+    height: 100%;
+    z-index: 1071;
+    opacity: 0;
+    transition: opacity .5s ease;
+    overflow: hidden;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body:not(.loaded)>div.preloader {
+    opacity: 1;
+}
+
+body:not(.loaded) {
+    overflow: hidden;
+}
+
+body.loaded>div.preloader {
+    animation: hidePreloader .5s linear .5s forwards;
+}
+
+.container {
+    margin-top: 5%;
+}
+
+</style>
+
+<script lang="ts">
+import {Component, Vue} from 'vue-property-decorator';
+
+@Component
+export default class LogIn extends Vue {
+
+}
+</script>
