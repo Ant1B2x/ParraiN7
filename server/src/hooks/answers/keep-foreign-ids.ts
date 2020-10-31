@@ -3,10 +3,11 @@
 import {Hook, HookContext} from '@feathersjs/feathers';
 import {AnswerData} from '../../services/answers/answers.class';
 
-// ensure that userId cannot be modified for an answer
+// ensure that userId and questionId cannot be modified for an answer
 export default (options = {}): Hook => {
     return async (context: HookContext): Promise<HookContext> => {
         let answer: AnswerData = context.app.service('answers').get(context.id);
+        context.data['userId'] = answer.userId;
         context.data['questionId'] = answer.questionId;
 
         return context;
