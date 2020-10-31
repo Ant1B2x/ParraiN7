@@ -7,7 +7,9 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="basic-addon1">?</span>
                     </div>
-                    <input type="text" class="form-control" placeholder="Votre question">
+                    <label>
+                        <input type="text" class="form-control" placeholder="Votre question">
+                    </label>
                     <div class="input-group-append">
                         <span class="input-group-text" id="basic-addon2">¿</span>
                     </div>
