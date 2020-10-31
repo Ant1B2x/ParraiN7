@@ -2,6 +2,7 @@ import {Service, KnexServiceOptions} from 'feathers-knex';
 import {Application} from '../../declarations';
 
 export interface UserData {
+    id: number;
     email: string;
     password: string;
     firstname?: string;

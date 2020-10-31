@@ -2,7 +2,9 @@
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
 import {Hook, HookContext} from '@feathersjs/feathers';
 
-const institutionalEmailRegexp = RegExp('^.*@etu\.toulouse-inp\.fr');
+// I'm trusting Esteban for this one
+const institutionalEmailRegexp =
+    RegExp('^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@etu\.toulouse-inp\.fr$');
 
 // check that user has entered an institutional email
 export default (options = {}): Hook => {
