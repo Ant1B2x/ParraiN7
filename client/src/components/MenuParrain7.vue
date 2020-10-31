@@ -3,7 +3,7 @@
         <div class="container">
             <!-- Brand -->
             <a class="navbar-brand" href="index.html">
-                <img alt="Image placeholder" src="assets/img/brand/dark.svg" id="navbar-logo">
+                <img alt="Image placeholder" src="assets/img/brand/the-godfather.svg" id="navbar-logo" style="min-height: 10.75rem;">
             </a>
             <!-- Toggler -->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -17,6 +17,12 @@
                     </li>
 					<li class="nav-item ">
                         <a class="nav-link" href="login.html">Login</a>
+                    </li>
+                    <li class="nav-item ">
+                        <router-link class="nav-link" to="/questions">Questions</router-link>
+                    </li>
+                    <li class="nav-item ">
+                        <router-link class="nav-link" to="/answers">Réponses</router-link>
                     </li>
                     <!-- <li class="nav-item dropdown dropdown-animate" data-toggle="hover">
                         <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pages</a>
@@ -33,9 +39,9 @@
                     </li> -->
                 </ul>
                 <!-- Button -->
-                <a class="navbar-btn btn btn-sm btn-primary d-none d-lg-inline-block ml-3" href="https://github.com/webpixels/quick-website-ui-kit-demo/archive/master.zip">
+                <!--a class="navbar-btn btn btn-sm btn-primary d-none d-lg-inline-block ml-3" href="https://github.com/webpixels/quick-website-ui-kit-demo/archive/master.zip">
                     Download Free
-                </a>
+                </a-->
                 <!-- Mobile button -->
                 <div class="d-lg-none text-center">
                     <a href="https://webpixels.io/themes/quick-website-ui-kit" class="btn btn-block btn-sm btn-warning">See more details</a>
