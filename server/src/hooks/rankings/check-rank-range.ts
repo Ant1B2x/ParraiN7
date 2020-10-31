@@ -2,14 +2,12 @@
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
 import {Hook, HookContext} from '@feathersjs/feathers';
 
-const institutionalEmailRegexp = RegExp('^.*@etu\.toulouse-inp\.fr');
-
-// check that user has entered an institutional email
+// check that a rank is between 1 and 5
 export default (options = {}): Hook => {
     return async (context: HookContext): Promise<HookContext> => {
-        if (!institutionalEmailRegexp.test(context.data['email']))
-            throw new Error('Email does not respect institutional email regexp');
+        if (context.data['rank'] < 1 || context.data['rank'] > 5)
+            throw new Error('Rank must be between 1 and 5');
 
         return context;
-    }
+    };
 };
