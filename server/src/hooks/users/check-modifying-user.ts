@@ -8,7 +8,7 @@ import {checkAdmin} from '../common-checks';
 // warning : has to be included AFTER authenticate hook
 export default (options = {}): Hook => {
     return async (context: HookContext): Promise<HookContext> => {
-        const currentUser: UserData = context.data;
+        const currentUser: UserData = context.app.service('users').get(context.id);
         const loggedUser: UserData = context.params.user;
         if (!checkAdmin(context) && currentUser.id !== loggedUser.id)
             throw new Error(`User ${loggedUser.email} can't modify ${currentUser.email}!`);

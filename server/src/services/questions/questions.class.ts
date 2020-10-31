@@ -1,7 +1,7 @@
 import {Service, KnexServiceOptions} from 'feathers-knex';
 import {Application} from '../../declarations';
 
-interface QuestionData {
+export interface QuestionData {
     id?: number;
     content: string;
     authorId: number;

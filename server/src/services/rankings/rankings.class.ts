@@ -1,7 +1,7 @@
 import {Service, KnexServiceOptions} from 'feathers-knex';
 import {Application} from '../../declarations';
 
-interface RankingData {
+export interface RankingData {
     id?: number;
     godfatherId: number;
     godsonId: number;

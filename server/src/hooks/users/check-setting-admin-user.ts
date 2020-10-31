@@ -7,7 +7,7 @@ import {UserData} from '../../services/users/users.class';
 // warning : has to be included AFTER authenticate hook
 export default (options = {}): Hook => {
     return async (context: HookContext): Promise<HookContext> => {
-        const currentUser: UserData = context.data;
+        const currentUser: UserData = context.app.service('users').get(context.id);
         const loggedUser: UserData = context.params.user;
         if (currentUser.isAdmin && !loggedUser.isAdmin)
             throw new Error(`User ${loggedUser.email} can't modify ${currentUser.email}!`);
