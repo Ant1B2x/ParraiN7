@@ -9,7 +9,6 @@ import {checkGodfather} from '../common-checks';
 const {protect} = local.hooks;
 
 // check that non-admin godfathers can't get or find users names
-// warning : has to be included AFTER authenticate hook
 export default (options = {}): Hook => {
     return async (context: HookContext): Promise<HookContext> => {
         if (context.params.user && checkGodfather(context) && !checkAdmin(context) && Array.isArray(context.result))
