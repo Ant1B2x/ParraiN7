@@ -152,7 +152,7 @@ export default class Questions extends Vue {
 
     questions = [
         new Question(1, 'Yvan', 'Comment tu t\'appelles ?'),
-        new Question(2, 'Antoine', 'Veux-tu niquer ta mère ?'),
+        new Question(2, 'Antoine', 'Veux-tu caliner ta mère ?'),
         new Question(3, 'Esteban', 'Quel âge as-tu ?'),
     ]
 

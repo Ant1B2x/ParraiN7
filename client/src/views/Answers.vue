@@ -111,7 +111,7 @@ export class Answer {
 export default class Answers extends Vue {
     answers = [
         new Answer('Moi', new Question(1, 'Yvan', 'Comment tu t\'appelles ?'), ''),
-        new Answer('Moi', new Question(2, 'Antoine', 'Veux-tu niquer ta mère ?'), ''),
+        new Answer('Moi', new Question(2, 'Antoine', 'Veux-tu caliner ta mère ?'), ''),
         new Answer('Moi', new Question(3, 'Esteban', 'Quel âge as-tu ?'), 'On ne demande pas ça à une dame, malotru !'),
     ]
 }
