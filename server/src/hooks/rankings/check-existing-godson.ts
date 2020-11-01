@@ -7,7 +7,7 @@ import {UserData} from '../../services/users/users.class';
 // check if the provided godsonId exists or not in users table
 export default (options = {}): Hook => {
     return async (context: HookContext): Promise<HookContext> => {
-        let ranking: RankingData = context.data;
+        const ranking: RankingData = context.data;
         await context.app.service('users').find({
             query: {
                 id: ranking.godsonId

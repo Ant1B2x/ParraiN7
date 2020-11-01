@@ -1,13 +1,14 @@
 // Use this hook to manipulate incoming or outgoing data.
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
 import {Hook, HookContext} from '@feathersjs/feathers';
+import {UserData} from '../../services/users/users.class';
 
-// check that a rank is between 1 and 5
+// set logged user as godfather of the ranking
+// warning : has to be included AFTER authenticate hook
 export default (options = {}): Hook => {
     return async (context: HookContext): Promise<HookContext> => {
-        const rank: number = context.data['rank'];
-        if (rank && (context.data['rank'] < 1 || context.data['rank'] > 5))
-            throw new Error('Rank must be between 1 and 5');
+        const user: UserData = context.params.user;
+        context.data['godfatherId'] = user.id;
 
         return context;
     };

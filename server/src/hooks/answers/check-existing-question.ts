@@ -7,7 +7,7 @@ import {QuestionData} from '../../services/questions/questions.class';
 // check if the provided questionId exists or not in questions table
 export default (options = {}): Hook => {
     return async (context: HookContext): Promise<HookContext> => {
-        let answer: AnswerData = context.data;
+        const answer: AnswerData = context.data;
         await context.app.service('questions').find({
             query: {
                 id: answer.questionId
