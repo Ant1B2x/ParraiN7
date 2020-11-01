@@ -3,7 +3,7 @@
 import {Hook, HookContext} from '@feathersjs/feathers';
 import {RankingData} from '../../services/rankings/rankings.class';
 
-// ensure that userId and questionId cannot be modified for an answer
+// ensure that godsonId and godfatherId cannot be modified for an answer
 export default (options = {}): Hook => {
     return async (context: HookContext): Promise<HookContext> => {
         const ranking: RankingData = context.app.service('rankings').get(context.id);
