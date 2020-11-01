@@ -18,7 +18,7 @@ import {Component, Prop, Vue} from "vue-property-decorator";
 
 @Component
 export default class Rating extends Vue {
-    @Prop() grade;
+    @Prop() grade!: number;
     maxStars = 5;
     hasCounter = true;
 

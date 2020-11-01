@@ -14,7 +14,7 @@
                 </div>
             </div>
             <div class="mt-4">
-                <button type="button" class="btn btn-block btn-primary">Ajouter</button>
+                <button type="button" class="btn btn-block btn-primary" v-on:click="sendQuestion">Ajouter</button>
             </div>
         </form>
 
@@ -130,6 +130,7 @@
 
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator';
+import app from '@/feathers-client';
 
 export class Question {
     idQuestion: number;
@@ -145,6 +146,10 @@ export class Question {
 
 @Component
 export default class Questions extends Vue {
+    async sendQuestion() {
+        console.log(await app.service('questions').find());
+    }
+
     questions = [
         new Question(1, 'Yvan', 'Comment tu t\'appelles ?'),
         new Question(2, 'Antoine', 'Veux-tu niquer ta mère ?'),

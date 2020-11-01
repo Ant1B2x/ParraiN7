@@ -38,7 +38,7 @@
                                 </div>
                             </div>
                             <div class="mt-4">
-                                <button type="button" class="btn btn-block btn-primary">Se connecter</button></div>
+                                <button type="button" class="btn btn-block btn-primary" v-on:click="logIn">Se connecter</button></div>
                         </form>
                     </div>
                     <div class="card-footer px-md-5"><small>Pas encore enregistré?</small>
@@ -98,9 +98,13 @@ body.loaded>div.preloader {
 
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator';
+import app from '@/feathers-client';
 
 @Component
 export default class LogIn extends Vue {
-
+    logIn = async () => {
+        console.log("...")
+    }
 }
+
 </script>
