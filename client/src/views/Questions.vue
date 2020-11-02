@@ -63,7 +63,7 @@
 
 <style scoped>
 /*@import "public/assets/css/quick-website.css";*/
-@import "src/views/css/Questions.css";
+@import "css/Questions.css";
 </style>
 
 <script lang="ts">

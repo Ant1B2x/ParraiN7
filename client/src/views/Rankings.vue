@@ -49,7 +49,7 @@
 
 <style scoped>
 /*@import "public/assets/css/quick-website.css";*/
-@import "src/views/css/Rankings.css";
+@import "css/Rankings.css";
 </style>
 
 <script lang="ts">

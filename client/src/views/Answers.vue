@@ -41,7 +41,7 @@
 
 <style scoped>
 /*@import "public/assets/css/quick-website.css";*/
-@import "src/views/css/Answers.css";
+@import "css/Answers.css";
 </style>
 
 <script lang="ts">

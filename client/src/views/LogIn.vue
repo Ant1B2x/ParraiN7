@@ -50,7 +50,7 @@
 </template>
 
 <style scoped>
-@import "src/views/css/LogIn.css";
+@import "css/LogIn.css";
 </style>
 
 <script lang="ts">
@@ -60,7 +60,7 @@ import app from '@/feathers-client';
 @Component
 export default class LogIn extends Vue {
     logIn = async () => {
-        console.log("...")
+        console.log("...");
     }
 }
 
