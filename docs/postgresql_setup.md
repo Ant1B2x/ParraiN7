@@ -63,32 +63,31 @@ Si quand on lance le serveur,  on obtient l'erreur `TypeError [ERR_INVALID_ARG_T
     "client": "pg",
     "connection": "postgres://postgres:{mot_de_passe}@localhost:5432/parrain7"
   }
-``` 
+```
 
 Pour une utilisation sans mot de passe, il faut modifier le fichier pg_hba.conf dans le dossier data de PostgreSQL.
 Il faut que la ligne suivante apparaîsse (ou remplacer ce qu'il y a à la place du trust par trust) : 
 `host    all             all             127.0.0.1/32            trust`
 Ensuite, se connecter avec `psql postgres` et lancer la commande SQL `ALTER USER postgres PASSWORD ''`
 
-Ensuite, pour utiliser PostgreSQL en ligne de commande avec psql, sous windows
+##### Ensuite, pour utiliser PostgreSQL en ligne de commande avec psql, sous windows
 
-1. Download and install a PostgreSQL server. For instructions, refer to the PostgreSQL documentation on www.postgresql.org.
-    * Ensure that the installation includes the PostgreSQL Unicode ODBC driver.
-    * During installation, set up a user account with superuser privileges.
-    ```
-    NOTE:
-    Once installed, the PostgreSQL server appears in the Services tab in Windows Task Manager.
-   ```
-2. Add the PostgreSQL bin directory path to the PATH environmental variable.
-    ```
-    NOTE:
-    This step enables you to use the command psql to start the PostgreSQL command-line tool (psql) from the Windows Command Prompt.
-    If the directory path is not added to the PATH variable, you must specify the psql.exe file path in the Command Prompt to start psql.
-    ```
-3. Open the psql command-line tool:
+1. Ajouter le répertoir `bin` de PostgreSQL bin à la variable d'environnement PATH .
 
-    * In the Windows Command Prompt, run the command:
-        `psql -U {userName}`
-    * Enter your password when prompted.
+    1. Touche windows, et taper "Variables", et cliquez sur "Modifier les variables d'environnement système"
+
+    2. Dans la fenêtre qui s'ouvre, cliquer sur "Variables d'environnement...", en bas de la-dite fenêtre.
+
+    3. Dans la partie "Variable utilisateur pour {nom_utilisateur}", double-cliqué sur la variable "Path".
+
+    4. Dans la fenêtre qui s'ouvre, double-cliquez sur une ligne vide, et renseignez le chemin jusqu'au fichier `bin` de PostgreSQL
+
+        (Usuellement : `C:\Program Files\PostgreSQL\{n°_version}\bin`)
+
+2. Ouvrir PowerShell:
+
+    * Lancez la commande:
+        `psql -U postgres`
+    * Entrez le mot de passe super utilisateur que vous avez renseigné lors de l'installation.
 ##### TODO
 
