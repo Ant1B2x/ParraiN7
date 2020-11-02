@@ -17,7 +17,7 @@
   
   Pour windows
   ```
-  psql -h localhost -p 5432 -U postgres -f  path\to\file\add_constraints.sql parrain7
+  psql -h localhost -p 5432 -U postgres -f path\to\file\add_constraints.sql parrain7
   ```
 
 - Se connecter à la base `parrain7`

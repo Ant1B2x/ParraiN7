@@ -77,35 +77,7 @@ export class Poulain {
     }
 })
 export default class Rankins extends Vue {
-    poulains = [
-        new Poulain(1,
-            'Moi',
-            1,
-            [
-                new Answer('Moi', new Question(1, 'Yvan', 'Comment tu t\'appelles ?'), 'Je suis moi, et toi ?'),
-                new Answer('Moi', new Question(2, 'Antoine', 'Veux-tu niquer ta mère ?'), 'Lui veux bien, mais il n\'est pas là.'),
-                new Answer('Moi', new Question(3, 'Esteban', 'Quel âge as-tu ?'), 'Devinnes combien de mois j\'ai.'),
-            ]
-        ),
-        new Poulain(2,
-            'Toi',
-            2,
-            [
-                new Answer('Toi', new Question(1, 'Yvan', 'Comment tu t\'appelles ?'), 'Eh bien je suis toi ! Commennt ça va ?'),
-                new Answer('Toi', new Question(2, 'Antoine', 'Veux-tu niquer ta mère ?'), 'Ne demande pas, ça ...'),
-                new Answer('Toi', new Question(3, 'Esteban', 'Quel âge as-tu ?'), 'Autant que jour que de tuiles sur mon toit.'),
-            ]
-        ),
-        new Poulain(3,
-            'Ça',
-            3,
-            [
-                new Answer('Ça', new Question(1, 'Yvan', 'Comment tu t\'appelles ?'), 'Eh bien, je vais bien, merci de demander.'),
-                new Answer('Ça', new Question(2, 'Antoine', 'Veux-tu niquer ta mère ?'), 'Toi, tu veux ?'),
-                new Answer('Ça', new Question(3, 'Esteban', 'Quel âge as-tu ?'), 'Auntant que toi moins moi.'),
-            ]
-        ),
-    ]
+    poulains: Poulain[] = []
 
     selectedPoulain: Poulain = this.poulains[0];
 

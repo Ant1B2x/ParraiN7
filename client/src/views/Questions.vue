@@ -40,7 +40,7 @@
             </div>
         </form>
         <!-- Afficher questions existantes -->
-        <div class="questionList">
+        <div class="questionList" v-if="questions">
             <div class="card hover-translate-y-n10 hover-shadow-lg" v-for="question in filteredList"
                  :key="question.idQuestion">
                 <div class="card-body">
@@ -50,7 +50,7 @@
                         </div>
                     </div>
                     <div class="pt-2 pb-3">
-                        <h5>{{ question.author }}</h5>
+                        <h5>{{ question.firstname }} {{question.lastname}}</h5>
                         <p class="text-muted mb-0">
                             {{ question.content }}
                         </p>
@@ -69,30 +69,43 @@
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator';
 import app from '@/feathers-client';
+import BACKEND_URL from "@/config";
 
 export class Question {
     idQuestion: number;
-    author: string;
+    firstname: string;
+    lastname: string;
     content: string;
 
-    constructor(idQuestion: number, author: string, content: string) {
+    constructor(idQuestion: number, firstname: string, lastname: string, content: string) {
         this.idQuestion = idQuestion;
-        this.author = author;
+        this.firstname = firstname;
+        this.lastname = lastname;
         this.content = content;
     }
 }
 
 @Component
 export default class Questions extends Vue {
+
+    questions: Question[] = []
+
     async sendQuestion() {
         console.log(await app.service('questions').find());
+        await fetch('http://' + BACKEND_URL + '/questions-with-authors')
+            .then(response => response.json())
+            .then(result => {
+                console.log(result);
+                this.questions = result;
+            });
     }
 
-    questions = [
-        new Question(1, 'Yvan', 'Comment tu t\'appelles ?'),
-        new Question(2, 'Antoine', 'Veux-tu caliner ta mère ?'),
-        new Question(3, 'Esteban', 'Quel âge as-tu ?'),
-    ]
+    mounted() {
+        this.sendQuestion();
+    }
+
+
+
 
     filteredList: Question[] = this.questions;
 
@@ -108,7 +121,9 @@ export default class Questions extends Vue {
 
     filterByAuthor() {
         this.filteredList = this.questions.filter(post =>
-            post.author.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            post.firstname.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                .includes(this.searchByAuthor.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))
+            || post.lastname.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
                 .includes(this.searchByAuthor.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))
         )
     }
