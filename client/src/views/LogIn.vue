@@ -18,8 +18,8 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><font-awesome-icon icon="user"/></span>
                                     </div>
-                                    <input v-model="email" type="email" class="form-control" id="input-email"
-                                           placeholder="name@etu.toulouse-inp.fr">
+                                    <input v-model="loginForm.email" type="email" class="form-control" id="input-email"
+                                           placeholder="prenom.nom@etu.toulouse-inp.fr"/>
                                 </div>
                             </div>
                             <div class="form-group mb-0">
@@ -35,19 +35,20 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><font-awesome-icon icon="key"/></span>
                                     </div>
-                                    <input v-model="password" type="password" class="form-control" id="input-password"
-                                           placeholder="Mot de passe">
+                                    <input v-model="loginForm.password" type="password" class="form-control"
+                                           id="input-password"
+                                           placeholder="Mot de passe"/>
                                 </div>
                             </div>
                             <div class="mt-4">
-                                <button type="button" class="btn btn-block btn-primary" v-on:click="logIn">Se
-                                    connecter
+                                <button type="button" class="btn btn-block btn-primary" v-on:click="logIn">
+                                    Se connecter
                                 </button>
                             </div>
                         </form>
                     </div>
-                    <div class="card-footer px-md-5"><small>Pas encore enregistré?</small>
-                        <router-link to="/signup" class="small font-weight-bold"> Inscrivez-vous</router-link>
+                    <div class="card-footer px-md-5"><small>Pas encore enregistré ? </small>
+                        <router-link to="/signup" class="small font-weight-bold">Inscrivez-vous !</router-link>
                     </div>
                 </div>
             </div>
@@ -61,16 +62,32 @@
 
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator';
+import app from "@/feathers-client";
 
 @Component
 export default class LogIn extends Vue {
 
-    email = '';
-    password = '';
-
-    logIn = async () => {
-        console.log("...");
+    private loginForm = {
+        email: '',
+        password: ''
     }
+
+    public logIn = async () => {
+
+        app.logout();
+        const auth = await app.authenticate({
+            strategy: 'local',
+            email: this.loginForm.email,
+            password: this.loginForm.password,
+        }).catch( (error: any) => {
+            if (error.code === 401)
+                console.log("mauvais mdp");
+        });
+
+        return auth;
+
+    }
+
 }
 
 </script>

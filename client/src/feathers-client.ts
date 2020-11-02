@@ -9,7 +9,8 @@ const socket = io(BACKEND_URL);
 const app = feathers();
 app.configure(feathers.socketio(socket));
 app.configure(feathers.authentication({
-    storageKey: 'auth'
+    //storageKey: 'auth'
+    storage: window.localStorage
 }));
 
 export default app;
