@@ -1,4 +1,4 @@
-INSERT INTO questions (content)
-VALUES ('Ton plat préféré ?'),
-       ('Ton film préféré ?'),
-       ('D''où viens-tu ?');
+INSERT INTO questions ("content", "authorId")
+VALUES ('Ton plat préféré ?', 1),
+       ('Ton film préféré ?', 2),
+       ('D''où viens-tu ?', 3);
