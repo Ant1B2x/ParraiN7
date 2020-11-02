@@ -2,12 +2,15 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-import {faKey, faUser, faUserSecret} from "@fortawesome/free-solid-svg-icons";
+import {faIdCard, faKey, faUser, faUserSecret, faArrowAltCircleLeft, faArrowAltCircleRight} from "@fortawesome/free-solid-svg-icons";
 import {library} from "@fortawesome/fontawesome-svg-core";
 
 library.add(faUserSecret)
 library.add(faKey)
 library.add(faUser)
+library.add(faIdCard)
+library.add(faArrowAltCircleLeft)
+library.add(faArrowAltCircleRight)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

@@ -1,0 +1,11 @@
+.isGodFatherRadio {
+  text-align: left;
+}
+
+.separator {
+  width: 100%;
+  background-color: lightgrey;
+  border-top: 1px solid rgba(0, 0, 0, .1);
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
