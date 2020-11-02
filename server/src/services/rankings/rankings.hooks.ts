@@ -5,6 +5,7 @@ import checkExistingGodson from '../../hooks/rankings/check-existing-godson';
 import checkModifyingRanking from '../../hooks/rankings/check-modifying-ranking';
 import setGodfather from '../../hooks/rankings/set-godfather';
 import keepRankingForeignIds from '../../hooks/rankings/keep-ranking-foreign-ids';
+import checkNonRedundantRank from '../../hooks/rankings/check-non-redundant-rank';
 // Don't remove this comment. It's needed to format import lines nicely.
 
 const {authenticate} = feathersAuthentication.hooks;
@@ -15,9 +16,9 @@ export default {
         all: [authenticate('jwt'), checkGodfather()],
         find: [],
         get: [],
-        create: [checkExistingGodson(), checkRankRange(), setGodfather()],
-        update: [checkRankRange(), checkModifyingRanking(), keepRankingForeignIds()],
-        patch: [checkRankRange(), checkModifyingRanking(), keepRankingForeignIds()],
+        create: [checkExistingGodson(), checkRankRange(), checkNonRedundantRank(), setGodfather()],
+        update: [checkModifyingRanking(), checkRankRange(), checkNonRedundantRank(), keepRankingForeignIds()],
+        patch: [checkModifyingRanking(), checkRankRange(), checkNonRedundantRank(), keepRankingForeignIds()],
         remove: [checkModifyingRanking()]
     },
 

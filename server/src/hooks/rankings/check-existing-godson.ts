@@ -12,12 +12,12 @@ export default (options = {}): Hook => {
             query: {
                 id: ranking.godsonId
             }
-        }).then((data: Array<UserData>) => {
-            if(!data.length)
+        }).then((users: Array<UserData>) => {
+            if(!users.length)
                 throw new Error(`There's no user of id ${ranking.godsonId}!`);
         });
 
-        let godson: UserData = context.app.service('users').get(ranking.godsonId);
+        const godson: UserData = context.app.service('users').get(ranking.godsonId);
         if (godson.isGodfather)
             throw new Error(`User of id ${godson.id} is godfather, not godson!`);
 
