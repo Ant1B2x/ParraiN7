@@ -18,7 +18,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><font-awesome-icon icon="user"/></span>
                                     </div>
-                                    <input type="email" class="form-control" id="input-email"
+                                    <input v-model="email" type="email" class="form-control" id="input-email"
                                            placeholder="name@etu.toulouse-inp.fr">
                                 </div>
                             </div>
@@ -35,7 +35,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><font-awesome-icon icon="key"/></span>
                                     </div>
-                                    <input type="password" class="form-control" id="input-password"
+                                    <input v-model="password" type="password" class="form-control" id="input-password"
                                            placeholder="Mot de passe">
                                 </div>
                             </div>
@@ -64,6 +64,10 @@ import {Component, Vue} from 'vue-property-decorator';
 
 @Component
 export default class LogIn extends Vue {
+
+    email = '';
+    password = '';
+
     logIn = async () => {
         console.log("...");
     }
