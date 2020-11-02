@@ -51,9 +51,11 @@ body.loaded>div.preloader {
 
 .hasError .errorMessage {
   color: #721c24 !important;
+  background-color: #f8d7da !important;
+  border-color: #f5c6cb !important;
 }
 
 .hasError .form-group .input-group > .input-group-prepend > .input-group-text > svg {
-  color: red
+  color: #dc6b6b;
 }
 
