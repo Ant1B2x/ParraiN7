@@ -3,10 +3,11 @@
         <div class="row align-items-center justify-content-center">
             <div class="col-md-6 col-lg-5 col-xl-5 py-6 py-md-0">
                 <div class="card shadow zindex-100 mb-0">
-                    <div class="card-body px-md-5 py-5">
+                    <div class="card-body px-md-5 py-5" :class="{ 'hasError': loginForm.hasError }">
                         <div class="mb-5">
                             <h6 class="h3">Connexion</h6>
-                            <p class="text-muted mb-0">Connectez-vous à votre compte pour continuer</p>
+                            <p class="text-muted mb-0 errorMessage"
+                               :class="{ 'alert alert-danger': loginForm.hasError }"  role="alert">{{loginForm.errorMessage}}</p>
                         </div>
                         <span class="clearfix"></span>
                         <form>
@@ -19,7 +20,8 @@
                                         <span class="input-group-text"><font-awesome-icon icon="user"/></span>
                                     </div>
                                     <input v-model="loginForm.email" type="email" class="form-control" id="input-email"
-                                           placeholder="prenom.nom@etu.toulouse-inp.fr"/>
+                                           placeholder="prenom.nom@etu.toulouse-inp.fr"
+                                           v-on:keyup="handleKeyUp"/>
                                 </div>
                             </div>
                             <div class="form-group mb-0">
@@ -37,11 +39,12 @@
                                     </div>
                                     <input v-model="loginForm.password" type="password" class="form-control"
                                            id="input-password"
-                                           placeholder="Mot de passe"/>
+                                           placeholder="Mot de passe"
+                                           v-on:keyup="handleKeyUp"/>
                                 </div>
                             </div>
                             <div class="mt-4">
-                                <button type="button" class="btn btn-block btn-primary" v-on:click="logIn">
+                                <button type="button" class="btn btn-primary" v-on:click="logIn">
                                     Se connecter
                                 </button>
                             </div>
@@ -69,23 +72,50 @@ export default class LogIn extends Vue {
 
     private loginForm = {
         email: '',
-        password: ''
+        password: '',
+        errorMessage: 'Connectez-vous à votre compte pour continuer',
+        hasError: false,
     }
 
     public logIn = async () => {
 
+        this.loginForm.errorMessage = 'Connectez-vous à votre compte pour continuer';
+        this.loginForm.hasError = false;
         app.logout();
         const auth = await app.authenticate({
             strategy: 'local',
             email: this.loginForm.email,
             password: this.loginForm.password,
-        }).catch( (error: any) => {
-            if (error.code === 401)
+        }).then(
+            (data: any) => {
+                console.log(data);
+                this.loginForm.email = '';
+                this.loginForm.password = '';
+                this.$router.push('questions');
+            }
+        ).catch( (error: any) => {
+            if (error.code === 401) {
                 console.log("mauvais mdp");
+                this.loginForm.errorMessage = 'Utilisateur ou mot de passe incorrect.';
+                this.loginForm.hasError = true;
+            }
         });
 
         return auth;
 
+    }
+
+    noError() {
+        this.loginForm.hasError = false;
+        this.loginForm.errorMessage = 'Connectez-vous à votre compte pour continuer'
+    }
+
+    handleKeyUp(e: any) {
+        if (e.keyCode === 13) {
+            this.logIn()
+        } else {
+            this.noError()
+        }
     }
 
 }

@@ -38,9 +38,22 @@ body.loaded>div.preloader {
 }
 
 .container {
-  margin-top: 5%;
+  margin-top: 1%;
 }
 
 .card {
   transition: all 1s;
 }
+
+.errorMessage {
+  transition: all 0.35s;
+}
+
+.hasError .errorMessage {
+  color: #721c24 !important;
+}
+
+.hasError .form-group .input-group > .input-group-prepend > .input-group-text > svg {
+  color: red
+}
+
