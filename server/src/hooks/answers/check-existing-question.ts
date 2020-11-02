@@ -12,8 +12,8 @@ export default (options = {}): Hook => {
             query: {
                 id: answer.questionId
             }
-        }).then((data: Array<QuestionData>) => {
-            if(!data.length)
+        }).then((questions: Array<QuestionData>) => {
+            if(!questions.length)
                 throw new Error(`There's no question of id ${answer.questionId}!`);
         });
 
