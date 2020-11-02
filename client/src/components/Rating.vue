@@ -35,5 +35,5 @@ export default class Rating extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-@import "src/components/css/Rating.css";
+@import "css/Rating.css";
 </style>

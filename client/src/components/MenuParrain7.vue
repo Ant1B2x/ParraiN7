@@ -63,5 +63,5 @@ export default class MenuParrain7 extends Vue {}
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-@import "src/components/css/MenuParrain7.css";
+@import "css/MenuParrain7.css";
 </style>

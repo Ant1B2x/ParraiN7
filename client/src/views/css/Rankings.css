@@ -52,6 +52,12 @@
   padding-bottom: 1.5rem !important
 }
 
+.arrows {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}
+
 @media (max-width: 600px) {
   .questionArea .questionList {
     min-width: unset;
@@ -61,3 +67,4 @@
     max-width: 500px;
   }
 }
+

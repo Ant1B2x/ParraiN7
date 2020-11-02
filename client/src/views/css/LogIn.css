@@ -40,3 +40,7 @@ body.loaded>div.preloader {
 .container {
   margin-top: 5%;
 }
+
+.card {
+  transition: all 1s;
+}

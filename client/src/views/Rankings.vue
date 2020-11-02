@@ -9,11 +9,10 @@
                     </select>
                 </label>
             </div>
-            <div class="mt-4">
-                <button type="button" class="btn btn-block btn-primary" v-on:click="nextPoulain()">Next</button>
-            </div>
-            <div class="mt-4">
-                <button type="button" class="btn btn-block btn-primary" v-on:click="previousPoulain()">Précédent</button>
+            <div class="mt-4 arrows">
+                <font-awesome-icon icon="arrow-alt-circle-left" :style="{ color: '#008aff' }" size="4x" v-on:click="nextPoulain()"/>
+
+                <font-awesome-icon icon="arrow-alt-circle-right" :style="{ color: '#008aff' }" size="4x" v-on:click="nextPoulain()"/>
             </div>
         </form>
 
@@ -49,7 +48,7 @@
 
 <style scoped>
 /*@import "public/assets/css/quick-website.css";*/
-@import "src/views/css/Rankings.css";
+@import "css/Rankings.css";
 </style>
 
 <script lang="ts">
