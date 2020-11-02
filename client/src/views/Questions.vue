@@ -87,32 +87,29 @@ export class Question {
 
 @Component
 export default class Questions extends Vue {
-
-    questions: Question[] = []
+    
+    questions: Question[] = [];
+    filteredList: Question[] = [];
 
     async sendQuestion() {
-        console.log(await app.service('questions').find());
+        console.log(app.service('questions').find());
         await fetch('http://' + BACKEND_URL + '/questions-with-authors')
             .then(response => response.json())
             .then(result => {
-                console.log(result);
                 this.questions = result;
+                this.filteredList = this.questions;
             });
-    }
-
+    }    
+    
     mounted() {
         this.sendQuestion();
     }
-
-
-
-
-    filteredList: Question[] = this.questions;
 
     searchByQuestion = '';
     searchByAuthor = '';
 
     filterByQuestion() {
+        this.filteredList = this.questions;
         this.filteredList = this.questions.filter(post =>
             post.content.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
                 .includes(this.searchByQuestion.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))
@@ -120,6 +117,7 @@ export default class Questions extends Vue {
     }
 
     filterByAuthor() {
+        this.filteredList = this.questions;
         this.filteredList = this.questions.filter(post =>
             post.firstname.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
                 .includes(this.searchByAuthor.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))

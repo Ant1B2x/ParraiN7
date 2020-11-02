@@ -1,6 +1,7 @@
+/* eslint-disable indent */
 import {Request, Response, NextFunction} from 'express';
-import Knex from "knex";
-import {Application} from "../declarations";
+import Knex from 'knex';
+import {Application} from '../declarations';
 
 export default (app: Application) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -14,5 +15,4 @@ export default (app: Application) => {
                 res.status(204).send([]); // send no content and empty array if not found
         });
     };
-
-}
+};
