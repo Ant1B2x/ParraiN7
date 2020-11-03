@@ -69,7 +69,6 @@
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator';
 import app from '@/feathers-client';
-import BACKEND_URL from "@/config";
 
 export class Question {
     idQuestion: number;
@@ -87,20 +86,16 @@ export class Question {
 
 @Component
 export default class Questions extends Vue {
-    
+
     questions: Question[] = [];
     filteredList: Question[] = [];
 
     async sendQuestion() {
-        console.log(app.service('questions').find());
-        await fetch('http://' + BACKEND_URL + '/questions-with-authors')
-            .then(response => response.json())
-            .then(result => {
-                this.questions = result;
-                this.filteredList = this.questions;
-            });
-    }    
-    
+        this.questions = await app.service('questions').find();
+        this.filteredList = this.questions;
+        console.log('ok',this.questions);
+    }
+
     mounted() {
         this.sendQuestion();
     }
