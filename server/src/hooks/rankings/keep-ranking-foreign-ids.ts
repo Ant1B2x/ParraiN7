@@ -6,7 +6,7 @@ import {RankingData} from '../../services/rankings/rankings.class';
 // ensure that godsonId and godfatherId cannot be modified for an answer
 export default (options = {}): Hook => {
     return async (context: HookContext): Promise<HookContext> => {
-        const ranking: RankingData = context.app.service('rankings').get(context.id);
+        const ranking: RankingData = await context.app.service('rankings').get(context.id);
         context.data['godfatherId'] = ranking.godfatherId;
         context.data['godsonId'] = ranking.godsonId;
 

@@ -3,6 +3,7 @@
 import {Hook, HookContext} from '@feathersjs/feathers';
 import {RankingData} from '../../services/rankings/rankings.class';
 import {UserData} from '../../services/users/users.class';
+import {Conflict} from "@feathersjs/errors";
 
 // check that the provided rank is not redundant (a godfather shouldn't give the same rank to 2 godsons)
 // warning : has to be included AFTER authenticate hook
@@ -18,7 +19,7 @@ export default (options = {}): Hook => {
                 }
             }).then((rankings: Array<RankingData>) => {
                if (rankings.length)
-                   throw new Error(`User ${loggedUser.id} already gaved rank ${rank} to someone!`);
+                   throw new Conflict(`User ${loggedUser.id} already gaved rank ${rank} to someone!`);
             });
         }
 
