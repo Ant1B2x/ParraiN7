@@ -1,5 +1,11 @@
 import * as feathersAuthentication from '@feathersjs/authentication';
 import * as local from '@feathersjs/authentication-local';
+import checkEmail from '../../hooks/users/check-email';
+import unsetAdmin from '../../hooks/users/unset-admin';
+import checkModifyingUser from '../../hooks/users/check-modifying-user';
+import checkSettingAdminUser from '../../hooks/users/check-setting-admin-user';
+import hideGodsonName from '../../hooks/users/hide-godson-name';
+import hideGodsonsNames from '../../hooks/users/hide-godsons-names';
 // Don't remove this comment. It's needed to format import lines nicely.
 
 const {authenticate} = feathersAuthentication.hooks;
@@ -10,10 +16,10 @@ export default {
         all: [],
         find: [authenticate('jwt')],
         get: [authenticate('jwt')],
-        create: [hashPassword('password'), authenticate('jwt')],
-        update: [hashPassword('password'), authenticate('jwt')],
-        patch: [hashPassword('password'), authenticate('jwt')],
-        remove: [authenticate('jwt')]
+        create: [checkEmail(), unsetAdmin(), hashPassword('password')],
+        update: [authenticate('jwt'), checkModifyingUser(), checkSettingAdminUser(), hashPassword('password')],
+        patch: [authenticate('jwt'), checkModifyingUser(), checkSettingAdminUser(), hashPassword('password')],
+        remove: [authenticate('jwt'), checkModifyingUser()]
     },
 
     after: {
@@ -22,8 +28,8 @@ export default {
             // Always must be the last hook
             protect('password')
         ],
-        find: [],
-        get: [],
+        find: [hideGodsonsNames()],
+        get: [hideGodsonName()],
         create: [],
         update: [],
         patch: [],
