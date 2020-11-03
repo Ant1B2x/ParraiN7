@@ -4,7 +4,8 @@ import checkEmail from '../../hooks/users/check-email';
 import unsetAdmin from '../../hooks/users/unset-admin';
 import checkModifyingUser from '../../hooks/users/check-modifying-user';
 import checkSettingAdminUser from '../../hooks/users/check-setting-admin-user';
-import checkGodfatherNonAdmin from '../../hooks/users/check-godfather-non-admin';
+import hideGodsonName from '../../hooks/users/hide-godson-name';
+import hideGodsonsNames from '../../hooks/users/hide-godsons-names';
 // Don't remove this comment. It's needed to format import lines nicely.
 
 const {authenticate} = feathersAuthentication.hooks;
@@ -27,8 +28,8 @@ export default {
             // Always must be the last hook
             protect('password')
         ],
-        find: [checkGodfatherNonAdmin()],
-        get: [checkGodfatherNonAdmin()],
+        find: [hideGodsonsNames()],
+        get: [hideGodsonName()],
         create: [],
         update: [],
         patch: [],
