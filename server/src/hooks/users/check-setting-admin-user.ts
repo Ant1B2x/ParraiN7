@@ -8,10 +8,11 @@ import {Forbidden} from "@feathersjs/errors";
 // warning : has to be included AFTER authenticate hook
 export default (options = {}): Hook => {
     return async (context: HookContext): Promise<HookContext> => {
+        const newData: UserData = context.data;
         const currentUser: UserData = await context.app.service('users').get(context.id);
         const loggedUser: UserData = context.params.user;
-        if (currentUser.isAdmin && !loggedUser.isAdmin)
-            throw new Forbidden(`User ${loggedUser.email} can't modify ${currentUser.email}!`);
+        if (!loggedUser.isAdmin && newData['isAdmin'])
+            throw new Forbidden(`User ${loggedUser.email} can't set ${currentUser.email} as admin!`);
 
         return context;
     };
