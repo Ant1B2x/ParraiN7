@@ -60,10 +60,10 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-10">
-                        <button type="submit" class="btn btn-warning" :disabled="!userChanged" v-on:click="resetUser">Reset</button>
+                        <button class="btn btn-warning" :disabled="!userChanged" v-on:click="resetUser">Reset</button>
                     </div>
                     <div class="col-sm-2">
-                        <button type="submit" class="btn btn-primary" :disabled="!userChanged" v-on:click="sendUserModifications">Valider</button>
+                        <button class="btn btn-primary" :disabled="!userChanged" v-on:click="sendUserModifications">Valider</button>
                     </div>
                 </div>
             </form>
@@ -113,7 +113,7 @@ export default class Users extends Vue {
     userChanged = false;
 
     async loadUsers() {
-        app.authentication.setAccessToken(JSON.parse(window.localStorage.getItem('user')).accessToken);
+        app.authentication.setAccessToken(JSON.parse(window.localStorage.getItem('user')!).accessToken);
         await app.authenticate();
         app.service('users').find().then(
             (data: any) => {
