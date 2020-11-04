@@ -95,7 +95,7 @@ export default class LogIn extends Vue {
             }
         ).catch( (error: any) => {
             if (error.code === 401) {
-                console.log("mauvais mdp");
+                // console.log("mauvais mdp");
                 this.loginForm.errorMessage = 'Utilisateur ou mot de passe incorrect.';
                 this.loginForm.hasError = true;
             }

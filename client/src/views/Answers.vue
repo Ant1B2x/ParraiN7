@@ -47,14 +47,19 @@
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator';
 import {Question} from "@/views/Questions.vue";
+import app from "@/feathers-client";
+import BACKEND_URL from "@/config";
 
 export class Answer {
-    author: string;
+    idAnswer?: number;
+    firstname: string;
+    lastname: string;
     question: Question;
     content: string;
 
-    constructor(author: string, question: Question, content: string) {
-        this.author = author;
+    constructor(firstname: string, lastname: string,  question: Question, content: string) {
+        this.firstname = firstname;
+        this.lastname = lastname;
         this.question = question;
         this.content = content;
     }
@@ -63,5 +68,21 @@ export class Answer {
 @Component
 export default class Answers extends Vue {
     answers: Answer[] = [];
+
+    async sendQuestion() {
+        await fetch('http://' + BACKEND_URL + '/answers-with-questions')
+            .then(response => response.json())
+            .then(result => {
+                for (const answer of result) {
+                    this.answers.push(new Answer('', '',
+                        new Question(answer.idQuestion, answer.firstnameAuthorQuestion, answer.lastnameAuthorQuestion, answer.contentQuestion),
+                        answer.answerContent))
+                }
+            });
+    }
+
+    mounted() {
+        this.sendQuestion();
+    }
 }
 </script>

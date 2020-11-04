@@ -24,6 +24,9 @@
                     <li class="nav-item ">
                         <router-link class="nav-link" to="/rankings">Choix des poulains</router-link>
                     </li>
+                    <li class="nav-item ">
+                        <router-link class="nav-link" to="/users">Gestion utilisateurs</router-link>
+                    </li>
                     <!-- <li class="nav-item dropdown dropdown-animate" data-toggle="hover">
                         <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pages</a>
                         <div class="dropdown-menu dropdown-menu-single">
