@@ -1,16 +1,52 @@
 <template>
     <div id="app">
-        <MenuParrain7/>
+        <MenuParrain7 :user="this.user" @signalLogOut="logOut"/>
         <router-view/>
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import MenuParrain7 from '@/components/MenuParrain7.vue';
+import {User} from "@/views/Users";
+import app from "@/feathers-client";
+import {Component, Vue} from "vue-property-decorator";
 
-export default {
+@Component({
     components: {
         MenuParrain7,
+    }
+})
+export default class App extends Vue  {
+
+    user: User | null = null;
+
+    mounted() {
+        this.user = this.getUser();
+    }
+
+    beforeUpdate() {
+        if (!this.user) {
+            this.user = this.getUser();
+        }
+    }
+
+    getUser(): User | null {
+        const authFromStorage = JSON.parse(window.localStorage.getItem('user')!);
+        if (authFromStorage) {
+            app.authentication.setAccessToken(authFromStorage.accessToken);
+            app.authenticate();
+            const userFromStorage = authFromStorage.user;
+            return new User(userFromStorage.id, userFromStorage.email, userFromStorage.firstname, userFromStorage.lastname,
+                userFromStorage.isGodfath, userFromStorage.isAdmin);
+        } else {
+            return null;
+        }
+    }
+
+    logOut() {
+        app.logout();
+        window.localStorage.removeItem('user');
+        this.user = null;
     }
 }
 </script>
