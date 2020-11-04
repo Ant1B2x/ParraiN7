@@ -88,14 +88,14 @@ export default class LogIn extends Vue {
             password: this.loginForm.password,
         }).then(
             (data: any) => {
-                console.log(data);
+                window.localStorage.setItem('user', JSON.stringify(data));
                 this.loginForm.email = '';
                 this.loginForm.password = '';
                 this.$router.push('questions');
             }
         ).catch( (error: any) => {
             if (error.code === 401) {
-                console.log("mauvais mdp");
+                // console.log("mauvais mdp");
                 this.loginForm.errorMessage = 'Utilisateur ou mot de passe incorrect.';
                 this.loginForm.hasError = true;
             }

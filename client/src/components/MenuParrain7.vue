@@ -3,7 +3,7 @@
         <div class="container">
             <!-- Brand -->
             <router-link class="navbar-brand" to="/">
-                <img alt="Image placeholder" src="assets/img/brand/the-godfather.svg" id="navbar-logo" style="min-height: 10.75rem;">
+                <img alt="Image placeholder" src="img/brand/the-godfather.svg" id="navbar-logo" style="min-height: 10.75rem;">
             </router-link>
             <!-- Toggler -->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,6 +23,9 @@
                     </li>
                     <li class="nav-item ">
                         <router-link class="nav-link" to="/rankings">Choix des poulains</router-link>
+                    </li>
+                    <li class="nav-item ">
+                        <router-link class="nav-link" to="/users">Gestion utilisateurs</router-link>
                     </li>
                     <!-- <li class="nav-item dropdown dropdown-animate" data-toggle="hover">
                         <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pages</a>

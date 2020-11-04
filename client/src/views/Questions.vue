@@ -50,7 +50,7 @@
                         </div>
                     </div>
                     <div class="pt-2 pb-3">
-                        <h5>{{ question.firstname }} {{question.lastname}}</h5>
+                        <h5>{{ question.authorFirstname }} {{question.authorLastname}}</h5>
                         <p class="text-muted mb-0">
                             {{ question.content }}
                         </p>
@@ -69,17 +69,18 @@
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator';
 import app from '@/feathers-client';
+import BACKEND_URL from "@/config";
 
 export class Question {
     idQuestion: number;
-    firstname: string;
-    lastname: string;
+    authorFirstname: string;
+    authorLastname: string;
     content: string;
 
-    constructor(idQuestion: number, firstname: string, lastname: string, content: string) {
+    constructor(idQuestion: number, authorFirstname: string, authorLastname: string, content: string) {
         this.idQuestion = idQuestion;
-        this.firstname = firstname;
-        this.lastname = lastname;
+        this.authorFirstname = authorFirstname;
+        this.authorLastname = authorLastname;
         this.content = content;
     }
 }
@@ -90,14 +91,14 @@ export default class Questions extends Vue {
     questions: Question[] = [];
     filteredList: Question[] = [];
 
-    async sendQuestion() {
+    async loadQuestions() {
         this.questions = await app.service('questions').find();
-        this.filteredList = this.questions;
+        this.filteredList = JSON.parse(JSON.stringify(this.questions));
         console.log('ok',this.questions);
     }
 
     mounted() {
-        this.sendQuestion();
+        this.loadQuestions();
     }
 
     searchByQuestion = '';
@@ -114,11 +115,15 @@ export default class Questions extends Vue {
     filterByAuthor() {
         this.filteredList = this.questions;
         this.filteredList = this.questions.filter(post =>
-            post.firstname.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            post.authorFirstname.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
                 .includes(this.searchByAuthor.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))
-            || post.lastname.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            || post.authorLastname.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
                 .includes(this.searchByAuthor.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))
         )
+    }
+
+    sendQuestion() {
+        // TODO: send question to the backend.
     }
 
 }
