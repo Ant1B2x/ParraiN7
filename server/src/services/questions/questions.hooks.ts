@@ -1,6 +1,7 @@
 import * as feathersAuthentication from '@feathersjs/authentication';
 import checkGodfather from '../../hooks/check-godfather';
 import setAuthor from '../../hooks/questions/set-author';
+import checkExistingAuthor from '../../hooks/questions/check-existing-author';
 import checkModifyingQuestion from '../../hooks/questions/check-modifying-question';
 import showQuestionAuthor from '../../hooks/questions/show-question-author';
 import showQuestionsAuthors from '../../hooks/questions/show-questions-authors';
@@ -14,8 +15,8 @@ export default {
         find: [],
         get: [],
         create: [authenticate('jwt'), checkGodfather(), setAuthor()],
-        update: [authenticate('jwt'), checkGodfather(), checkModifyingQuestion()],
-        patch: [authenticate('jwt'), checkGodfather(), checkModifyingQuestion()],
+        update: [authenticate('jwt'), checkGodfather(), checkModifyingQuestion(), checkExistingAuthor()],
+        patch: [authenticate('jwt'), checkGodfather(), checkModifyingQuestion(), checkExistingAuthor()],
         remove: [authenticate('jwt'), checkGodfather(), checkModifyingQuestion()]
     },
 
