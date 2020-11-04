@@ -21,7 +21,7 @@
                                     </div>
                                     <input v-model="loginForm.email" type="email" class="form-control" id="input-email"
                                            placeholder="prenom.nom@etu.toulouse-inp.fr"
-                                           v-on:keyup="handleKeyUp"/>
+                                           @keyup="handleKeyUp" @blur="checkError"/>
                                 </div>
                             </div>
                             <div class="form-group mb-0">
@@ -44,7 +44,7 @@
                                 </div>
                             </div>
                             <div class="mt-4">
-                                <button type="button" class="btn btn-primary" v-on:click="logIn">
+                                <button type="button" class="btn btn-primary" v-on:click="logIn" :disabled="loginForm.hasError">
                                     Se connecter
                                 </button>
                             </div>
@@ -69,6 +69,9 @@ import app from "@/feathers-client";
 
 @Component
 export default class LogIn extends Vue {
+
+    private institutionalEmailRegexp =
+        RegExp('^\\w+\\.\\w+@etu\\.toulouse-inp\\.fr$');
 
     private loginForm = {
         email: '',
@@ -105,16 +108,23 @@ export default class LogIn extends Vue {
 
     }
 
+    checkError() {
+        if (!this.institutionalEmailRegexp.test(this.loginForm.email)) {
+            this.loginForm.errorMessage = 'L\'email ne respecte pas le format attendu !';
+            this.loginForm.hasError = true;
+        }
+    }
+
     noError() {
-        this.loginForm.hasError = false;
         this.loginForm.errorMessage = 'Connectez-vous à votre compte pour continuer'
+        this.loginForm.hasError = false;
     }
 
     handleKeyUp(e: any) {
         if (e.keyCode === 13) {
             this.logIn()
-        } else {
-            this.noError()
+        } else if (this.institutionalEmailRegexp.test(this.loginForm.email)) {
+            this.noError();
         }
     }
 

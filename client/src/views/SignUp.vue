@@ -3,10 +3,11 @@
         <div class="row align-items-center justify-content-center">
             <div class="col-md-6 col-lg-5 col-xl-5 py-6 py-md-0">
                 <div class="card shadow zindex-100 mb-0">
-                    <div class="card-body px-md-5 py-5">
+                    <div class="card-body px-md-5 py-5" :class="{ 'hasError': signUpValidation.hasError }">
                         <div class="mb-5">
                             <h6 class="h3">Inscription</h6>
-                            <p class="text-muted mb-0">Veuillez vous inscrire</p>
+                            <p class="text-muted mb-0 errorMessage"
+                               :class="{ 'alert alert-danger': signUpValidation.hasError }"  role="alert">{{signUpValidation.errorMessage}}</p>
                         </div>
                         <span class="clearfix"></span>
                         <form>
@@ -18,8 +19,8 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><font-awesome-icon icon="user"/></span>
                                     </div>
-                                    <input type="email" class="form-control" id="input-email"
-                                           placeholder="name@etu.toulouse-inp.fr">
+                                    <input v-model="signUpForm.email" type="email" class="form-control" id="input-email"
+                                           placeholder="name@etu.toulouse-inp.fr" @keyup="handleKeyUp" @blur="checkError">
                                 </div>
                             </div>
                             <div class="form-group mb-0">
@@ -35,8 +36,8 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><font-awesome-icon icon="key"/></span>
                                     </div>
-                                    <input type="password" class="form-control" id="input-password"
-                                           placeholder="Mot de passe">
+                                    <input v-model="signUpForm.password" type="password" class="form-control" id="input-password"
+                                           placeholder="Mot de passe" @blur="checkError">
                                 </div>
                             </div>
 
@@ -53,8 +54,8 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><font-awesome-icon icon="key"/></span>
                                     </div>
-                                    <input type="password" class="form-control" id="input-password-confirmation"
-                                           placeholder="Mot de passe">
+                                    <input v-model="signUpValidation.passwordConfirm" type="password" class="form-control" id="input-password-confirmation"
+                                           placeholder="Mot de passe" @blur="checkError">
                                 </div>
                             </div>
 
@@ -70,7 +71,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><font-awesome-icon icon="id-card"/></span>
                                     </div>
-                                    <input type="text" class="form-control" id="input-first-name" placeholder="John">
+                                    <input v-model="signUpForm.firstname" type="text" class="form-control" id="input-first-name" placeholder="John" @blur="checkNameValidity">
                                 </div>
                             </div>
 
@@ -82,26 +83,26 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><font-awesome-icon icon="id-card"/></span>
                                     </div>
-                                    <input type="text" class="form-control" id="input-last-name" placeholder="Doe">
+                                    <input v-model="signUpForm.lastname" type="text" class="form-control" id="input-last-name" placeholder="Doe" @blur="checkNameValidity">
                                 </div>
                             </div>
 
                             <hr class="separator"/>
 
-                            <div class="form-group isGodFatherRadio">
+                            <div class="form-group isGodfatherRadio">
                                 <div class="custom-control custom-radio">
-                                    <input type="radio" id="godfatherRadio" name="godfatherRadio"
-                                           class="custom-control-input">
+                                    <input v-model="signUpForm.isGodfather" type="radio" id="godfatherRadio" name="godfatherRadio"
+                                           class="custom-control-input" value=true>
                                     <label class="custom-control-label" for="godfatherRadio">Godfather</label>
                                 </div>
                                 <div class="custom-control custom-radio">
-                                    <input type="radio" id="godsonRadio" name="godfatherRadio"
-                                           class="custom-control-input">
+                                    <input v-model="signUpForm.isGodfather" type="radio" id="godsonRadio" name="godfatherRadio"
+                                           class="custom-control-input" value=false>
                                     <label class="custom-control-label" for="godsonRadio">Godson</label>
                                 </div>
                             </div>
                             <div class="mt-4">
-                                <button type="button" class="btn btn-block btn-primary" v-on:click="logIn">S'inscrire
+                                <button type="button" class="btn btn-block btn-primary" v-on:click="signUp" :disabled="signUpValidation.hasError">S'inscrire
                                 </button>
                             </div>
                         </form>
@@ -121,11 +122,89 @@
 
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator';
+import app from "@/feathers-client";
 
 @Component
 export default class LogIn extends Vue {
-    logIn = async () => {
-        console.log("...")
+
+    //Yep
+    private institutionalEmailRegexp =
+        RegExp('^\\w+\\.\\w+@etu\\.toulouse-inp\\.fr$');
+    
+    private nameValidity =
+        RegExp('^\\w+$');
+
+    private signUpValidation = {
+        passwordConfirm: '',
+        hasError: false,
+        errorMessage: 'Entrez vos informations utilisateurs'
+    }
+
+    private signUpForm = {
+        email: '',
+        password: '',
+        firstname: '',
+        lastname: '',
+        isGodfather: false,
+        isAdmin: false,
+    }
+
+    public signUp = async () => {
+
+        this.signUpValidation.hasError = false;
+        this.signUpValidation.errorMessage = 'Entrez vos informations utilisateurs';
+        app.logout();
+
+        await app.service('users').create(this.signUpForm).then(
+            (data: any) => {
+                //Send check email or smth
+                console.log(data);
+                this.$router.push('home');
+            }
+        ).catch( (error: any) => {
+            console.log(error);
+            if (error.code === 409) {
+                this.signUpValidation.errorMessage = 'Un utilisateur existe déjà avec cet email !';
+                this.signUpValidation.hasError = true;
+            }
+            if (error.code === 406) {
+                this.signUpValidation.errorMessage = 'L\'email ne respecte pas le format attendu !';
+                this.signUpValidation.hasError = true;
+            }
+        });
+    }
+
+    checkError() {
+        if ((this.signUpForm.password && this.signUpValidation.passwordConfirm) && (this.signUpForm.password != this.signUpValidation.passwordConfirm)) {
+            this.signUpValidation.errorMessage = "Les mots de passe ne correspondent pas !";
+            this.signUpValidation.hasError = true;
+        } else if (!this.institutionalEmailRegexp.test(this.signUpForm.email)) {
+            this.signUpValidation.errorMessage = 'L\'email ne respecte pas le format attendu !';
+            this.signUpValidation.hasError = true;
+        } else {
+            this.noError();
+        }
+    }
+
+    noError() {
+        this.signUpValidation.errorMessage = "Entrez vos informations utilisateurs";
+        this.signUpValidation.hasError = false;
+    }
+
+    checkNameValidity() {
+        if ((this.signUpForm.firstname && !this.nameValidity.test(this.signUpForm.firstname))
+            || (this.signUpForm.lastname && !this.nameValidity.test(this.signUpForm.lastname))) {
+                this.signUpValidation.errorMessage = 'Le nom et/ou le prénom ne respecte(nt) pas le format attendu !';
+                this.signUpValidation.hasError = true;
+            }
+    }
+
+    handleKeyUp(e: any) {
+        if (e.keyCode === 13) {
+            this.signUp()
+        } else {
+            this.noError()
+        }
     }
 }
 
