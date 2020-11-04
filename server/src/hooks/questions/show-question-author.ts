@@ -3,13 +3,13 @@
 import {Hook, HookContext} from '@feathersjs/feathers';
 import {UserData} from "../../services/users/users.class";
 
-// add author name to sent question
+// add author to sent question
 export default (options = {}): Hook => {
     return async (context: HookContext): Promise<HookContext> => {
         const sentQuestion = context.result;
         const author: UserData = await context.app.service('users').get(sentQuestion['authorId']);
-        sentQuestion['authorFirstname'] = author.firstname;
-        sentQuestion['authorLastname'] = author.lastname;
+
+        sentQuestion['author'] = author;
 
         return context;
     };
