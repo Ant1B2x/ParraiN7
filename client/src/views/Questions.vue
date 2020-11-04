@@ -14,7 +14,7 @@
                 </div>
             </div>
             <div class="mt-4">
-                <button type="button" class="btn btn-block btn-primary" v-on:click="sendQuestion">Ajouter</button>
+                <button type="button" class="btn btn-block btn-primary" v-on:click="loadQuestions">Ajouter</button>
             </div>
         </form>
 
@@ -87,22 +87,22 @@ export class Question {
 
 @Component
 export default class Questions extends Vue {
-    
+
     questions: Question[] = [];
     filteredList: Question[] = [];
 
-    async sendQuestion() {
+    async loadQuestions() {
         console.log(app.service('questions').find());
         await fetch('http://' + BACKEND_URL + '/questions-with-authors')
             .then(response => response.json())
             .then(result => {
                 this.questions = result;
-                this.filteredList = this.questions;
+                this.filteredList = JSON.parse(JSON.stringify(this.questions));
             });
-    }    
-    
+    }
+
     mounted() {
-        this.sendQuestion();
+        this.loadQuestions();
     }
 
     searchByQuestion = '';
