@@ -17,11 +17,11 @@ export default (options = {}): Hook => {
                 email: context.data['email']
             }
         });
-        if (testEmail)
+        if (testEmail.length > 0)
             throw new Conflict('A user already has this email!');
         if (!institutionalEmailRegexp.test(context.data['email']))
             throw new NotAcceptable('Email does not respect the institutional convention!');
-                        
+
         return context;
     };
 };

@@ -130,7 +130,7 @@ export default class LogIn extends Vue {
     //Yep
     private institutionalEmailRegexp =
         RegExp('^\\w+\\.\\w+@etu\\.toulouse-inp\\.fr$');
-    
+
     private nameValidity =
         RegExp('^\\w+$');
 
@@ -163,12 +163,16 @@ export default class LogIn extends Vue {
             }
         ).catch( (error: any) => {
             console.log(error);
-            if (error.code === 409) {
-                this.signUpValidation.errorMessage = 'Un utilisateur existe déjà avec cet email !';
+            if (error.code === 400) {
+                this.signUpValidation.errorMessage = 'Le nom et/ou le prénom ne respecte(nt) pas le format attendu !';
                 this.signUpValidation.hasError = true;
             }
             if (error.code === 406) {
                 this.signUpValidation.errorMessage = 'L\'email ne respecte pas le format attendu !';
+                this.signUpValidation.hasError = true;
+            }
+            if (error.code === 409) {
+                this.signUpValidation.errorMessage = 'Un utilisateur existe déjà avec cet email !';
                 this.signUpValidation.hasError = true;
             }
         });

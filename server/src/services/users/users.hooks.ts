@@ -1,6 +1,7 @@
 import * as feathersAuthentication from '@feathersjs/authentication';
 import * as local from '@feathersjs/authentication-local';
 import checkEmail from '../../hooks/users/check-email';
+import checkName from '../../hooks/users/check-name';
 import unsetAdmin from '../../hooks/users/unset-admin';
 import checkModifyingUser from '../../hooks/users/check-modifying-user';
 import checkSettingAdminUser from '../../hooks/users/check-setting-admin-user';
@@ -16,7 +17,7 @@ export default {
         all: [],
         find: [authenticate('jwt')],
         get: [authenticate('jwt')],
-        create: [checkEmail(), unsetAdmin(), hashPassword('password')],
+        create: [checkEmail(), checkName(), unsetAdmin(), hashPassword('password')],
         update: [authenticate('jwt'), checkModifyingUser(), checkSettingAdminUser(), hashPassword('password')],
         patch: [authenticate('jwt'), checkModifyingUser(), checkSettingAdminUser(), hashPassword('password')],
         remove: [authenticate('jwt'), checkModifyingUser()]
