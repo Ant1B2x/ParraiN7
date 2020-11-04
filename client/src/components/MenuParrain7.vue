@@ -15,16 +15,16 @@
                     <li class="nav-item ">
                         <router-link class="nav-link" to="/">Home</router-link>
                     </li>
-                    <li class="nav-item ">
+                    <li class="nav-item " v-if="this.isGodfather()">
                         <router-link class="nav-link" to="/questions">Questions</router-link>
                     </li>
-                    <li class="nav-item ">
+                    <li class="nav-item " v-if="this.isGodSon()">
                         <router-link class="nav-link" to="/answers">Réponses</router-link>
                     </li>
-                    <li class="nav-item ">
+                    <li class="nav-item " v-if="this.isGodfather()">
                         <router-link class="nav-link" to="/rankings">Choix des poulains</router-link>
                     </li>
-                    <li class="nav-item ">
+                    <li class="nav-item " v-if="this.isAdmin()">
                         <router-link class="nav-link" to="/users">Gestion utilisateurs</router-link>
                     </li>
                     <!-- <li class="nav-item dropdown dropdown-animate" data-toggle="hover">
@@ -59,9 +59,42 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import app from "@/feathers-client";
+import {User} from "@/views/Users.vue";
 
 @Component
-export default class MenuParrain7 extends Vue {}
+export default class MenuParrain7 extends Vue {
+
+    user: User | null = null;
+
+    mounted() {
+        this.user = this.getUser();
+    }
+
+    getUser(): User | null {
+        const userFromStorage = JSON.parse(window.localStorage.getItem('user')!);
+        if (userFromStorage) {
+            app.authentication.setAccessToken(userFromStorage.accessToken);
+            app.authenticate();
+            return new User(userFromStorage.id, userFromStorage.email, userFromStorage.firstname, userFromStorage.lastname,
+                userFromStorage.isGodfath, userFromStorage.isAdmin);
+        } else {
+            return null;
+        }
+    }
+
+    isAdmin(): boolean {
+        return !!this.user && this.user.isAdmin;
+    }
+
+    isGodfather(): boolean {
+        return !!this.user && this.user.isGodfather || this.isAdmin();
+    }
+
+    isGodSon(): boolean {
+        return !!this.user && !this.user.isGodfather || this.isAdmin();
+    }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
