@@ -3,6 +3,7 @@
 import {Hook, HookContext} from '@feathersjs/feathers';
 import {UserData} from '../services/users/users.class';
 import {checkAdmin} from './common-checks';
+import {Forbidden} from "@feathersjs/errors";
 
 // check if an user is admin, throw an error if he isn't
 // warning : has to be included AFTER authenticate hook
@@ -10,7 +11,7 @@ export default (options = {}): Hook => {
     return async (context: HookContext): Promise<HookContext> => {
         const user: UserData = context.params.user;
         if (!checkAdmin(context))
-            throw new Error(`User ${user.email} isn't admin!`);
+            throw new Forbidden(`User ${user.email} isn't admin!`);
 
         return context;
     };

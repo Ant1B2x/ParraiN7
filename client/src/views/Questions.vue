@@ -14,7 +14,7 @@
                 </div>
             </div>
             <div class="mt-4">
-                <button type="button" class="btn btn-block btn-primary" v-on:click="loadQuestions">Ajouter</button>
+                <button type="button" class="btn btn-block btn-primary" v-on:click="sendQuestion">Ajouter</button>
             </div>
         </form>
 
@@ -92,13 +92,9 @@ export default class Questions extends Vue {
     filteredList: Question[] = [];
 
     async loadQuestions() {
-        console.log(app.service('questions').find());
-        await fetch('http://' + BACKEND_URL + '/questions-with-authors')
-            .then(response => response.json())
-            .then(result => {
-                this.questions = result;
-                this.filteredList = JSON.parse(JSON.stringify(this.questions));
-            });
+        this.questions = await app.service('questions').find();
+        this.filteredList = JSON.parse(JSON.stringify(this.questions));
+        console.log('ok',this.questions);
     }
 
     mounted() {
@@ -124,6 +120,10 @@ export default class Questions extends Vue {
             || post.lastname.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
                 .includes(this.searchByAuthor.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))
         )
+    }
+
+    sendQuestion() {
+        // TODO: send question to the backend.
     }
 
 }

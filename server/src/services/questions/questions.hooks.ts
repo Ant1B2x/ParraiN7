@@ -2,6 +2,8 @@ import * as feathersAuthentication from '@feathersjs/authentication';
 import checkGodfather from '../../hooks/check-godfather';
 import setAuthor from '../../hooks/questions/set-author';
 import checkModifyingQuestion from '../../hooks/questions/check-modifying-question';
+import showQuestionAuthor from '../../hooks/questions/show-question-author';
+import showQuestionsAuthors from '../../hooks/questions/show-questions-authors';
 // Don't remove this comment. It's needed to format import lines nicely.
 
 const {authenticate} = feathersAuthentication.hooks;
@@ -19,8 +21,8 @@ export default {
 
     after: {
         all: [],
-        find: [],
-        get: [],
+        find: [showQuestionsAuthors()],
+        get: [showQuestionAuthor()],
         create: [],
         update: [],
         patch: [],
