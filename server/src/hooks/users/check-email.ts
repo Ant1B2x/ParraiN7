@@ -3,24 +3,26 @@
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
 import {Hook, HookContext} from '@feathersjs/feathers';
 import {Conflict, NotAcceptable} from '@feathersjs/errors';
-import app from '../../app';
 
 // I'm trusting Esteban for this one.
 // Not anymore. I did it alllllllll over again. Was very hard. Love, Yvan.
 const institutionalEmailRegexp =
-    RegExp('^\\w+\\.\\w+@etu\\.toulouse-inp\\.fr$');
+    RegExp('^(([^<>()\\[\\]\\\\.,;:\\s@"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@"]+)*)|(".+"))@etu\\.toulouse-inp\\.fr$');
 
+// check that user has entered a non-existant institutional email
 export default (options = {}): Hook => {
     return async (context: HookContext): Promise<HookContext> => {
         if (!institutionalEmailRegexp.test(context.data['email']))
             throw new NotAcceptable('Email does not respect the institutional convention!');
-        const testEmail = await context.app.service('users').find({
+
+        const emails = await context.app.service('users').find({
             query: {
                 email: context.data['email']
             }
         });
-        if (testEmail.length > 0)
+        if (emails.length > 0)
             throw new Conflict('A user already has this email!');
+
         return context;
     };
 };
