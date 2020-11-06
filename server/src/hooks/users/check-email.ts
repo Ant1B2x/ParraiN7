@@ -2,7 +2,7 @@
 // Use this hook to manipulate incoming or outgoing data.
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
 import {Hook, HookContext} from '@feathersjs/feathers';
-import {Conflict, NotAcceptable} from "@feathersjs/errors";
+import {Conflict, NotAcceptable} from '@feathersjs/errors';
 import app from '../../app';
 
 // I'm trusting Esteban for this one.
@@ -19,7 +19,7 @@ export default (options = {}): Hook => {
                 email: context.data['email']
             }
         });
-        if (testEmail)
+        if (testEmail.length > 0)
             throw new Conflict('A user already has this email!');
         return context;
     };

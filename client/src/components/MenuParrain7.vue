@@ -45,9 +45,12 @@
                 <!--a class="navbar-btn btn btn-sm btn-primary d-none d-lg-inline-block ml-3" href="https://github.com/webpixels/quick-website-ui-kit-demo/archive/master.zip">
                     Download Free
                 </a-->
-                <router-link class="navbar-btn btn btn-sm btn-primary d-none d-lg-inline-block ml-3" to="/login">
+                <router-link class="navbar-btn btn btn-sm btn-primary d-none d-lg-inline-block ml-3" to="/login" v-if="!this.user">
                     Log in
                 </router-link>
+                <button class="navbar-btn btn btn-sm btn-danger d-none d-lg-inline-block ml-3" v-if="this.user" @click="signalLogOut">
+                    Log out
+                </button>
                 <!-- Mobile button -->
                 <div class="d-lg-none text-center">
                     <a href="https://webpixels.io/themes/quick-website-ui-kit" class="btn btn-block btn-sm btn-warning">See more details</a>
@@ -58,41 +61,29 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import {Component, Vue, Prop, Emit} from 'vue-property-decorator';
 import app from "@/feathers-client";
 import {User} from "@/views/Users.vue";
 
 @Component
 export default class MenuParrain7 extends Vue {
 
-    user: User | null = null;
-
-    mounted() {
-        this.user = this.getUser();
-    }
-
-    getUser(): User | null {
-        const userFromStorage = JSON.parse(window.localStorage.getItem('user')!);
-        if (userFromStorage) {
-            app.authentication.setAccessToken(userFromStorage.accessToken);
-            app.authenticate();
-            return new User(userFromStorage.id, userFromStorage.email, userFromStorage.firstname, userFromStorage.lastname,
-                userFromStorage.isGodfath, userFromStorage.isAdmin);
-        } else {
-            return null;
-        }
-    }
+    @Prop() user: User | null = null;
 
     isAdmin(): boolean {
         return !!this.user && this.user.isAdmin;
     }
 
     isGodfather(): boolean {
-        return !!this.user && this.user.isGodfather || this.isAdmin();
+        return (!!this.user && this.user.isGodfather) || this.isAdmin();
     }
 
     isGodSon(): boolean {
-        return !!this.user && !this.user.isGodfather || this.isAdmin();
+        return (!!this.user && !this.user.isGodfather) || this.isAdmin();
+    }
+
+    signalLogOut() {
+        this.$emit('signalLogOut');
     }
 }
 </script>

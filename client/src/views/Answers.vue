@@ -70,15 +70,20 @@ export default class Answers extends Vue {
     answers: Answer[] = [];
 
     async sendQuestion() {
-        await fetch('http://' + BACKEND_URL + '/answers-with-questions')
-            .then(response => response.json())
-            .then(result => {
-                for (const answer of result) {
-                    this.answers.push(new Answer('', '',
-                        new Question(answer.idQuestion, answer.firstnameAuthorQuestion, answer.lastnameAuthorQuestion, answer.contentQuestion),
-                        answer.answerContent))
+        try {
+            await app.service('answers').find( { query: { userId: 10 } } ).then(
+                (data: any) => {
+                    console.log(data);
+                    for (const answer of data) {
+                        this.answers.push(new Answer(answer.firstname, answer.lastname,
+                            new Question(answer.question.id, answer.question.author.firstnamle, answer.question.author.lastname, answer.question.content),
+                            answer.content))
+                    }
                 }
-            });
+            );
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     mounted() {

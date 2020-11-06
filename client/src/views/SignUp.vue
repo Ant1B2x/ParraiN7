@@ -1,7 +1,7 @@
 <template>
     <div class="container d-flex flex-column">
         <div class="row align-items-center justify-content-center">
-            <div class="col-md-6 col-lg-5 col-xl-5 py-6 py-md-0">
+            <div class="col-md-6 py-6 py-md-0">
                 <div class="card shadow zindex-100 mb-0">
                     <div class="card-body px-md-5 py-5" :class="{ 'hasError': signUpValidation.hasError }">
                         <div class="mb-5">
@@ -20,7 +20,11 @@
                                         <span class="input-group-text"><font-awesome-icon icon="user"/></span>
                                     </div>
                                     <input v-model="signUpForm.email" type="email" class="form-control" id="input-email"
-                                           placeholder="name@etu.toulouse-inp.fr" @keyup="handleKeyUp" @blur="checkError">
+                                           placeholder="prenom.nom" @keyup="handleKeyUp" @blur="checkError">
+
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">@etu.toulouse-inp.fr</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group mb-0">
@@ -130,7 +134,7 @@ export default class LogIn extends Vue {
     //Yep
     private institutionalEmailRegexp =
         RegExp('^\\w+\\.\\w+@etu\\.toulouse-inp\\.fr$');
-    
+
     private nameValidity =
         RegExp('^\\w+$');
 
@@ -155,7 +159,11 @@ export default class LogIn extends Vue {
         this.signUpValidation.errorMessage = 'Entrez vos informations utilisateurs';
         app.logout();
 
-        await app.service('users').create(this.signUpForm).then(
+
+        const signUpFormBis = JSON.parse(JSON.stringify(this.signUpForm));
+        signUpFormBis.email = signUpFormBis.email + '@etu.toulouse-inp.fr';
+
+        await app.service('users').create(signUpFormBis).then(
             (data: any) => {
                 //Send check email or smth
                 console.log(data);
@@ -179,11 +187,20 @@ export default class LogIn extends Vue {
     }
 
     checkError() {
+        /*
         if ((this.signUpForm.password && this.signUpValidation.passwordConfirm) && (this.signUpForm.password != this.signUpValidation.passwordConfirm)) {
             this.signUpValidation.errorMessage = "Les mots de passe ne correspondent pas !";
             this.signUpValidation.hasError = true;
         } else if (!this.institutionalEmailRegexp.test(this.signUpForm.email)) {
             this.signUpValidation.errorMessage = 'L\'email ne respecte pas le format attendu !';
+            this.signUpValidation.hasError = true;
+        } else {
+            this.noError();
+        }
+        */
+
+        if ((this.signUpForm.password && this.signUpValidation.passwordConfirm) && (this.signUpForm.password != this.signUpValidation.passwordConfirm)) {
+            this.signUpValidation.errorMessage = "Les mots de passe ne correspondent pas !";
             this.signUpValidation.hasError = true;
         } else {
             this.noError();
