@@ -19,6 +19,10 @@
         <!-- Ligne séparatrice -->
         <hr class="separator"/>
 
+        <div class="card-body px-md-5 py-5" v-bind:class="[validation.messageState]">
+            <p class="text-muted mb-0 alertMessage" role="alert">{{validation.message}}</p>
+        </div>
+
         <div v-if="selectedPoulain">
             <h2 style="color: #152c5b;">{{selectedPoulain.name}}</h2>
             <Rating :grade="selectedPoulain.rank" :maxStars="5" :hasCounter="true" @updatedStars="changeRating"/>
@@ -56,6 +60,7 @@ import {Component, Vue} from 'vue-property-decorator';
 import {Answer} from "@/views/Answers.vue";
 import {Question} from "@/views/Questions.vue";
 import Rating from "@/components/Rating.vue"
+import {MessageState} from "@/views/enum";
 
 export class Poulain {
     idUser: number;
@@ -106,6 +111,11 @@ export default class Rankins extends Vue {
             ]
         ),
     ]
+
+    private validation = {
+        message: 'Vote du poulain',
+        messageState: MessageState.none,
+    }
 
     selectedPoulain: Poulain = this.poulains[0];
 
