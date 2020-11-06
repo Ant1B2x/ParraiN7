@@ -12,6 +12,8 @@ const institutionalEmailRegexp =
 
 export default (options = {}): Hook => {
     return async (context: HookContext): Promise<HookContext> => {
+        if (!institutionalEmailRegexp.test(context.data['email']))
+            throw new NotAcceptable('Email does not respect the institutional convention!');
         const testEmail = await context.app.service('users').find({
             query: {
                 email: context.data['email']
@@ -19,9 +21,6 @@ export default (options = {}): Hook => {
         });
         if (testEmail)
             throw new Conflict('A user already has this email!');
-        if (!institutionalEmailRegexp.test(context.data['email']))
-            throw new NotAcceptable('Email does not respect the institutional convention!');
-                        
         return context;
     };
 };
