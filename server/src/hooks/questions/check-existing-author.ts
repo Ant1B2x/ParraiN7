@@ -11,14 +11,13 @@ export default (options = {}): Hook => {
         const newData: QuestionData = context.data;
         if (newData['authorId']) {
 
-            await context.app.service('users').find({
+            const users: Array<UserData> = await context.app.service('users').find({
                 query: {
                     id: newData.authorId
                 }
-            }).then((users: Array<UserData>) => {
-                if (!users.length)
-                    throw new NotFound(`There's no user of id ${newData.authorId}!`);
             });
+            if (!users.length)
+                throw new NotFound(`There's no user of id ${newData.authorId}!`);
 
         }
 

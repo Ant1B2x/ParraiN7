@@ -4,16 +4,17 @@
 import {Hook, HookContext} from '@feathersjs/feathers';
 import {BadRequest} from "@feathersjs/errors";
 
-
-// I'm trusting Esteban for this one.
-// Not anymore. I did it alllllllll over again. Was very hard. Love, Yvan.
 const nameRegEx =
     RegExp('^\\w+$');
 
+// check that user's firstname and lastname are well-formed
 export default (options = {}): Hook => {
     return async (context: HookContext): Promise<HookContext> => {
-        if (!nameRegEx.test(context.data['firstname']) || !nameRegEx.test(context.data['lastname']))
-            throw new BadRequest('Firstname and/or lastname does not respect the expected format!');
+        if (context.data['firstname'] && !nameRegEx.test(context.data['firstname']))
+            throw new BadRequest('Firstname does not respect the expected format!')
+
+        if (context.data['lastname'] && !nameRegEx.test(context.data['lastname']))
+            throw new BadRequest('Lastname does not respect the expected format!')
 
         return context;
     };

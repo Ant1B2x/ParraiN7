@@ -12,15 +12,14 @@ export default (options = {}): Hook => {
         const rank: number = context.data['rank'];
         if (rank) {
             const loggedUser: UserData = context.params.user;
-            await context.app.service('ranks').find({
+            const rankings: Array<RankingData> = await context.app.service('ranks').find({
                 query: {
                     godfatherId: loggedUser.id,
                     rank: rank
                 }
-            }).then((rankings: Array<RankingData>) => {
-               if (rankings.length)
-                   throw new Conflict(`User ${loggedUser.id} already gaved rank ${rank} to someone!`);
             });
+            if (rankings.length)
+                throw new Conflict(`User ${loggedUser.id} already gaved rank ${rank} to someone!`);
         }
 
         return context;
