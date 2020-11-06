@@ -27,7 +27,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group mb-0">
+                            <div class="form-group">
                                 <div class="d-flex align-items-center justify-content-between">
 
                                     <label class="form-control-label">Mot de passe</label>
@@ -45,7 +45,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group mb-0">
+                            <div class="form-group">
                                 <div class="d-flex align-items-center justify-content-between">
 
                                     <label class="form-control-label">Confirmer mot de passe</label>
@@ -62,9 +62,6 @@
                                            placeholder="Mot de passe" @blur="checkError">
                                 </div>
                             </div>
-
-
-                            <hr class="separator"/>
 
 
                             <div class="form-group">
@@ -91,18 +88,16 @@
                                 </div>
                             </div>
 
-                            <hr class="separator"/>
-
                             <div class="form-group isGodfatherRadio">
-                                <div class="custom-control custom-radio">
+                                <div class="custom-control custom-radio custom-control-inline">
                                     <input v-model="signUpForm.isGodfather" type="radio" id="godfatherRadio" name="godfatherRadio"
                                            class="custom-control-input" value=true>
-                                    <label class="custom-control-label" for="godfatherRadio">Godfather</label>
+                                    <label class="custom-control-label" for="godfatherRadio">Parrain</label>
                                 </div>
-                                <div class="custom-control custom-radio">
+                                <div class="custom-control custom-radio custom-control-inline">
                                     <input v-model="signUpForm.isGodfather" type="radio" id="godsonRadio" name="godfatherRadio"
                                            class="custom-control-input" value=false>
-                                    <label class="custom-control-label" for="godsonRadio">Godson</label>
+                                    <label class="custom-control-label" for="godsonRadio">Filleul</label>
                                 </div>
                             </div>
                             <div class="mt-4">

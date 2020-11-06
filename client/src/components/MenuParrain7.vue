@@ -13,7 +13,7 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav mt-4 mt-lg-0 ml-auto">
                     <li class="nav-item ">
-                        <router-link class="nav-link" to="/">Home</router-link>
+                        <router-link class="nav-link" to="/">Accueil</router-link>
                     </li>
                     <li class="nav-item " v-if="this.isGodfather()">
                         <router-link class="nav-link" to="/questions">Questions</router-link>
@@ -26,6 +26,9 @@
                     </li>
                     <li class="nav-item " v-if="this.isAdmin()">
                         <router-link class="nav-link" to="/users">Gestion utilisateurs</router-link>
+                    </li>
+                    <li class="nav-item ">
+                        <router-link class="nav-link" to="/about">A propos</router-link>
                     </li>
                     <!-- <li class="nav-item dropdown dropdown-animate" data-toggle="hover">
                         <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pages</a>
@@ -46,10 +49,10 @@
                     Download Free
                 </a-->
                 <router-link class="navbar-btn btn btn-sm btn-primary d-none d-lg-inline-block ml-3" to="/login" v-if="!this.user">
-                    Log in
+                    Connexion
                 </router-link>
                 <button class="navbar-btn btn btn-sm btn-danger d-none d-lg-inline-block ml-3" v-if="this.user" @click="signalLogOut">
-                    Log out
+                    Déconnexion
                 </button>
                 <!-- Mobile button -->
                 <div class="d-lg-none text-center">
@@ -61,7 +64,7 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue, Prop, Emit} from 'vue-property-decorator';
+import {Component, Vue, Prop} from 'vue-property-decorator';
 import app from "@/feathers-client";
 import {User} from "@/views/Users.vue";
 
