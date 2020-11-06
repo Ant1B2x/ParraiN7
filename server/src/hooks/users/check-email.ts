@@ -2,7 +2,7 @@
 // Use this hook to manipulate incoming or outgoing data.
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
 import {Hook, HookContext} from '@feathersjs/feathers';
-import {Conflict, NotAcceptable} from "@feathersjs/errors";
+import {Conflict, NotAcceptable} from '@feathersjs/errors';
 import app from '../../app';
 
 // I'm trusting Esteban for this one.
@@ -12,6 +12,8 @@ const institutionalEmailRegexp =
 
 export default (options = {}): Hook => {
     return async (context: HookContext): Promise<HookContext> => {
+        if (!institutionalEmailRegexp.test(context.data['email']))
+            throw new NotAcceptable('Email does not respect the institutional convention!');
         const testEmail = await context.app.service('users').find({
             query: {
                 email: context.data['email']
@@ -19,9 +21,6 @@ export default (options = {}): Hook => {
         });
         if (testEmail.length > 0)
             throw new Conflict('A user already has this email!');
-        if (!institutionalEmailRegexp.test(context.data['email']))
-            throw new NotAcceptable('Email does not respect the institutional convention!');
-
         return context;
     };
 };
