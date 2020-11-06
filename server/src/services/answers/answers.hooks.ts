@@ -4,8 +4,8 @@ import setGodson from '../../hooks/answers/set-godson';
 import checkExistingQuestion from '../../hooks/answers/check-existing-question';
 import keepAnswerForeignIds from '../../hooks/answers/keep-answer-foreign-ids';
 import checkModifyingAnswer from '../../hooks/answers/check-modifying-answer';
-import showAnswerUser from '../../hooks/answers/show-answer-user';
-import showAnswersUsers from '../../hooks/answers/show-answers-users';
+import showAnswerForeigns from '../../hooks/answers/show-answer-foreigns';
+import showAnswersForeigns from '../../hooks/answers/show-answers-foreigns';
 // Don't remove this comment. It's needed to format import lines nicely.
 
 const {authenticate} = feathersAuthentication.hooks;
@@ -23,8 +23,8 @@ export default {
 
     after: {
         all: [],
-        find: [showAnswersUsers()],
-        get: [showAnswerUser()],
+        find: [showAnswersForeigns()],
+        get: [showAnswerForeigns()],
         create: [],
         update: [],
         patch: [],

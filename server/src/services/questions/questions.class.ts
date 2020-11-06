@@ -4,6 +4,7 @@ import {Application} from '../../declarations';
 export interface QuestionData {
     id?: number;
     content: string;
+    placeholder?: string;
     authorId: number;
 }
 
