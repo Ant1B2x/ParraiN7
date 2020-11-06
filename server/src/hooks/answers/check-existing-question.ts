@@ -9,14 +9,14 @@ import {NotFound} from "@feathersjs/errors";
 export default (options = {}): Hook => {
     return async (context: HookContext): Promise<HookContext> => {
         const answer: AnswerData = context.data;
-        await context.app.service('questions').find({
+
+        const questions: Array<QuestionData> = await context.app.service('questions').find({
             query: {
                 id: answer.questionId
             }
-        }).then((questions: Array<QuestionData>) => {
-            if(!questions.length)
-                throw new NotFound(`There's no question of id ${answer.questionId}!`);
         });
+        if (!questions.length)
+            throw new NotFound(`There's no question of id ${answer.questionId}!`);
 
         return context;
     };
