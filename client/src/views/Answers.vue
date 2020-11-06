@@ -22,7 +22,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1">¿</span>
                                 </div>
-                                <textarea type="text" class="form-control" placeholder="Votre réponse"
+                                <textarea type="text" class="form-control" :placeholder="answer.question.placeholder ? answer.question.placeholder : 'Votre réponse...'"
                                 v-model="answer.content"></textarea>
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="basic-addon2">?</span>

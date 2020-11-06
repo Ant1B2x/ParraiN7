@@ -17,62 +17,62 @@
 }
 
 @keyframes hidePreloader {
-    0% {
-      width: 100%;
-      height: 100%;
-    }
-
-    100% {
-      width: 0;
-      height: 0;
-    }
-  }
-
-  body>div.preloader {
-    position: fixed;
-    background: white;
+  0% {
     width: 100%;
     height: 100%;
-    z-index: 1071;
-    opacity: 0;
-    transition: opacity .5s ease;
-    overflow: hidden;
-    pointer-events: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
 
-  body:not(.loaded)>div.preloader {
-    opacity: 1;
+  100% {
+    width: 0;
+    height: 0;
   }
+}
 
-  body:not(.loaded) {
-    overflow: hidden;
-  }
+body > div.preloader {
+  position: fixed;
+  background: white;
+  width: 100%;
+  height: 100%;
+  z-index: 1071;
+  opacity: 0;
+  transition: opacity .5s ease;
+  overflow: hidden;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  body.loaded>div.preloader {
-    animation: hidePreloader .5s linear .5s forwards;
-  }
+body:not(.loaded) > div.preloader {
+  opacity: 1;
+}
 
-  .container {
-    margin-top: 1%;
-  }
+body:not(.loaded) {
+  overflow: hidden;
+}
 
-  .card {
-    transition: all 1s;
-  }
+body.loaded > div.preloader {
+  animation: hidePreloader .5s linear .5s forwards;
+}
 
-  .errorMessage {
-    transition: all 0.35s;
-  }
+.container {
+  margin-top: 1%;
+}
 
-  .hasError .errorMessage {
-    color: #721c24 !important;
-    background-color: #f8d7da !important;
-    border-color: #f5c6cb !important;
-  }
+.card {
+  transition: all 1s;
+}
 
-  .hasError .form-group .input-group > .input-group-prepend > .input-group-text > svg {
-    color: #dc6b6b;
-  }
+.errorMessage {
+  transition: all 0.35s;
+}
+
+.hasError .errorMessage {
+  color: #721c24 !important;
+  background-color: #f8d7da !important;
+  border-color: #f5c6cb !important;
+}
+
+.hasError .form-group .input-group > .input-group-prepend > .input-group-text > svg {
+  color: #dc6b6b;
+}

@@ -1,16 +1,31 @@
 <template>
     <div class="questionArea">
+        <div class="card-body px-md-5 py-5" v-bind:class="[validation.messageState]">
+            <p class="text-muted mb-0 alertMessage" role="alert">{{validation.message}}</p>
+        </div>
         <form>
             <div class="form-group">
                 <label class="form-control-label">Question</label>
                 <div class="input-group">
                     <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1">?</span>
+                        <span class="input-group-text" id="questionInputPrepend">?</span>
                     </div>
-                    <input type="text" class="form-control" placeholder="Votre question">
+                    <input type="text" class="form-control" placeholder="Votre question"
+                           v-model="questionToAdd" @keyup.enter="sendQuestion">
                     <div class="input-group-append">
-                        <span class="input-group-text" id="basic-addon2">¿</span>
+                        <span class="input-group-text" id="questionInputAppend">¿</span>
                     </div>
+                </div>
+            </div>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="customCheck1" v-model="addPlaceholder">
+                <label class="custom-control-label" for="customCheck1">Ajouter un placeholder ?</label>
+            </div>
+            <div class="form-group col-md-8 placeholder" v-if="addPlaceholder">
+                <!--label class="form-control-label">Placeholder</label-->
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Votre placeholder"
+                           v-model="placeholder" @keyup.enter="sendQuestion">
                 </div>
             </div>
             <div class="mt-4">
@@ -50,7 +65,7 @@
                         </div>
                     </div>
                     <div class="pt-2 pb-3">
-                        <h5>{{ question.authorFirstname }} {{question.authorLastname}}</h5>
+                        <h5>{{ question.author.firstname }} {{question.author.lastname}}</h5>
                         <p class="text-muted mb-0">
                             {{ question.content }}
                         </p>
@@ -64,23 +79,25 @@
 <style scoped>
 /*@import "public/assets/css/quick-website.css";*/
 @import "css/Questions.css";
+@import "css/MessageState.css";
 </style>
 
 <script lang="ts">
-import {Component, Vue} from 'vue-property-decorator';
+import {Component, Prop, Vue} from 'vue-property-decorator';
 import app from '@/feathers-client';
 import BACKEND_URL from "@/config";
+import {User} from "@/views/Users.vue";
+import {MessageState} from "@/views/enum";
 
 export class Question {
     idQuestion: number;
-    authorFirstname: string;
-    authorLastname: string;
+    author: User;
     content: string;
+    placeholder?: string;
 
-    constructor(idQuestion: number, authorFirstname: string, authorLastname: string, content: string) {
+    constructor(idQuestion: number, author: User, content: string) {
         this.idQuestion = idQuestion;
-        this.authorFirstname = authorFirstname;
-        this.authorLastname = authorLastname;
+        this.author = author;
         this.content = content;
     }
 }
@@ -90,11 +107,22 @@ export default class Questions extends Vue {
 
     questions: Question[] = [];
     filteredList: Question[] = [];
+    addPlaceholder = true;
+    questionToAdd = '';
+    placeholder = '';
+
+    @Prop() user: User;
+
+    private validation = {
+        message: 'Ajoutez votre question',
+        messageState: MessageState.none,
+    }
 
     async loadQuestions() {
         this.questions = await app.service('questions').find();
+        console.log(this.questions);
         this.filteredList = JSON.parse(JSON.stringify(this.questions));
-        console.log('ok',this.questions);
+        // console.log('ok',this.questions);
     }
 
     mounted() {
@@ -115,15 +143,44 @@ export default class Questions extends Vue {
     filterByAuthor() {
         this.filteredList = this.questions;
         this.filteredList = this.questions.filter(post =>
-            post.authorFirstname.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            post.author.firstname.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
                 .includes(this.searchByAuthor.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))
-            || post.authorLastname.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            || post.author.lastname.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
                 .includes(this.searchByAuthor.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))
         )
     }
 
-    sendQuestion() {
-        // TODO: send question to the backend.
+    async sendQuestion() {
+        if (this.addPlaceholder && (this.placeholder === '' || !this.placeholder)) {
+            this.validation.messageState = MessageState.hasWarning;
+            this.validation.message = 'Attention, placeholder non précisé.';
+        } else {
+            await this.user.connect();
+            const question = {
+                content: this.questionToAdd,
+                placeholders: this.addPlaceholder ? this.placeholder : null
+            }
+            app.service('questions').create(question).then(
+                (data: any) => {
+                    //Send check email or smth
+                    console.log(data);
+                    this.questionAdded();
+                }
+            ).catch((error: any) => {
+                console.log(error);
+                this.validation.message = 'La question n\'a pas pu être ajoutée.';
+                this.validation.messageState = MessageState.hasError;
+            });
+        }
+    }
+
+    questionAdded() {
+        this.validation.messageState = MessageState.hasSucceed;
+        this.validation.message = 'La question a bien été ajoutée !';
+        setTimeout(() => {
+            this.validation.messageState = MessageState.none;
+            this.validation.message = 'Ajoutez votre question';
+        }, 3000);
     }
 
 }
