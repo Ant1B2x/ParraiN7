@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <MenuParrain7 :user="this.user" @signalLogOut="logOut"/>
-        <router-view/>
+        <router-view :user="this.user"/>
     </div>
 </template>
 

@@ -32,8 +32,8 @@
 			<h4>Résultats du parrainage</h4>
 			<p>À la fin de la session, un.e première année se voit attribuer un.e parrain/marraine. Vous pouvez désormais vous embrasser.</p>
 		</section>
-		<hr>
-		<section>
+		<hr v-if="!this.user">
+		<section v-if="!this.user">
 			<h3>C'est parti !</h3>
 			<router-link class="btn btn-primary" to="/signup">S'inscrire</router-link>
 		</section>
@@ -41,12 +41,14 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator';
 import app from "@/feathers-client";
+import {User} from "@/views/Users.vue";
 
 @Component
 export default class Demo extends Vue {
-	
+	@Prop() user: User;
+
 }
 </script>
 
