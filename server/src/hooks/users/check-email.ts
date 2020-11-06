@@ -12,16 +12,19 @@ const institutionalEmailRegexp =
 // check that user has entered a non-existant institutional email
 export default (options = {}): Hook => {
     return async (context: HookContext): Promise<HookContext> => {
-        if (!institutionalEmailRegexp.test(context.data['email']))
-            throw new NotAcceptable('Email does not respect the institutional convention!');
 
-        const emails = await context.app.service('users').find({
-            query: {
-                email: context.data['email']
-            }
-        });
-        if (emails.length > 0)
-            throw new Conflict('A user already has this email!');
+        if (context.data['email']) {
+            if (!institutionalEmailRegexp.test(context.data['email']))
+                throw new NotAcceptable('Email does not respect the institutional convention!');
+
+            const emails = await context.app.service('users').find({
+                query: {
+                    email: context.data['email']
+                }
+            });
+            if (emails.length > 0)
+                throw new Conflict('A user already has this email!');
+        }
 
         return context;
     };

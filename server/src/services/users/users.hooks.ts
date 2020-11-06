@@ -18,8 +18,8 @@ export default {
         find: [authenticate('jwt')],
         get: [authenticate('jwt')],
         create: [checkEmail(), checkName(), unsetAdmin(), hashPassword('password')],
-        update: [authenticate('jwt'), checkModifyingUser(), checkSettingAdminUser(), hashPassword('password')],
-        patch: [authenticate('jwt'), checkModifyingUser(), checkSettingAdminUser(), hashPassword('password')],
+        update: [authenticate('jwt'), checkModifyingUser(), checkSettingAdminUser(), checkEmail(), checkName(), hashPassword('password')],
+        patch: [authenticate('jwt'), checkModifyingUser(), checkSettingAdminUser(), checkEmail(), checkName(), hashPassword('password')],
         remove: [authenticate('jwt'), checkModifyingUser()]
     },
 
