@@ -1,7 +1,7 @@
 <template>
     <div class="container d-flex flex-column">
         <div class="row align-items-center justify-content-center">
-            <div class="col-md-6 col-lg-5 col-xl-5 py-6 py-md-0">
+            <div class="col-md-6 py-6 py-md-0">
                 <div class="card shadow zindex-100 mb-0">
                     <div class="card-body px-md-5 py-5" :class="{ 'hasError': loginForm.hasError }">
                         <div class="mb-5">
@@ -20,8 +20,12 @@
                                         <span class="input-group-text"><font-awesome-icon icon="user"/></span>
                                     </div>
                                     <input v-model="loginForm.email" type="email" class="form-control" id="input-email"
-                                           placeholder="prenom.nom@etu.toulouse-inp.fr"
+                                           placeholder="prenom.nom"
                                            @keyup="handleKeyUp" @blur="checkError"/>
+
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">@etu.toulouse-inp.fr</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group mb-0">
@@ -87,7 +91,7 @@ export default class LogIn extends Vue {
         app.logout();
         const auth = await app.authenticate({
             strategy: 'local',
-            email: this.loginForm.email,
+            email: this.loginForm.email + '@etu.toulouse-inp.fr',
             password: this.loginForm.password,
         }).then(
             (data: any) => {
@@ -109,10 +113,12 @@ export default class LogIn extends Vue {
     }
 
     checkError() {
+        /*
         if (!this.institutionalEmailRegexp.test(this.loginForm.email)) {
             this.loginForm.errorMessage = 'L\'email ne respecte pas le format attendu !';
             this.loginForm.hasError = true;
         }
+        */
     }
 
     noError() {
@@ -121,9 +127,16 @@ export default class LogIn extends Vue {
     }
 
     handleKeyUp(e: any) {
+        /*
         if (e.keyCode === 13) {
             this.logIn()
         } else if (this.institutionalEmailRegexp.test(this.loginForm.email)) {
+            this.noError();
+        }
+        */
+        if (e.keyCode === 13) {
+            this.logIn()
+        } else {
             this.noError();
         }
     }
