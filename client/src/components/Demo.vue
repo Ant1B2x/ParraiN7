@@ -1,14 +1,14 @@
 <template>
-	
+<div></div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import app from "@/feathersjs/client";
+import app from "@/feathers-client";
 
 @Component
 export default class Demo extends Vue {
-	
+
 }
 </script>
 
