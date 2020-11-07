@@ -20,6 +20,8 @@
   font-size: 42px;
   transition: all 0.2s ease-in-out;
   cursor: pointer;
+  margin: unset;
+  padding: 0 10px;
 }
 .rating .list .star:hover ~ .star:not(.active) {
   color: inherit;

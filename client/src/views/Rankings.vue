@@ -127,9 +127,9 @@ export default class Rankings extends Vue {
     }
 
     async loadUsers() {
-        console.log(await app.service('users').find({ query: { answers: true } } ));
+        // console.log(await app.service('users').find({ query: { answers: true } } ));
         this.godsons = await app.service('users').find({ query: { answers: true } } );
-        console.log(this.godsons);
+        // console.log(this.godsons);
         for (const godson of this.godsons) {
             godson.rank = godson.rank ? godson.rank : 1;
         }
