@@ -23,8 +23,8 @@ export default {
 
     after: {
         all: [],
-        find: [showAnswersForeigns()],
-        get: [showAnswerForeigns()],
+        find: [/*showAnswersForeigns()*/],
+        get: [/*showAnswerForeigns()*/],
         create: [],
         update: [],
         patch: [],
