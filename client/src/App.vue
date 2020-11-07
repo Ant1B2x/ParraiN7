@@ -40,7 +40,7 @@ export default class App extends Vue  {
             app.authenticate();
             const userFromStorage = authFromStorage.user;
             return new User(userFromStorage.id, userFromStorage.email, userFromStorage.firstname, userFromStorage.lastname,
-                userFromStorage.isGodfath, userFromStorage.isAdmin);
+                userFromStorage.isGodfather, userFromStorage.isAdmin);
         } else {
             return null;
         }

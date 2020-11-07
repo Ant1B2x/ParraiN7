@@ -115,15 +115,14 @@ export default class Rankings extends Vue {
 
     currentIndex = 0;
 
-
-
     private validation = {
         message: 'Vote du poulain',
         messageState: MessageState.none,
     }
 
-    mounted() {
-        this.loadUsers();
+    async mounted() {
+        await this.user.connect();
+        await this.loadUsers();
     }
 
     async loadUsers() {
@@ -134,8 +133,6 @@ export default class Rankings extends Vue {
             godson.rank = godson.rank ? godson.rank : 1;
         }
     }
-
-
 
     nextPoulain() {
         this.currentIndex = (this.currentIndex + 1) % this.godsons.length;
