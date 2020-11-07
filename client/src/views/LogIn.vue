@@ -15,7 +15,7 @@
                                 <div class="d-flex align-items-center justify-content-between">
                                     <label class="form-control-label">Adresse email</label>
                                 </div>
-                                <div class="input-group">
+                                <div class="input-group input-group-email">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><font-awesome-icon icon="user"/></span>
                                     </div>
