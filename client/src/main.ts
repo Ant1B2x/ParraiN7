@@ -10,6 +10,10 @@ import {
     faArrowAltCircleLeft,
     faArrowAltCircleRight,
     faStar,
+    faArrowRight,
+    faArrowLeft,
+    faAngleRight,
+    faAngleLeft
 } from "@fortawesome/free-solid-svg-icons";
 import {library} from "@fortawesome/fontawesome-svg-core";
 
@@ -20,6 +24,10 @@ library.add(faIdCard)
 library.add(faArrowAltCircleLeft)
 library.add(faArrowAltCircleRight)
 library.add(faStar)
+library.add(faArrowRight)
+library.add(faArrowLeft)
+library.add(faAngleRight)
+library.add(faAngleRight)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

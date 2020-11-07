@@ -1,23 +1,23 @@
 <template>
     <div class="questionArea">
         <form>
-            <div class="form-group">
-                <label>
-                    <select class="custom-select" v-model="godsons[this.currentIndex]">
-                        <option selected disabled>Choisissez un poulain</option>
-                        <option v-for="godson in godsons" :value="godson" :key="godson.id">{{godson.firstname}} {{godson.lastname}}</option>
-                    </select>
-                </label>
-            </div>
-            <div class="mt-4 arrows">
-                <font-awesome-icon icon="arrow-alt-circle-left" :style="{ color: '#008aff' }" size="4x" v-on:click="previousPoulain()"/>
-
-                <font-awesome-icon icon="arrow-alt-circle-right" :style="{ color: '#008aff' }" size="4x" v-on:click="nextPoulain()"/>
+            <div class="row justify-content-center">
+                <div class="col col-md-1 align-self-center mb-1 order-1 order-md-0">
+                    <font-awesome-icon icon="arrow-left" :style="{ color: '#171347' }" size="2x" v-on:click="previousPoulain()"/>
+                </div>
+                <div class="col-md-auto order-0 order-md-1">
+                    <label>
+                        <select class="custom-select" v-model="godsons[this.currentIndex]">
+                            <option selected disabled>Choisissez un poulain</option>
+                            <option v-for="godson in godsons" :value="godson" :key="godson.id">{{godson.firstname}} {{godson.lastname}}</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="col col-md-1 align-self-center mb-1 order-2 order-md-2">
+                    <font-awesome-icon icon="arrow-right" :style="{ color: '#171347' }" size="2x" v-on:click="nextPoulain()"/>
+                </div>
             </div>
         </form>
-
-        <!-- Ligne séparatrice -->
-        <hr class="separator"/>
 
         <div class="card-body px-md-5 py-5" v-bind:class="[validation.messageState]">
             <p class="text-muted mb-0 alertMessage" role="alert">{{validation.message}}</p>

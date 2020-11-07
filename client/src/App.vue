@@ -2,11 +2,13 @@
     <div id="app">
         <MenuParrain7 :user="this.user" @signalLogOut="logOut"/>
         <router-view :user="this.user"/>
+        <Footer/>
     </div>
 </template>
 
 <script lang="ts">
 import MenuParrain7 from '@/components/MenuParrain7.vue';
+import Footer from '@/components/Footer.vue';
 import app from "@/feathers-client";
 import {Component, Vue} from "vue-property-decorator";
 import {User} from "@/views/Users.vue";
@@ -14,6 +16,7 @@ import {User} from "@/views/Users.vue";
 @Component({
     components: {
         MenuParrain7,
+        Footer
     }
 })
 export default class App extends Vue  {

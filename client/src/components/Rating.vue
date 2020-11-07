@@ -3,7 +3,7 @@
     <div class="rating">
         <ul class="list">
             <li @click="rate(star)" v-for="star in maxStars" :class="{ 'active': star <= grade }" :key="star.grade" class="star">
-                <font-awesome-icon :prefix="star <= grade ? 'fas' : 'far'" icon="star"/>
+                <font-awesome-icon icon="star"/>
             </li>
         </ul>
         <div v-if="hasCounter" class="info counter">
