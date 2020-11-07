@@ -17,6 +17,7 @@ export default function (app: Application): Knex {
                 table.integer('godsonId').notNullable();
                 table.unique(['godfatherId', 'godsonId']);
                 table.integer('rank').notNullable();
+                table.unique(['godfatherId', 'rank']);
             })
                 .then(() => console.log(`Created ${tableName} table`))
                 .catch(e => console.error(`Error creating ${tableName} table`, e));
