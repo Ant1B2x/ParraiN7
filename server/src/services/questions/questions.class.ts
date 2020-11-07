@@ -47,10 +47,10 @@ export class Questions extends Service<QuestionData> {
             const answers = await db('answers').select('id as answerId', 'content as answerContent', 'questionId')
                 .where('userId', godsonId);
 
-            for (let answer of answers) {
-                const question = questions.find((question: any) => question.id === answer.questionId);
-                question['answerId'] = answer.answerId;
-                question['answerContent'] = answer.answerContent;
+            for (let question of questions) {
+                const answer = answers.find((answer: any) => answer.questionId === question.id);
+                question['answerId'] = answer?.answerId;
+                question['answerContent'] = answer?.answerContent;
             }
         }
 
