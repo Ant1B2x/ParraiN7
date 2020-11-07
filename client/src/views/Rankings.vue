@@ -3,14 +3,14 @@
         <form>
             <div class="form-group">
                 <label>
-                    <select class="custom-select" v-model="selectedPoulain">
+                    <select class="custom-select" v-model="godsons[this.currentIndex]">
                         <option selected disabled>Choisissez un poulain</option>
-                        <option v-for="poulain in poulains" :value="poulain" :key="poulain.idUser">{{poulain.name}}</option>
+                        <option v-for="godson in godsons" :value="godson" :key="godson.id">{{godson.firstname}} {{godson.lastname}}</option>
                     </select>
                 </label>
             </div>
             <div class="mt-4 arrows">
-                <font-awesome-icon icon="arrow-alt-circle-left" :style="{ color: '#008aff' }" size="4x" v-on:click="nextPoulain()"/>
+                <font-awesome-icon icon="arrow-alt-circle-left" :style="{ color: '#008aff' }" size="4x" v-on:click="previousPoulain()"/>
 
                 <font-awesome-icon icon="arrow-alt-circle-right" :style="{ color: '#008aff' }" size="4x" v-on:click="nextPoulain()"/>
             </div>
@@ -23,15 +23,15 @@
             <p class="text-muted mb-0 alertMessage" role="alert">{{validation.message}}</p>
         </div>
 
-        <div v-if="selectedPoulain">
-            <h2 style="color: #152c5b;">{{selectedPoulain.name}}</h2>
-            <Rating :grade="selectedPoulain.rank" :maxStars="5" :hasCounter="true" @updatedStars="changeRating"/>
+        <div v-if="godsons[this.currentIndex]">
+            <h2 style="color: #152c5b;">{{godsons[this.currentIndex].firstname}} {{godsons[this.currentIndex].lastname}}</h2>
+            <Rating :grade="godsons[this.currentIndex].rank" :maxStars="5" :hasCounter="true" @updatedStars="changeRating"/>
         </div>
 
         <!-- Afficher questions existantes -->
-        <div class="questionList" v-if="selectedPoulain">
-            <div class="card hover-translate-y-n10 hover-shadow-lg" v-for="answer in selectedPoulain.answers"
-                 :key="answer.question.idQuestion">
+        <div class="questionList" v-if="godsons[this.currentIndex]">
+            <div class="card hover-translate-y-n10 hover-shadow-lg" v-for="question in godsons[this.currentIndex].questions"
+                 :key="question.idQuestion">
                 <div class="card-body">
                     <div class="pb-4">
                         <div class="icon bg-dark text-white rounded-circle icon-shape shadow">
@@ -39,9 +39,12 @@
                         </div>
                     </div>
                     <div class="pt-2 pb-3">
-                        <h5>{{ answer.question.content }}</h5>
-                        <p class="text-muted mb-0">
-                            {{ answer.content }}
+                        <h5 class="mb-0">{{ question.questionContent }}</h5>
+                        <p class="text-muted">
+                            {{ question.answerContent }}
+                        </p>
+                        <p class="text-muted mb-0" v-if="question.placeholder">
+                            ({{ question.placeholder }})
                         </p>
                     </div>
                 </div>
@@ -57,24 +60,45 @@
 
 <script lang="ts">
 import {Component, Vue, Prop} from 'vue-property-decorator';
-import {Answer} from "@/views/Answers.vue";
-import {Question} from "@/views/Questions.vue";
 import Rating from "@/components/Rating.vue"
 import {MessageState} from "@/views/enum";
 import app from "@/feathers-client";
 import {User} from "@/views/Users.vue";
 
-export class Poulain {
-    idUser: number;
-    name: string;
-    rank: number;
-    answers: Answer[];
+class Question {
+    constructor(public questionId: number, public questionContent: string,
+                public answerId: number, public answerContent: string)
+    { }
 
-    constructor(idUser: number, name: string, rank: number, answers: Answer[]) {
-        this.idUser = idUser;
-        this.name = name;
+}
+
+
+export class Godson {
+
+    id: number;
+    email: string;
+    password: string;
+    firstname: string;
+    lastname: string;
+    isGodfather: boolean;
+    isAdmin: boolean;
+    token: string;
+    questions: Question[];
+    rank: number;
+
+    constructor(id: number, email: string, password: string, firstname: string, lastname: string,
+                isGodfather: boolean, isAdmin: boolean, token: string, questions: Question[], rank: number) {
         this.rank = rank;
-        this.answers = answers;
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.isGodfather = isGodfather;
+        this.isAdmin = isAdmin;
+        this.token = token;
+        this.questions = questions;
+        this.rank = rank;
     }
 }
 
@@ -83,61 +107,43 @@ export class Poulain {
         Rating
     }
 })
-export default class Rankins extends Vue {
+export default class Rankings extends Vue {
 
     @Prop() user?: User | null;
 
-    private user1 = new User(1, 'yvan.leduc@etu.toulouse-inp.fr', 'Yvan', 'Le Duc', true, true);
-    private user2 = new User(1, 'antoine.bedex@etu.toulouse-inp.fr', 'Antoine', 'Bédex', true, true);
-    private user3 = new User(1, 'esteban.baichoo@etu.toulouse-inp.fr', 'Esteban', 'Baichoo', true, true);
+    godsons: Godson[] = [];
 
-    private question1 = new Question(1, this.user1, 'Comment tu t\'appelles ?');
-    private question2 = new Question(2, this.user2, 'Veux-tu niquer ta mère ?');
-    private question3 = new Question(3, this.user3, 'Quel âge as-tu ?');
+    currentIndex = 0;
 
-    poulains: Poulain[] = [
-        new Poulain(1,
-            'Moi',
-            1,
-            [
-                new Answer('Moi', '', this.question1, 'Je suis moi, et toi ?'),
-                new Answer('Moi', '', this.question2, 'Lui veux bien, mais il n\'est pas là.'),
-                new Answer('Moi', '', this.question3, 'Devinnes combien de mois j\'ai.'),
-            ]
-        ),
-        new Poulain(2,
-            'Toi',
-            2,
-            [
-                new Answer('Toi', '', this.question1, 'Eh bien je suis toi ! Comment ça va ?'),
-                new Answer('Toi', '', this.question2, 'Ne demande pas, ça ...'),
-                new Answer('Toi', '', this.question3, 'Autant que jour que de tuiles sur mon toit.'),
-            ]
-        ),
-        new Poulain(3,
-            'Ça',
-            3,
-            [
-                new Answer('Ça', '', this.question1, 'Eh bien, je vais bien, merci de demander.'),
-                new Answer('Ça', '', this.question2, 'Toi, tu veux ?'),
-                new Answer('Ça', '', this.question3, 'Auntant que toi moins moi.'),
-            ]
-        ),
-    ]
+
 
     private validation = {
         message: 'Vote du poulain',
         messageState: MessageState.none,
     }
 
-    selectedPoulain: Poulain = this.poulains[0];
+    mounted() {
+        this.loadUsers();
+    }
+
+    async loadUsers() {
+        console.log(await app.service('users').find({ query: { answers: true } } ));
+        this.godsons = await app.service('users').find({ query: { answers: true } } );
+        console.log(this.godsons);
+        for (const godson of this.godsons) {
+            godson.rank = godson.rank ? godson.rank : 1;
+        }
+    }
+
+
 
     nextPoulain() {
-        this.selectedPoulain = this.poulains[(this.poulains.indexOf(this.selectedPoulain) + 1) % this.poulains.length];
+        this.currentIndex = (this.currentIndex + 1) % this.godsons.length;
+        console.log(this.currentIndex);
     }
 
     previousPoulain() {
-        this.selectedPoulain = this.poulains[this.mod(this.poulains.indexOf(this.selectedPoulain) - 1, this.poulains.length)];
+        this.currentIndex = this.mod((this.currentIndex - 1), this.godsons.length);
     }
 
     mod(n: number, m: number) {
@@ -145,26 +151,28 @@ export default class Rankins extends Vue {
     }
 
     changeRating(rank: number) {
-        this.selectedPoulain.rank = rank;
+        this.godsons[this.currentIndex].rank = rank;
     }
 
     async sendVote() {
-        await this.user?.connect();
-        const rang = {
-            godsonId: this.selectedPoulain.idUser,
-            rank: this.selectedPoulain.rank,
-        }
-        app.service('rank').patch(rang).then(
-            (data: any) => {
-                //Send check email or smth
-                console.log(data);
-                this.rateChanged();
+        if (this.godsons[this.currentIndex]) {
+            await this.user?.connect();
+            const rang = {
+                godsonId: this.godsons[this.currentIndex].id,
+                rank: this.godsons[this.currentIndex].rank,
             }
-        ).catch((error: any) => {
-            console.log(error);
-            this.validation.message = 'La question n\'a pas pu être ajoutée.';
-            this.validation.messageState = MessageState.hasError;
-        });
+            app.service('rank').patch(rang).then(
+                (data: any) => {
+                    //Send check email or smth
+                    console.log(data);
+                    this.rateChanged();
+                }
+            ).catch((error: any) => {
+                console.log(error);
+                this.validation.message = 'La question n\'a pas pu être ajoutée.';
+                this.validation.messageState = MessageState.hasError;
+            });
+        }
     }
 
     rateChanged() {
