@@ -121,7 +121,7 @@ export default class Rankings extends Vue {
     }
 
     async mounted() {
-        await this.user.connect();
+        await this.user?.connect();
         await this.loadUsers();
     }
 
