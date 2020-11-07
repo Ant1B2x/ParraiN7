@@ -47,6 +47,11 @@ const routes: Array<RouteConfig> = [
         name: 'users',
         component: () => import(/* webpackChunkName: "about" */ '../views/Users.vue')
     },
+    {
+        path: '/token',
+        name: 'token',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Token.vue')
+    },
 ]
 
 const router = new VueRouter({
