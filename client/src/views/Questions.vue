@@ -61,13 +61,16 @@
                 <div class="card-body">
                     <div class="pb-4">
                         <div class="icon bg-dark text-white rounded-circle icon-shape shadow">
-                            <!--i data-feather="droplet"></i-->?
+                            ?
                         </div>
                     </div>
                     <div class="pt-2 pb-3">
                         <h5>{{ question.author.firstname }} {{question.author.lastname}}</h5>
                         <p class="text-muted mb-0">
                             {{ question.content }}
+                        </p>
+                        <p class="text-muted mb-0" v-if="question.placeholder">
+                            ({{ question.placeholder }})
                         </p>
                     </div>
                 </div>
@@ -111,7 +114,7 @@ export default class Questions extends Vue {
     questionToAdd = '';
     placeholder = '';
 
-    @Prop() user: User;
+    @Prop() user!: User;
 
     private validation = {
         message: 'Ajoutez votre question',
@@ -158,7 +161,7 @@ export default class Questions extends Vue {
             await this.user.connect();
             const question = {
                 content: this.questionToAdd,
-                placeholders: this.addPlaceholder ? this.placeholder : null
+                placeholder: this.addPlaceholder ? this.placeholder : null
             }
             app.service('questions').create(question).then(
                 (data: any) => {

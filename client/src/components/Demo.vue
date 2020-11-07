@@ -47,7 +47,7 @@ import {User} from "@/views/Users.vue";
 
 @Component
 export default class Demo extends Vue {
-	@Prop() user: User;
+	@Prop() user!: User;
 
 }
 </script>

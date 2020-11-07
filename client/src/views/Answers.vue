@@ -22,7 +22,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1">¿</span>
                                 </div>
-                                <textarea type="text" class="form-control" :placeholder="answer.question.placeholder ? answer.question.placeholder : 'Votre réponse...'"
+                                <textarea type="text" class="form-control" :placeholder="answer.question.placeholder"
                                 v-model="answer.content"></textarea>
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="basic-addon2">?</span>
@@ -49,6 +49,7 @@ import {Component, Vue} from 'vue-property-decorator';
 import {Question} from "@/views/Questions.vue";
 import app from "@/feathers-client";
 import BACKEND_URL from "@/config";
+import {User} from "@/views/Users.vue";
 
 export class Answer {
     idAnswer?: number;
@@ -75,8 +76,11 @@ export default class Answers extends Vue {
                 (data: any) => {
                     console.log(data);
                     for (const answer of data) {
+                        const authorQuestion = new User(answer.question.author.id, answer.question.author.email,
+                            answer.question.author.firstname, answer.question.author.lastname,
+                            answer.question.author.isGodfather, answer.question.author.isAdmin);
                         this.answers.push(new Answer(answer.firstname, answer.lastname,
-                            new Question(answer.question.id, answer.question.author.firstnamle, answer.question.author.lastname, answer.question.content),
+                            new Question(answer.question.id, authorQuestion, answer.question.content),
                             answer.content))
                     }
                 }

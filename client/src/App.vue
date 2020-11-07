@@ -7,9 +7,9 @@
 
 <script lang="ts">
 import MenuParrain7 from '@/components/MenuParrain7.vue';
-import {User} from "@/views/Users";
 import app from "@/feathers-client";
 import {Component, Vue} from "vue-property-decorator";
+import {User} from "@/views/Users.vue";
 
 @Component({
     components: {
@@ -18,7 +18,7 @@ import {Component, Vue} from "vue-property-decorator";
 })
 export default class App extends Vue  {
 
-    user: User | null = null;
+    user!: User;
 
     mounted() {
         this.user = this.getUser();
@@ -30,7 +30,7 @@ export default class App extends Vue  {
         }
     }
 
-    getUser(): User | null {
+    getUser(): User{
         const authFromStorage = JSON.parse(window.localStorage.getItem('user')!);
         if (authFromStorage) {
             app.authentication.setAccessToken(authFromStorage.accessToken);
@@ -39,14 +39,16 @@ export default class App extends Vue  {
             return new User(userFromStorage.id, userFromStorage.email, userFromStorage.firstname, userFromStorage.lastname,
                 userFromStorage.isGodfath, userFromStorage.isAdmin);
         } else {
-            return null;
+            return new User(-1, '', '', '',
+                false, false);
         }
     }
 
     logOut() {
         app.logout();
         window.localStorage.removeItem('user');
-        this.user = null;
+        this.user = new User(-1, '', '', '',
+            false, false);
     }
 }
 </script>
