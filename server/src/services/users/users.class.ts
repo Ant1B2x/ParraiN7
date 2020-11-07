@@ -34,17 +34,27 @@ export class Users extends Service<UserData> {
             users = users.filter((user: any) => !user.isGodfather);
 
             const db = this.app.get('knexClient');
-            const questions = await db('questions').select('id as questionId', 'content as questionContent');
+            const questions = await db('questions').select('id as questionId', 'content as questionContent', 'placeholder');
 
             for (let user of users) {
                 user['questions'] = [];
                 for (let question of questions) {
-                    const answer = ( await db('answers').select('id as answerId', 'content as answerContent')
-                        .where({'userId': user.id, 'questionId': question.questionId}) )[0];
-                    user['questions'].push( {...question, ...answer} )
+                    const answer = await db('answers').select('id as answerId', 'content as answerContent')
+                        .where('userId', user.id)
+                        .andWhere('questionId', question.questionId);
+                    question['answerId'] = answer[0] ? answer[0]['answerId'] : null;
+                    question['answerContent'] = answer[0] ? answer[0]['answerContent'] : null;
+                    user['questions'].push(question)
                 }
+                const rank = await db('rankings').select('rank')
+                    .where('godfatherId', params?.user.id)
+                    .andWhere('godsonId', user.id);
+                user['rank'] = rank[0] ? rank[0]['rank'] : null;
             }
         }
+
+
+        console.log(users[0]['questions']);
 
         return users;
     }
