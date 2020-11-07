@@ -10,7 +10,6 @@
                         </div>
                     </div>
                     <div class="pt-2 pb-3">
-                        <h5>{{ /*answer.question.author*/ }} ¿?¿ </h5>
                         <p class="text-muted mb-0">
                             {{ question.content }}
                         </p>
@@ -19,14 +18,8 @@
                     <form>
                         <div class="form-group">
                             <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon1">¿</span>
-                                </div>
                                 <textarea type="text" class="form-control" :placeholder="question.placeholder"
                                 v-model="question.answerContent"></textarea>
-                                <div class="input-group-append">
-                                    <span class="input-group-text" id="basic-addon2">?</span>
-                                </div>
                             </div>
                         </div>
                         <div class="mt-4">
@@ -74,6 +67,10 @@ export default class Answers extends Vue {
 
     questionsWithAnswers: QuestionWithAnswer[] = [];
 
+    mounted() {
+        this.sendQuestion();
+    }
+
     async sendQuestion() {
         try {
             await app.service('questions').find( { query: { answers: true, godsonId: this.user?.id } } ).then(
@@ -88,10 +85,6 @@ export default class Answers extends Vue {
         } catch (e) {
             console.log(e);
         }
-    }
-
-    mounted() {
-        this.sendQuestion();
     }
 }
 </script>

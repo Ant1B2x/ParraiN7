@@ -126,6 +126,10 @@ export default class Questions extends Vue {
         messageState: MessageState.none,
     }
 
+    mounted() {
+        this.loadQuestions();
+    }
+
     async loadQuestions() {
         this.questions = await app.service('questions').find();
         // console.log(this.questions);
@@ -133,9 +137,7 @@ export default class Questions extends Vue {
         // console.log('ok',this.questions);
     }
 
-    mounted() {
-        this.loadQuestions();
-    }
+
 
     searchByQuestion = '';
     searchByAuthor = '';
