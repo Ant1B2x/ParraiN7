@@ -85,7 +85,7 @@ export class Poulain {
 })
 export default class Rankins extends Vue {
 
-    @Prop() user!: User;
+    @Prop() user?: User | null;
 
     private user1 = new User(1, 'yvan.leduc@etu.toulouse-inp.fr', 'Yvan', 'Le Duc', true, true);
     private user2 = new User(1, 'antoine.bedex@etu.toulouse-inp.fr', 'Antoine', 'Bédex', true, true);
@@ -149,7 +149,7 @@ export default class Rankins extends Vue {
     }
 
     async sendVote() {
-        await this.user.connect();
+        await this.user?.connect();
         const rang = {
             godsonId: this.selectedPoulain.idUser,
             rank: this.selectedPoulain.rank,

@@ -65,7 +65,7 @@
                         </div>
                     </div>
                     <div class="pt-2 pb-3">
-                        <h5>{{ question.author.firstname }} {{question.author.lastname}}</h5>
+                        <h5>{{ question.authorFirstname }} {{question.authorLastname}}</h5>
                         <p class="text-muted mb-0">
                             {{ question.content }}
                         </p>
@@ -93,15 +93,20 @@ import {User} from "@/views/Users.vue";
 import {MessageState} from "@/views/enum";
 
 export class Question {
-    idQuestion: number;
-    author: User;
+    id: number;
+    authorFirstname: string;
+    authorLastname: string;
+    authorId: number;
     content: string;
     placeholder?: string;
 
-    constructor(idQuestion: number, author: User, content: string) {
-        this.idQuestion = idQuestion;
-        this.author = author;
+    constructor(id: number, authorFirstname: string, authorLastname: string, authorId: number, content: string, placeholder: string) {
+        this.id = id;
+        this.authorFirstname = authorFirstname;
+        this.authorLastname = authorLastname;
+        this.authorId = authorId;
         this.content = content;
+        this.placeholder = placeholder;
     }
 }
 
@@ -114,7 +119,7 @@ export default class Questions extends Vue {
     questionToAdd = '';
     placeholder = '';
 
-    @Prop() user!: User;
+    @Prop() user?: User | null;
 
     private validation = {
         message: 'Ajoutez votre question',
@@ -123,8 +128,8 @@ export default class Questions extends Vue {
 
     async loadQuestions() {
         this.questions = await app.service('questions').find();
-        console.log(this.questions);
-        this.filteredList = JSON.parse(JSON.stringify(this.questions));
+        // console.log(this.questions);
+        this.filteredList = JSON.parse(JSON.stringify(this.questions)) as Question[];
         // console.log('ok',this.questions);
     }
 
@@ -146,9 +151,9 @@ export default class Questions extends Vue {
     filterByAuthor() {
         this.filteredList = this.questions;
         this.filteredList = this.questions.filter(post =>
-            post.author.firstname.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            post.authorFirstname.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
                 .includes(this.searchByAuthor.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))
-            || post.author.lastname.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            || post.authorLastname.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
                 .includes(this.searchByAuthor.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))
         )
     }
@@ -158,7 +163,7 @@ export default class Questions extends Vue {
             this.validation.messageState = MessageState.hasWarning;
             this.validation.message = 'Attention, placeholder non précisé.';
         } else {
-            await this.user.connect();
+            await this.user?.connect();
             const question = {
                 content: this.questionToAdd,
                 placeholder: this.addPlaceholder ? this.placeholder : null

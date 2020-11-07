@@ -13,6 +13,6 @@ import {User} from "@/views/Users.vue";
     },
 })
 export default class Home extends Vue {
-	@Prop() user!: User;
+	@Prop() user?: User | null;
 }
 </script>

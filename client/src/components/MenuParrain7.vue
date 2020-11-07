@@ -11,7 +11,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <!-- Collapse -->
-            <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav mt-4 mt-lg-0 ml-auto">
                     <li class="nav-item ">
                         <router-link class="nav-link" to="/">Accueil</router-link>
@@ -49,10 +49,10 @@
                 <!--a class="navbar-btn btn btn-sm btn-primary d-none d-lg-inline-block ml-3" href="https://github.com/webpixels/quick-website-ui-kit-demo/archive/master.zip">
                     Download Free
                 </a-->
-                <router-link class="navbar-btn btn btn-sm btn-primary d-none d-lg-inline-block ml-3" to="/login" v-if="!this.user">
+                <router-link class=" btn btn-sm btn-primary d-lg-inline-block" to="/login" v-if="!this.user">
                     Connexion
                 </router-link>
-                <button class="navbar-btn btn btn-sm btn-danger d-none d-lg-inline-block ml-3" v-if="this.user" @click="signalLogOut">
+                <button class="btn btn-sm btn-danger d-lg-inline-block" v-if="this.user" @click="signalLogOut">
                     Déconnexion
                 </button>
             </div>
@@ -62,13 +62,16 @@
 
 <script lang="ts">
 import {Component, Vue, Prop} from 'vue-property-decorator';
-import app from "@/feathers-client";
 import {User} from "@/views/Users.vue";
 
 @Component
 export default class MenuParrain7 extends Vue {
 
-    @Prop() user!: User;
+    @Prop() user?: User | null;
+
+    mounted() {
+        console.log(this.user);
+    }
 
     isAdmin(): boolean {
         return !!this.user && this.user.isAdmin;
@@ -83,11 +86,13 @@ export default class MenuParrain7 extends Vue {
     }
 
     signalLogOut() {
+        console.log("Deco moi pls");
         this.$emit('signalLogOut');
     }
 
     toggleMenu() {
-        document.getElementById('navbarCollapse')?.classList.toggle('collapse');
+        const elem = 'navbarCollapse';
+        document.getElementById(elem)?.classList.toggle('show');
     }
 }
 </script>

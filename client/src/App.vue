@@ -18,7 +18,7 @@ import {User} from "@/views/Users.vue";
 })
 export default class App extends Vue  {
 
-    user!: User;
+    user: User | null = null;
 
     mounted() {
         this.user = this.getUser();
@@ -30,7 +30,7 @@ export default class App extends Vue  {
         }
     }
 
-    getUser(): User{
+    getUser(): User | null {
         const authFromStorage = JSON.parse(window.localStorage.getItem('user')!);
         if (authFromStorage) {
             app.authentication.setAccessToken(authFromStorage.accessToken);
@@ -39,16 +39,14 @@ export default class App extends Vue  {
             return new User(userFromStorage.id, userFromStorage.email, userFromStorage.firstname, userFromStorage.lastname,
                 userFromStorage.isGodfath, userFromStorage.isAdmin);
         } else {
-            return new User(-1, '', '', '',
-                false, false);
+            return null;
         }
     }
 
     logOut() {
         app.logout();
         window.localStorage.removeItem('user');
-        this.user = new User(-1, '', '', '',
-            false, false);
+        this.user = null;
     }
 }
 </script>

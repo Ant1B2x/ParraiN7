@@ -1,14 +1,31 @@
 h3 {
   margin: 40px 0 0;
 }
+
 ul {
   list-style-type: none;
   padding: 0;
 }
+
 li {
   display: inline-block;
   margin: 0 10px;
 }
-a {
 
+
+@media (max-width: 991.98px)
+{
+  .navbar-collapse {
+    flex-basis: 100%;
+    flex-grow: 1;
+    align-items: center;
+    transition: max-height .75s linear;
+    overflow: hidden;
+    max-height: 820px;
+  }
+
+  .navbar-collapse:not(.show) {
+    max-height: 0;
+  }
 }
+

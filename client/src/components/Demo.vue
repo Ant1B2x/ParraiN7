@@ -42,12 +42,12 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import app from "@/feathers-client";
 import {User} from "@/views/Users.vue";
+
 
 @Component
 export default class Demo extends Vue {
-	@Prop() user!: User;
+	@Prop() user?: User | null;
 
 }
 </script>

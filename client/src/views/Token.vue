@@ -31,8 +31,8 @@
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-property-decorator';
 import app from '@/feathers-client';
-import {User} from "@/views/Users.vue";
 import {MessageState} from "@/views/enum";
+import {User} from "@/views/Users.vue";
 
 export class Question {
     idQuestion: number;
@@ -51,7 +51,7 @@ export class Question {
 export default class Questions extends Vue {
     token = '';
 
-    @Prop() user!: User;
+    @Prop() user?: User | null;
 
     private validation = {
         messageState: MessageState.none,
@@ -59,7 +59,7 @@ export default class Questions extends Vue {
     }
 
     async sendToken() {
-        await this.user.connect();
+        await this.user?.connect();
         const token = {
             content: this.token,
         }
