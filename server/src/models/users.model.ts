@@ -19,6 +19,7 @@ export default function (app: Application): Knex {
                 table.string('lastname');
                 table.boolean('isGodfather').notNullable();
                 table.boolean('isAdmin').defaultTo(0).notNullable();
+                table.integer('token')
             })
                 .then(() => console.log(`Created ${tableName} table`))
                 .catch(e => console.error(`Error creating ${tableName} table`, e));

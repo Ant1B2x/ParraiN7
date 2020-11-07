@@ -7,6 +7,9 @@ import checkModifyingUser from '../../hooks/users/check-modifying-user';
 import checkSettingAdminUser from '../../hooks/users/check-setting-admin-user';
 import hideGodsonName from '../../hooks/users/hide-godson-name';
 import hideGodsonsNames from '../../hooks/users/hide-godsons-names';
+import addToken from '../../hooks/users/add-token';
+import hideToken from '../../hooks/users/hide-token';
+import {add} from "winston";
 // Don't remove this comment. It's needed to format import lines nicely.
 
 const {authenticate} = feathersAuthentication.hooks;
@@ -17,7 +20,7 @@ export default {
         all: [],
         find: [authenticate('jwt')],
         get: [authenticate('jwt')],
-        create: [checkEmail(), checkName(), unsetAdmin(), hashPassword('password')],
+        create: [checkEmail(), checkName(), unsetAdmin(), addToken(), hashPassword('password')],
         update: [authenticate('jwt'), checkModifyingUser(), checkSettingAdminUser(), checkEmail(), checkName(), hashPassword('password')],
         patch: [authenticate('jwt'), checkModifyingUser(), checkSettingAdminUser(), checkEmail(), checkName(), hashPassword('password')],
         remove: [authenticate('jwt'), checkModifyingUser()]
@@ -29,9 +32,9 @@ export default {
             // Always must be the last hook
             protect('password')
         ],
-        find: [hideGodsonsNames()],
-        get: [hideGodsonName()],
-        create: [],
+        find: [hideGodsonsNames(), hideToken()],
+        get: [hideGodsonName(), hideToken()],
+        create: [hideToken()],
         update: [],
         patch: [],
         remove: []
