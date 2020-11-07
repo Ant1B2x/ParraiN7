@@ -6,7 +6,8 @@
                 <img alt="Image placeholder" src="img/brand/godfather.svg" id="navbar-logo" style="min-height: 10.75rem;">
             </router-link>
             <!-- Toggler -->
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation"
+            v-on:click="toggleMenu">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <!-- Collapse -->
@@ -54,10 +55,6 @@
                 <button class="navbar-btn btn btn-sm btn-danger d-none d-lg-inline-block ml-3" v-if="this.user" @click="signalLogOut">
                     Déconnexion
                 </button>
-                <!-- Mobile button -->
-                <div class="d-lg-none text-center">
-                    <a href="https://webpixels.io/themes/quick-website-ui-kit" class="btn btn-block btn-sm btn-warning">See more details</a>
-                </div>
             </div>
         </div>
     </nav>
@@ -71,7 +68,7 @@ import {User} from "@/views/Users.vue";
 @Component
 export default class MenuParrain7 extends Vue {
 
-    @Prop() user: User | null = null;
+    @Prop() user!: User;
 
     isAdmin(): boolean {
         return !!this.user && this.user.isAdmin;
@@ -87,6 +84,10 @@ export default class MenuParrain7 extends Vue {
 
     signalLogOut() {
         this.$emit('signalLogOut');
+    }
+
+    toggleMenu() {
+        document.getElementById('navbarCollapse')?.classList.toggle('collapse');
     }
 }
 </script>
