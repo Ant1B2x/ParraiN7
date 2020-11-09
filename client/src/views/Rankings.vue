@@ -19,9 +19,7 @@
             </div>
         </form>
 
-        <div class="card-body px-md-5 py-5" v-bind:class="[validation.messageState]">
-            <p class="text-muted mb-0 alertMessage" role="alert">{{validation.message}}</p>
-        </div>
+        <MessageStateComponent :standard-message="standardMessage" ref="MessageState"/>
 
         <div v-if="godsons[this.currentIndex]">
             <h2 style="color: #152c5b;">{{godsons[this.currentIndex].firstname}} {{godsons[this.currentIndex].lastname}}</h2>
@@ -59,9 +57,10 @@
 </style>
 
 <script lang="ts">
-import {Component, Vue, Prop} from 'vue-property-decorator';
+import {Component, Vue, Prop, Ref} from 'vue-property-decorator';
 import Rating from "@/components/Rating.vue"
 import {MessageState} from "@/views/enum";
+import MessageStateComponent from "@/components/MessageStateComponent.vue";
 import app from "@/feathers-client";
 import {User} from "@/views/Users.vue";
 
@@ -104,21 +103,20 @@ export class Godson {
 
 @Component({
     components: {
-        Rating
+        Rating,
+        MessageStateComponent,
     }
 })
 export default class Rankings extends Vue {
 
     @Prop() user?: User | null;
+    @Ref('MessageStateComponent') messageStateComponent!: MessageStateComponent;
+
+    standardMessage = 'Vous pouvez noter les filleuls';
 
     godsons: Godson[] = [];
 
     currentIndex = 0;
-
-    private validation = {
-        message: 'Vote du poulain',
-        messageState: MessageState.none,
-    }
 
     async mounted() {
         await this.user?.connect();
@@ -161,23 +159,13 @@ export default class Rankings extends Vue {
                 (data: any) => {
                     //Send check email or smth
                     // console.log(data);
-                    this.rateChanged();
+                    this.messageStateComponent.displaySuccess('Le vote a bien été enregistré.');
                 }
             ).catch((error: any) => {
                 console.log(error);
-                this.validation.message = 'La question n\'a pas pu être ajoutée.';
-                this.validation.messageState = MessageState.hasError;
+                this.messageStateComponent.displayError('Le vote n\'a pas pu être pris en compte.');
             });
         }
-    }
-
-    rateChanged() {
-        this.validation.messageState = MessageState.hasSucceed;
-        this.validation.message = 'Le vote a bien été modifié !';
-        setTimeout(() => {
-            this.validation.messageState = MessageState.none;
-            this.validation.message = 'Votez pour chaque filleul.';
-        }, 3000);
     }
 }
 </script>

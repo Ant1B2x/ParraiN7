@@ -23,7 +23,7 @@
                             </div>
                         </div>
                         <div class="mt-4">
-                            <button type="button" class="btn btn-block btn-primary">Valider</button>
+                            <button class="btn btn-block btn-primary" v-on:click="sendQuestion">Valider</button>
                         </div>
                     </form>
                 </div>
@@ -68,10 +68,10 @@ export default class Answers extends Vue {
     questionsWithAnswers: QuestionWithAnswer[] = [];
 
     mounted() {
-        this.sendQuestion();
+        this.getQuestions();
     }
 
-    async sendQuestion() {
+    async getQuestions() {
         try {
             await app.service('questions').find( { query: { answers: true, godsonId: this.user?.id } } ).then(
                 (data: any) => {

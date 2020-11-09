@@ -101,7 +101,7 @@
                                 </div>
                             </div>
                             <div class="mt-4">
-                                <button type="button" class="btn btn-block btn-primary" v-on:click="signUp" :disabled="signUpValidation.hasError">S'inscrire
+                                <button class="btn btn-block btn-primary" v-on:click="signUp" :disabled="signUpValidation.hasError">S'inscrire
                                 </button>
                             </div>
                         </form>

@@ -13,7 +13,7 @@ import {
     faArrowRight,
     faArrowLeft,
     faAngleRight,
-    faAngleLeft
+    faRing
 } from "@fortawesome/free-solid-svg-icons";
 import {library} from "@fortawesome/fontawesome-svg-core";
 
@@ -28,6 +28,7 @@ library.add(faArrowRight)
 library.add(faArrowLeft)
 library.add(faAngleRight)
 library.add(faAngleRight)
+library.add(faRing)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

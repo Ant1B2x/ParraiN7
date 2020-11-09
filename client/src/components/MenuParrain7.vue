@@ -6,7 +6,7 @@
                 <img alt="Image placeholder" src="img/brand/godfather.svg" id="navbar-logo" style="min-height: 10.75rem;">
             </router-link>
             <!-- Toggler -->
-            <button class="navbar-toggler" type="button" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation"
+            <button class="navbar-toggler" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation"
             v-on:click="toggleMenu">
                 <span class="navbar-toggler-icon"></span>
             </button>

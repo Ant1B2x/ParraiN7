@@ -1,8 +1,6 @@
 <template>
     <div class="questionArea">
-        <div class="card-body px-md-5 py-5" v-bind:class="[validation.messageState]">
-            <p class="text-muted mb-0 alertMessage" role="alert">{{validation.message}}</p>
-        </div>
+        <MessageStateComponent :standard-message="standardMessage" ref="MessageState"/>
         <form>
             <div class="form-group">
                 <label class="form-control-label">Question</label>
@@ -29,7 +27,7 @@
                 </div>
             </div>
             <div class="mt-4">
-                <button type="button" class="btn btn-block btn-primary" v-on:click="sendQuestion">Ajouter</button>
+                <button class="btn btn-block btn-primary" v-on:click="sendQuestion">Ajouter</button>
             </div>
         </form>
 
@@ -86,11 +84,11 @@
 </style>
 
 <script lang="ts">
-import {Component, Prop, Vue} from 'vue-property-decorator';
+import {Component, Prop, Ref, Vue} from 'vue-property-decorator';
 import app from '@/feathers-client';
-import BACKEND_URL from "@/config";
 import {User} from "@/views/Users.vue";
 import {MessageState} from "@/views/enum";
+import MessageStateComponent from "@/components/MessageStateComponent.vue";
 
 export class Question {
     id: number;
@@ -110,7 +108,11 @@ export class Question {
     }
 }
 
-@Component
+@Component({
+    components: {
+        MessageStateComponent
+    }
+})
 export default class Questions extends Vue {
 
     questions: Question[] = [];
@@ -118,13 +120,10 @@ export default class Questions extends Vue {
     addPlaceholder = true;
     questionToAdd = '';
     placeholder = '';
+    standardMessage = 'Ajoutez votre question';
 
     @Prop() user?: User | null;
-
-    private validation = {
-        message: 'Ajoutez votre question',
-        messageState: MessageState.none,
-    }
+    @Ref('MessageStateComponent') messageStateComponent!: MessageStateComponent;
 
     mounted() {
         this.loadQuestions();
@@ -162,8 +161,7 @@ export default class Questions extends Vue {
 
     async sendQuestion() {
         if (this.addPlaceholder && (this.placeholder === '' || !this.placeholder)) {
-            this.validation.messageState = MessageState.hasWarning;
-            this.validation.message = 'Attention, placeholder non précisé.';
+            this.messageStateComponent.displayWarning('Attention, placeholder non précisé.');
         } else {
             await this.user?.connect();
             const question = {
@@ -171,26 +169,17 @@ export default class Questions extends Vue {
                 placeholder: this.addPlaceholder ? this.placeholder : null
             }
             app.service('questions').create(question).then(
-                (data: any) => {
+                async (data: any) => {
                     //Send check email or smth
                     // console.log(data);
-                    this.questionAdded();
+                    this.messageStateComponent.displaySuccess('La question a bien été ajoutée !');
+                    await this.loadQuestions();
                 }
             ).catch((error: any) => {
                 console.log(error);
-                this.validation.message = 'La question n\'a pas pu être ajoutée.';
-                this.validation.messageState = MessageState.hasError;
+                this.messageStateComponent.displayError('La question n\'a pas pu être ajoutée.');
             });
         }
-    }
-
-    questionAdded() {
-        this.validation.messageState = MessageState.hasSucceed;
-        this.validation.message = 'La question a bien été ajoutée !';
-        setTimeout(() => {
-            this.validation.messageState = MessageState.none;
-            this.validation.message = 'Ajoutez votre question';
-        }, 3000);
     }
 
 }
