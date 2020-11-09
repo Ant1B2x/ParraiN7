@@ -1,6 +1,6 @@
 <template>
     <div class="questionArea">
-        <MessageStateComponent :standard-message="standardMessage" ref="MessageState"/>
+        <MessageStateComponent :standard-message="standardMessage" ref="MessageStateComponent"/>
         <form>
             <div class="form-group">
                 <label class="form-control-label">Question</label>
@@ -67,10 +67,13 @@
                         <p class="text-muted mb-0">
                             {{ question.content }}
                         </p>
+                        <textarea class="form-control" v-model="question.content" v-if="questionIsBeingEdited(question.id)"></textarea>
                         <p class="text-muted mb-0" v-if="question.placeholder">
                             ({{ question.placeholder }})
                         </p>
                     </div>
+                    <button class="btn btn-warning" v-if="isAuthorOrAdmin(question.authorId) && !questionIsBeingEdited(question.id)" v-on:click="editQuestion(question.id)">Éditer</button>
+                    <button class="btn btn-success" v-if="questionIsBeingEdited(question.id)" v-on:click="sendQuestionModified(question)">Valider</button>
                 </div>
             </div>
         </div>
@@ -80,7 +83,6 @@
 <style scoped>
 /*@import "public/assets/css/quick-website.css";*/
 @import "css/Questions.css";
-@import "css/MessageState.css";
 </style>
 
 <script lang="ts">
@@ -117,10 +119,12 @@ export default class Questions extends Vue {
 
     questions: Question[] = [];
     filteredList: Question[] = [];
-    addPlaceholder = true;
+    addPlaceholder = false;
     questionToAdd = '';
     placeholder = '';
     standardMessage = 'Ajoutez votre question';
+    inEdition = false;
+    idEditedQuestion: number | undefined;
 
     @Prop() user?: User | null;
     @Ref('MessageStateComponent') messageStateComponent!: MessageStateComponent;
@@ -180,6 +184,52 @@ export default class Questions extends Vue {
                 this.messageStateComponent.displayError('La question n\'a pas pu être ajoutée.');
             });
         }
+    }
+
+    async sendQuestionModified(question: Question) {
+        await this.user?.connect();
+        if(question.content.length > 0) {
+            try {
+                const questionToModify = {
+                    content: question.content,
+                    placeholder: question.placeholder
+                }
+                await app.service('questions').patch(question.id, questionToModify);
+                this.messageStateComponent.displaySuccess('La question a bien été modifiée !');
+                this.inEdition = false;
+                this.idEditedQuestion = undefined;
+                await this.loadQuestions();
+            } catch (error) {
+                console.log(error);
+                this.messageStateComponent.displayError('La question n\'a pas pu être modifiée.');
+            }
+        } else {
+            try {
+                await app.service('questions').remove(question.id);
+                this.messageStateComponent.displaySuccess('La question a bien été supprimée !');
+                this.inEdition = false;
+                this.idEditedQuestion = undefined;
+                await this.loadQuestions();
+            } catch (error) {
+                console.log(error);
+                this.messageStateComponent.displayError('La question n\'a pas pu être supprimée.');
+            }
+        }
+
+    }
+
+    isAuthorOrAdmin(idAuthor: number) {
+        return this.user?.id === idAuthor || this.user?.isAdmin;
+    }
+
+    editQuestion(idQuestion: number) {
+        this.inEdition = true;
+        this.idEditedQuestion = idQuestion;
+        console.log(this.inEdition, this.idEditedQuestion);
+    }
+
+    questionIsBeingEdited(idQuestion: number) {
+        return this.inEdition && this.idEditedQuestion === idQuestion;
     }
 
 }
