@@ -161,7 +161,7 @@ export default class LogIn extends Vue {
         await app.service('users').create(signUpFormBis).then(
             (data: any) => {
                 //Send check email or smth
-                console.log(data);
+                // console.log(data);
                 this.$router.push('home');
             }
         ).catch( (error: any) => {

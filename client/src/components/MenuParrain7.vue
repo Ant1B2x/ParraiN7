@@ -70,7 +70,7 @@ export default class MenuParrain7 extends Vue {
     @Prop() user?: User | null;
 
     mounted() {
-        console.log(this.user);
+        // console.log(this.user);
     }
 
     isAdmin(): boolean {
@@ -86,7 +86,7 @@ export default class MenuParrain7 extends Vue {
     }
 
     signalLogOut() {
-        console.log("Deco moi pls");
+        // console.log("Deco moi pls");
         this.$emit('signalLogOut');
     }
 

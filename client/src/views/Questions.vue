@@ -173,7 +173,7 @@ export default class Questions extends Vue {
             app.service('questions').create(question).then(
                 (data: any) => {
                     //Send check email or smth
-                    console.log(data);
+                    // console.log(data);
                     this.questionAdded();
                 }
             ).catch((error: any) => {

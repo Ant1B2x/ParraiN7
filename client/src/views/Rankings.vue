@@ -136,7 +136,6 @@ export default class Rankings extends Vue {
 
     nextPoulain() {
         this.currentIndex = (this.currentIndex + 1) % this.godsons.length;
-        console.log(this.currentIndex);
     }
 
     previousPoulain() {
@@ -161,7 +160,7 @@ export default class Rankings extends Vue {
             app.service('rank').patch(rang).then(
                 (data: any) => {
                     //Send check email or smth
-                    console.log(data);
+                    // console.log(data);
                     this.rateChanged();
                 }
             ).catch((error: any) => {
