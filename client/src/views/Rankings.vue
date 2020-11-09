@@ -19,7 +19,11 @@
             </div>
         </form>
 
-        <MessageStateComponent :standard-message="standardMessage" ref="MessageState"/>
+        <MessageStateComponent :standard-message="standardMessage" ref="MessageStateComponent"/>
+
+        <div class="mt-4">
+            <button class="btn btn-primary" v-on:click="sendVote">Modifier</button>
+        </div>
 
         <div v-if="godsons[this.currentIndex]">
             <h2 style="color: #152c5b;">{{godsons[this.currentIndex].firstname}} {{godsons[this.currentIndex].lastname}}</h2>
@@ -125,7 +129,9 @@ export default class Rankings extends Vue {
 
     async loadUsers() {
         // console.log(await app.service('users').find({ query: { answers: true } } ));
-        this.godsons = await app.service('users').find({ query: { answers: true } } );
+        this.godsons = await app.service('users').find({ query: { answers: true }, $sort: {
+                id: 1
+            } } );
         // console.log(this.godsons);
         for (const godson of this.godsons) {
             godson.rank = godson.rank ? godson.rank : 1;
@@ -155,11 +161,12 @@ export default class Rankings extends Vue {
                 godsonId: this.godsons[this.currentIndex].id,
                 rank: this.godsons[this.currentIndex].rank,
             }
-            app.service('rank').patch(rang).then(
-                (data: any) => {
+            app.service('rankings').patch(0, rang).then(
+                async (data: any) => {
                     //Send check email or smth
                     // console.log(data);
                     this.messageStateComponent.displaySuccess('Le vote a bien été enregistré.');
+                    await this.loadUsers();
                 }
             ).catch((error: any) => {
                 console.log(error);
