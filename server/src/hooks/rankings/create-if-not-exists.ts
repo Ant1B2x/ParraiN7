@@ -14,9 +14,11 @@ export default (options = {}): Hook => {
                 user: context.params.user
             });
         } catch (err) {
-            await context.app.service('rankings').create(context.data, {
+            const result = await context.app.service('rankings').create(context.data, {
                 user: context.params.user
             });
+            // context.data['id'] = result['id'];
+            context.id = result['id']
         }
 
         return context;
