@@ -13,11 +13,10 @@ li {
 }
 
 nav {
-    margin-bottom: 50px;
+  margin-bottom: 50px;
 }
 
-@media (max-width: 991.98px)
-{
+@media (max-width: 991.98px) {
   .navbar-collapse {
     flex-basis: 100%;
     flex-grow: 1;
