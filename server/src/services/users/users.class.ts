@@ -39,18 +39,22 @@ export class Users extends Service<UserData> {
             for (let user of users) {
                 user['questions'] = [];
                 for (let question of questions) {
+                    const questionToAdd = JSON.parse(JSON.stringify(question));
                     const answer = await db('answers').select('id as answerId', 'content as answerContent')
                         .where('userId', user.id)
-                        .andWhere('questionId', question.questionId);
-                    question['answerId'] = answer[0] ? answer[0]['answerId'] : null;
-                    question['answerContent'] = answer[0] ? answer[0]['answerContent'] : null;
-                    user['questions'].push(question)
+                        .andWhere('questionId', questionToAdd.questionId);
+                    questionToAdd['answerId'] = answer[0] ? answer[0]['answerId'] : null;
+                    questionToAdd['answerContent'] = answer[0] ? answer[0]['answerContent'] : null;
+                    user['questions'].push(questionToAdd)
                 }
                 const rank = await db('rankings').select('rank')
                     .where('godfatherId', params?.user.id)
                     .andWhere('godsonId', user.id);
                 user['rank'] = rank[0] ? rank[0]['rank'] : null;
+
             }
+            // console.log(users[1]);
+            // console.log(users[4]);
         }
 
         return users;
