@@ -1,5 +1,6 @@
 <template>
     <div class="questionArea">
+        <MessageStateComponent :standard-message="standardMessage" ref="MessageStateComponent"/>
         <!-- Afficher questions existantes -->
         <div class="questionList">
             <div class="card hover-translate-y-n10 hover-shadow-lg" v-for="question in questionsWithAnswers" :key="question.id">
@@ -23,7 +24,8 @@
                             </div>
                         </div>
                         <div class="mt-4">
-                            <button class="btn btn-block btn-primary" v-on:click="sendQuestion">Valider</button>
+                            <button class="btn btn-block btn-primary" v-if="!question.answerId" v-on:click="sendAnswer(question.id, question.answerContent)">Valider</button>
+                            <button class="btn btn-block btn-warning" v-if="question.answerId" v-on:click="editAnswer(question.answerId, question.answerContent)">Editer</button>
                         </div>
                     </form>
                 </div>
@@ -38,9 +40,10 @@
 </style>
 
 <script lang="ts">
-import {Component, Prop, Vue} from 'vue-property-decorator';
+import {Component, Prop, Ref, Vue} from 'vue-property-decorator';
 import app from "@/feathers-client";
 import {User} from "@/views/Users.vue";
+import MessageStateComponent from "@/components/MessageStateComponent.vue";
 
 export class QuestionWithAnswer {
     id?: number;
@@ -60,10 +63,17 @@ export class QuestionWithAnswer {
     }
 }
 
-@Component
+@Component({
+    components: {
+        MessageStateComponent
+    }
+})
 export default class Answers extends Vue {
 
     @Prop() user?: User;
+    @Ref('MessageStateComponent') messageStateComponent!: MessageStateComponent;
+
+    standardMessage = 'Veuillez répondre aux questions.';
 
     questionsWithAnswers: QuestionWithAnswer[] = [];
 
@@ -76,14 +86,47 @@ export default class Answers extends Vue {
             await app.service('questions').find( { query: { answers: true, godsonId: this.user?.id } } ).then(
                 (data: any) => {
                     // console.log(data);
+                    this.questionsWithAnswers = [];
                     for (const answer of data) {
                         this.questionsWithAnswers.push(new QuestionWithAnswer(answer.id, answer.content,
                             answer.authorId, answer.placeholder, answer.answerId, answer.answerContent))
                     }
+                    console.log(this.questionsWithAnswers);
                 }
             );
         } catch (e) {
             console.log(e);
+        }
+    }
+
+    async sendAnswer(questionId: number, answerContent: string) {
+        this.user?.connect();
+        const answer = { userId: this.user?.id, questionId: questionId, content: answerContent };
+        console.log(answer);
+        try {
+            await app.service('answers').create(answer);
+            this.messageStateComponent.displaySuccess('La réponse a bien été prise en compte !');
+            await this.getQuestions();
+        } catch (error) {
+            console.log(error);
+            if (error.code === 408) {
+                this.messageStateComponent.displayError('Vous n\'êtes pas un Godson, vous ne pouvez donner de réponses.' );
+            } else {
+                this.messageStateComponent.displayError('Une erreur est survenue.' );
+            }
+        }
+    }
+
+    async editAnswer(questionId: number, answerContent: string) {
+        this.user?.connect();
+        try {
+            const answer = { content: answerContent };
+            await app.service('answers').patch(questionId, answer);
+            this.messageStateComponent.displaySuccess('La réponse a bien été modifiée.');
+            await this.getQuestions();
+        } catch (error) {
+            console.log(error);
+            this.messageStateComponent.displayError('Une erreur est survenue.')
         }
     }
 }
