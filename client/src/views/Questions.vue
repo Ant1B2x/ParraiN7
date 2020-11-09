@@ -134,7 +134,13 @@ export default class Questions extends Vue {
     }
 
     async loadQuestions() {
-        this.questions = await app.service('questions').find();
+        this.questions = await app.service('questions').find({
+            query: {
+                $sort: {
+                    id: 1
+                }
+            }
+        });
         // console.log(this.questions);
         this.filteredList = JSON.parse(JSON.stringify(this.questions)) as Question[];
         // console.log('ok',this.questions);
