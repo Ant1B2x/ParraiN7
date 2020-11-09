@@ -1,8 +1,12 @@
 <template>
     <div id="app">
-        <MenuParrain7 :user="this.user" @signalLogOut="logOut"/>
+        <header>
+            <MenuParrain7 :user="this.user" @signalLogOut="logOut"/>
+        </header>
         <router-view :user="this.user"/>
-        <Footer/>
+        <footer>
+            <Footer/>
+        </footer>
     </div>
 </template>
 
