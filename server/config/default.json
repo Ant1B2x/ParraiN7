@@ -15,8 +15,8 @@
       "header": {
         "typ": "access"
       },
-      "audience": "https://yourdomain.com",
-      "issuer": "feathers",
+      "audience": "https://parrai-n-7-app.feathersjs.com",
+      "issuer": "ParraiN7",
       "algorithm": "HS256",
       "expiresIn": "1d"
     },

@@ -23,13 +23,13 @@
                         <router-link class="nav-link" to="/answers">Réponses</router-link>
                     </li>
                     <li class="nav-item " v-if="this.isGodfather()">
-                        <router-link class="nav-link" to="/rankings">Choix des poulains</router-link>
+                        <router-link class="nav-link" to="/rankings">Choix des filleuls</router-link>
                     </li>
                     <li class="nav-item " v-if="this.isAdmin()">
                         <router-link class="nav-link" to="/users">Gestion utilisateurs</router-link>
                     </li>
                     <li class="nav-item ">
-                        <router-link class="nav-link" to="/about">A propos</router-link>
+                        <router-link class="nav-link" to="/about">À propos</router-link>
                     </li>
                     <!-- <li class="nav-item dropdown dropdown-animate" data-toggle="hover">
                         <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pages</a>
@@ -45,11 +45,7 @@
                         <a class="nav-link" href="docs/index.html">Docs</a>
                     </li> -->
                 </ul>
-                <!-- Button -->
-                <!--a class="navbar-btn btn btn-sm btn-primary d-none d-lg-inline-block ml-3" href="https://github.com/webpixels/quick-website-ui-kit-demo/archive/master.zip">
-                    Download Free
-                </a-->
-                <router-link class=" btn btn-sm btn-primary d-lg-inline-block" to="/login" v-if="!this.user">
+                <router-link class="btn btn-sm btn-primary d-lg-inline-block" to="/login" v-if="!this.user">
                     Connexion
                 </router-link>
                 <button class="btn btn-sm btn-danger d-lg-inline-block" v-if="this.user" @click="signalLogOut">
@@ -69,10 +65,6 @@ export default class MenuParrain7 extends Vue {
 
     @Prop() user?: User | null;
 
-    mounted() {
-        // console.log(this.user);
-    }
-
     isAdmin(): boolean {
         return !!this.user && this.user.isAdmin;
     }
@@ -86,7 +78,6 @@ export default class MenuParrain7 extends Vue {
     }
 
     signalLogOut() {
-        // console.log("Deco moi pls");
         this.$emit('signalLogOut');
     }
 
