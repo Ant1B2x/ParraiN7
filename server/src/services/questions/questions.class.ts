@@ -55,7 +55,7 @@ export class Questions extends Service<QuestionData> {
         }
 
         for (let question of questions) {
-            const author = ( await db('users').select('firstname', 'lastname')
+            const author = (await db('users').select('firstname', 'lastname')
                 .where('id', question.authorId) )[0];
             question['authorFirstname'] = author['firstname'];
             question['authorLastname'] = author['lastname'];

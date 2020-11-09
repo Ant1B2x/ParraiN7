@@ -11,10 +11,10 @@ const nameRegEx =
 export default (options = {}): Hook => {
     return async (context: HookContext): Promise<HookContext> => {
         if (context.data['firstname'] && !nameRegEx.test(context.data['firstname']))
-            throw new BadRequest('Firstname does not respect the expected format!')
+            throw new BadRequest('Firstname does not respect the expected format!');
 
         if (context.data['lastname'] && !nameRegEx.test(context.data['lastname']))
-            throw new BadRequest('Lastname does not respect the expected format!')
+            throw new BadRequest('Lastname does not respect the expected format!');
 
         return context;
     };

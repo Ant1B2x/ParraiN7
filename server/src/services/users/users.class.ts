@@ -53,8 +53,6 @@ export class Users extends Service<UserData> {
                 user['rank'] = rank[0] ? rank[0]['rank'] : null;
 
             }
-            // console.log(users[1]);
-            // console.log(users[4]);
         }
 
         return users;
