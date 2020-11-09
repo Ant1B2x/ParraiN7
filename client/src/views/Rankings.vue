@@ -7,9 +7,9 @@
                 </div>
                 <div class="col-md-auto order-0 order-md-1">
                     <label>
-                        <select class="custom-select" v-model="godsons[this.currentIndex]">
+                        <select class="custom-select" v-model="currentIndex">
                             <option selected disabled>Choisissez un poulain</option>
-                            <option v-for="godson in godsons" :value="godson" :key="godson.id">{{godson.firstname}} {{godson.lastname}}</option>
+                            <option v-for="godson in godsons" :value="godsons.indexOf(godson)" :key="godson.id">Filleul #{{godson.id}}</option>
                         </select>
                     </label>
                 </div>
@@ -26,7 +26,7 @@
         </div>
 
         <div v-if="godsons[this.currentIndex]">
-            <h2 style="color: #152c5b;">{{godsons[this.currentIndex].firstname}} {{godsons[this.currentIndex].lastname}}</h2>
+            <h2 style="color: #152c5b;">Filleul #{{godsons[this.currentIndex].id}}</h2>
             <Rating :grade="godsons[this.currentIndex].rank" :maxStars="5" :hasCounter="true" @updatedStars="changeRating"/>
         </div>
 
