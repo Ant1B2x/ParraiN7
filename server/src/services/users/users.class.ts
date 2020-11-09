@@ -53,9 +53,6 @@ export class Users extends Service<UserData> {
             }
         }
 
-
-        console.log(users[0]['questions']);
-
         return users;
     }
 
