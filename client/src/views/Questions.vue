@@ -164,7 +164,11 @@ export default class Questions extends Vue {
     }
 
     async sendQuestion() {
-        if (this.addPlaceholder && (this.placeholder === '' || !this.placeholder)) {
+        if (this.questionToAdd.length < 5) {
+            this.messageStateComponent.displayWarning('Votre question est trop courte.');
+        } else if (this.questionToAdd.length > 255) {
+            this.messageStateComponent.displayWarning('Votre question est trop longue.');
+        } else if (this.addPlaceholder && (this.placeholder === '' || !this.placeholder)) {
             this.messageStateComponent.displayWarning('Attention, placeholder non précisé.');
         } else {
             await this.user?.connect();
@@ -188,31 +192,35 @@ export default class Questions extends Vue {
 
     async sendQuestionModified(question: Question) {
         await this.user?.connect();
-        if(question.content.length > 0) {
-            try {
-                const questionToModify = {
-                    content: question.content,
-                    placeholder: question.placeholder
-                }
-                await app.service('questions').patch(question.id, questionToModify);
-                this.messageStateComponent.displaySuccess('La question a bien été modifiée !');
-                this.inEdition = false;
-                this.idEditedQuestion = undefined;
-                await this.loadQuestions();
-            } catch (error) {
-                console.log(error);
-                this.messageStateComponent.displayError('La question n\'a pas pu être modifiée.');
-            }
+        if (this.questionToAdd.length > 255) {
+            this.messageStateComponent.displayWarning('Votre question est trop longue.');
         } else {
-            try {
-                await app.service('questions').remove(question.id);
-                this.messageStateComponent.displaySuccess('La question a bien été supprimée !');
-                this.inEdition = false;
-                this.idEditedQuestion = undefined;
-                await this.loadQuestions();
-            } catch (error) {
-                console.log(error);
-                this.messageStateComponent.displayError('La question n\'a pas pu être supprimée.');
+            if (question.content.length > 0) {
+                try {
+                    const questionToModify = {
+                        content: question.content,
+                        placeholder: question.placeholder
+                    }
+                    await app.service('questions').patch(question.id, questionToModify);
+                    this.messageStateComponent.displaySuccess('La question a bien été modifiée !');
+                    this.inEdition = false;
+                    this.idEditedQuestion = undefined;
+                    await this.loadQuestions();
+                } catch (error) {
+                    console.log(error);
+                    this.messageStateComponent.displayError('La question n\'a pas pu être modifiée.');
+                }
+            } else {
+                try {
+                    await app.service('questions').remove(question.id);
+                    this.messageStateComponent.displaySuccess('La question a bien été supprimée !');
+                    this.inEdition = false;
+                    this.idEditedQuestion = undefined;
+                    await this.loadQuestions();
+                } catch (error) {
+                    console.log(error);
+                    this.messageStateComponent.displayError('La question n\'a pas pu être supprimée.');
+                }
             }
         }
 
