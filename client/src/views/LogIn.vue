@@ -51,9 +51,9 @@
                             </div>
                         </form>
                     </div>
-                    <div class="card-footer px-md-5"><small>Pas encore enregistré ? </small>
+                    <button class="card-footer px-md-5"><small>Pas encore enregistré ? </small>
                         <router-link to="/signup" class="small font-weight-bold">Inscrivez-vous !</router-link>
-                    </div>
+                    </button>
                 </div>
             </div>
         </div>
@@ -84,14 +84,18 @@ export default class LogIn extends Vue {
     public logIn = async () => {
 
         this.loginForm.errorMessage = 'Connectez-vous à votre compte pour continuer';
-        this.loginForm.hasError = false;
+        this.loginForm.hasError = true;
         try {
+            this.loginForm.errorMessage = 'Avant';
+
             // await app.logout();
             await app.authenticate({
                 strategy: 'local',
                 email: this.loginForm.email + this.institutionalEmailEnd,
                 password: this.loginForm.password
             });
+            this.loginForm.errorMessage = 'Après';
+
             this.loginForm.email = '';
             this.loginForm.password = '';
             await this.$router.push('/questions');
