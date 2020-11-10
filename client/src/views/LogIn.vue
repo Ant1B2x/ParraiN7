@@ -94,7 +94,7 @@ export default class LogIn extends Vue {
                 email: this.loginForm.email + this.institutionalEmailEnd,
                 password: this.loginForm.password
             });
-            app.set('user', auth.user);
+            localStorage.setItem('user', JSON.stringify(auth.user));
             this.loginForm.email = '';
             this.loginForm.password = '';
             await this.$router.push('questions');

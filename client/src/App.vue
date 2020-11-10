@@ -27,18 +27,22 @@ export default class App extends Vue  {
 
     user: User | null = null;
 
-    beforeUpdate() {
-        this.user = app.get('user');
+    private beforeUpdate() {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser)
+            this.user = JSON.parse(storedUser);
+        else
+            this.user = null;
     }
 
     public logOut = async () => {
         await app.logout();
-        app.set('user', null);
+        localStorage.removeItem('user');
 
         try {
             await this.$router.replace('/');
         } catch (err) {
-            null;
+            // pass
         }
     }
 
