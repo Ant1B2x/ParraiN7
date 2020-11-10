@@ -18,7 +18,7 @@
                     <p>Répondez aux questions qui vous sont posées. Les réponses sont envoyées de manière anonyme.<br>
                         Vous serez avertis si de nouvelles questions ont été proposées par les deuxièmes années.</p>
                 </div>
-                <div class="col-md-6 text-left pl-lg-5">
+                <div class="col-md-6 text-left pl-lg-5" id="secondYear">
                     <h4 class="text-center text-lg-left">2ème année</h4>
                     <h5>Création de compte</h5>
                     <p>Vous pouvez créer votre compte en utilisant l'adresse mail de l'N7.<br>N'oubliez pas de sélectionner "Parrain" avant de confirmer l'inscription.</p>
@@ -32,7 +32,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <h4>Résultats du parrainage</h4>
-                    <p class="text-left text-lg-center">À la fin de la session, un.e première année se voit attribuer un.e parrain/marraine. Vous pouvez désormais vous embrasser.</p>
+                    <p class="text-center">À la fin de la session, un.e première année se voit attribuer un.e parrain/marraine. Vous pouvez désormais vous embrasser.</p>
                 </div>
             </div>
         </section>
