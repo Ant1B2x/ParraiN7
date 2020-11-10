@@ -84,7 +84,8 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><font-awesome-icon icon="id-card"/></span>
                                     </div>
-                                    <input v-model="signUpForm.lastname" type="text" class="form-control" id="input-last-name" placeholder="Doe" @blur="checkNameValidity">
+                                    <input v-model="signUpForm.lastname" type="text" class="form-control" id="input-last-name" placeholder="Doe"
+                                           @blur="checkNameValidity" @keyup="handleKeyUp">
                                 </div>
                             </div>
 
@@ -101,8 +102,7 @@
                                 </div>
                             </div>
                             <div class="mt-4">
-                                <button class="btn btn-block btn-primary" v-on:click="signUp" :disabled="signUpValidation.hasError">S'inscrire
-                                </button>
+                                <div class="btn btn-block btn-primary" v-on:click="signUp" :disabled="signUpValidation.hasError">S'inscrire</div>
                             </div>
                         </form>
                     </div>
