@@ -45,9 +45,9 @@
                                 </div>
                             </div>
                             <div class="mt-4">
-                                <div class="btn btn-primary" v-on:click="logIn" :disabled="loginForm.hasError">
+                                <button type="button" class="btn btn-primary" v-on:click="logIn" :disabled="loginForm.hasError">
                                     Se connecter
-                                </div>
+                                </button>
                             </div>
                         </form>
                     </div>

@@ -27,7 +27,7 @@
                 </div>
             </div>
             <div class="mt-4">
-                <button class="btn btn-block btn-primary" v-on:click="sendQuestion">Ajouter</button>
+                <button type="button" class="btn btn-block btn-primary" v-on:click="sendQuestion">Ajouter</button>
             </div>
         </form>
 
@@ -72,8 +72,8 @@
                             ({{ question.placeholder }})
                         </p>
                     </div>
-                    <button class="btn btn-warning" v-if="isAuthorOrAdmin(question.authorId) && !questionIsBeingEdited(question.id)" v-on:click="editQuestion(question.id)">Éditer</button>
-                    <button class="btn btn-success" v-if="questionIsBeingEdited(question.id)" v-on:click="sendQuestionModified(question)">Valider</button>
+                    <button type="button" class="btn btn-warning" v-if="isAuthorOrAdmin(question.authorId) && !questionIsBeingEdited(question.id)" v-on:click="editQuestion(question.id)">Éditer</button>
+                    <button type="button" class="btn btn-success" v-if="questionIsBeingEdited(question.id)" v-on:click="sendQuestionModified(question)">Valider</button>
                 </div>
             </div>
         </div>

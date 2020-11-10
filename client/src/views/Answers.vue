@@ -24,8 +24,8 @@
                             </div>
                         </div>
                         <div class="mt-4">
-                            <button class="btn btn-block btn-primary" v-if="!question.answerId" v-on:click="sendAnswer(question.id, question.answerContent)">Valider</button>
-                            <button class="btn btn-block btn-warning" v-if="question.answerId" v-on:click="editAnswer(question.answerId, question.answerContent)">Editer</button>
+                            <button type="button" class="btn btn-block btn-primary" v-if="!question.answerId" v-on:click="sendAnswer(question.id, question.answerContent)">Valider</button>
+                            <button type="button" class="btn btn-block btn-warning" v-if="question.answerId" v-on:click="editAnswer(question.answerId, question.answerContent)">Editer</button>
                         </div>
                     </form>
                 </div>

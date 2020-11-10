@@ -22,7 +22,7 @@
         <MessageStateComponent :standard-message="standardMessage" ref="MessageStateComponent"/>
 
         <div class="mt-4">
-            <button class="btn btn-primary" v-on:click="sendVote">Modifier</button>
+            <button type="button" class="btn btn-primary" v-on:click="sendVote">Modifier</button>
         </div>
 
         <div v-if="godsons[this.currentIndex]">

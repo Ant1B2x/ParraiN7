@@ -48,7 +48,7 @@
                 <router-link class="btn btn-sm btn-primary d-lg-inline-block" to="/login" v-if="!this.user">
                     Connexion
                 </router-link>
-                <button class="btn btn-sm btn-danger d-lg-inline-block" v-if="this.user" @click="signalLogOut">
+                <button type="button" class="btn btn-sm btn-danger d-lg-inline-block" v-if="this.user" @click="signalLogOut">
                     Déconnexion
                 </button>
             </div>

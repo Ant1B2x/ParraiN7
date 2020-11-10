@@ -58,10 +58,10 @@
                 </div>
                 <div class="buttons">
                     <div class="">
-                        <button class="btn btn-warning" :disabled="!userChanged" v-on:click="resetUser">Reset</button>
+                        <button type="button" class="btn btn-warning" :disabled="!userChanged" v-on:click="resetUser">Reset</button>
                     </div>
                     <div class="">
-                        <button class="btn btn-primary" :disabled="!userChanged" v-on:click="sendUserModifications">Valider</button>
+                        <button type="button" class="btn btn-primary" :disabled="!userChanged" v-on:click="sendUserModifications">Valider</button>
                     </div>
                 </div>
             </form>

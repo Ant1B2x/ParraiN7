@@ -28,7 +28,7 @@
                     </div>
                 </div>
                 <div class="mt-4">
-                    <button class="btn btn-primary" v-on:click="sendToken" :disabled="this.token.length !== tokenLength">Valider</button>
+                    <button type="button" class="btn btn-primary" v-on:click="sendToken" :disabled="this.token.length !== tokenLength">Valider</button>
                 </div>
             </form>
         </div>
