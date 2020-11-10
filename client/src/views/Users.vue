@@ -111,8 +111,6 @@ export default class Users extends Vue {
     userChanged = false;
 
     async loadUsers() {
-        app.authentication.setAccessToken(JSON.parse(window.localStorage.getItem('user')!).accessToken);
-        await app.authenticate();
         app.service('users').find().then(
             (data: any) => {
                 for (const user of data) {
