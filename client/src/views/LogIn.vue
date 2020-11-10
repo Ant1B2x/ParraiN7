@@ -45,9 +45,9 @@
                                 </div>
                             </div>
                             <div class="mt-4">
-                                <button class="btn btn-primary" v-on:click="logIn" :disabled="loginForm.hasError">
+                                <div class="btn btn-primary" v-on:click="logIn" :disabled="loginForm.hasError">
                                     Se connecter
-                                </button>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -86,7 +86,7 @@ export default class LogIn extends Vue {
         this.loginForm.errorMessage = 'Connectez-vous à votre compte pour continuer';
         this.loginForm.hasError = false;
         try {
-            await app.logout();
+            // await app.logout();
             await app.authenticate({
                 strategy: 'local',
                 email: this.loginForm.email + this.institutionalEmailEnd,
@@ -120,7 +120,7 @@ export default class LogIn extends Vue {
 
     private handleKeyUp(e: any) {
         if (e.keyCode === 13) {
-            // pass
+            this.logIn();
         } else {
             this.noError();
         }
