@@ -24,7 +24,7 @@
                                            @keyup="handleKeyUp" @blur="checkError"/>
 
                                     <div class="input-group-append">
-                                        <span class="input-group-text">@etu.toulouse-inp.fr</span>
+                                        <span class="input-group-text">{{institutionalEmailEnd}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -74,8 +74,7 @@ import app from "@/feathers-client";
 @Component
 export default class LogIn extends Vue {
 
-    private institutionalEmailRegexp =
-        RegExp('^\\w+\\.\\w+@etu\\.toulouse-inp\\.fr$');
+    private institutionalEmailEnd = '@etu.toulouse-inp.fr';
 
     private loginForm = {
         email: '',
@@ -88,27 +87,23 @@ export default class LogIn extends Vue {
 
         this.loginForm.errorMessage = 'Connectez-vous à votre compte pour continuer';
         this.loginForm.hasError = false;
-        app.logout();
-        const auth = await app.authenticate({
-            strategy: 'local',
-            email: this.loginForm.email + '@etu.toulouse-inp.fr',
-            password: this.loginForm.password,
-        }).then(
-            (data: any) => {
-                window.localStorage.setItem('user', JSON.stringify(data));
-                this.loginForm.email = '';
-                this.loginForm.password = '';
-                this.$router.push('questions');
-            }
-        ).catch( (error: any) => {
-            if (error.code === 401) {
-                // console.log("mauvais mdp");
+        await app.logout();
+        try {
+            const auth = await app.authenticate({
+                strategy: 'local',
+                email: this.loginForm.email + this.institutionalEmailEnd,
+                password: this.loginForm.password
+            });
+            localStorage.setItem('user', JSON.stringify(auth.user));
+            this.loginForm.email = '';
+            this.loginForm.password = '';
+            await this.$router.push('questions');
+        } catch (err) {
+            if (err.code === 401) {
                 this.loginForm.errorMessage = 'Utilisateur ou mot de passe incorrect.';
                 this.loginForm.hasError = true;
             }
-        });
-
-        return auth;
+        }
 
     }
 
@@ -135,7 +130,7 @@ export default class LogIn extends Vue {
         }
         */
         if (e.keyCode === 13) {
-            this.logIn()
+            this.logIn();
         } else {
             this.noError();
         }

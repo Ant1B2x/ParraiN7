@@ -27,34 +27,25 @@ export default class App extends Vue  {
 
     user: User | null = null;
 
-    mounted() {
-        this.user = this.getUser();
+    private beforeUpdate() {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser)
+            this.user = JSON.parse(storedUser);
+        else
+            this.user = null;
     }
 
-    beforeUpdate() {
-        if (!this.user) {
-            this.user = this.getUser();
+    public logOut = async () => {
+        await app.logout();
+        localStorage.removeItem('user');
+
+        try {
+            await this.$router.replace('/');
+        } catch (err) {
+            // pass
         }
     }
 
-    getUser(): User | null {
-        const authFromStorage = JSON.parse(window.localStorage.getItem('user')!);
-        if (authFromStorage) {
-            app.authentication.setAccessToken(authFromStorage.accessToken);
-            app.authenticate();
-            const userFromStorage = authFromStorage.user;
-            return new User(userFromStorage.id, userFromStorage.email, userFromStorage.firstname, userFromStorage.lastname,
-                userFromStorage.isGodfather, userFromStorage.isAdmin);
-        } else {
-            return null;
-        }
-    }
-
-    logOut() {
-        app.logout();
-        window.localStorage.removeItem('user');
-        this.user = null;
-    }
 }
 </script>
 

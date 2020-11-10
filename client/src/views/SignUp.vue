@@ -107,7 +107,7 @@
                         </form>
                     </div>
                     <div class="card-footer px-md-5"><small>Déjà enregistré ?</small>
-                        <router-link to="/login" class="small font-weight-bold"> Connectez-vous</router-link>
+                        <router-link to="/login" class="small font-weight-bold"> Connectez-vous.</router-link>
                     </div>
                 </div>
             </div>
