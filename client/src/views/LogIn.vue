@@ -86,7 +86,7 @@ export default class LogIn extends Vue {
         this.loginForm.errorMessage = 'Connectez-vous à votre compte pour continuer';
         this.loginForm.hasError = false;
         try {
-            // await app.logout();
+            await app.logout();
             await app.authenticate({
                 strategy: 'local',
                 email: this.loginForm.email + this.institutionalEmailEnd,
