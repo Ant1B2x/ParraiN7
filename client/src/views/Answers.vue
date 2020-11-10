@@ -100,7 +100,6 @@ export default class Answers extends Vue {
     }
 
     async sendAnswer(questionId: number, answerContent: string) {
-        this.user?.connect();
         const answer = { userId: this.user?.id, questionId: questionId, content: answerContent };
         console.log(answer);
         try {
@@ -118,7 +117,6 @@ export default class Answers extends Vue {
     }
 
     async editAnswer(questionId: number, answerContent: string) {
-        this.user?.connect();
         try {
             const answer = { content: answerContent };
             await app.service('answers').patch(questionId, answer);

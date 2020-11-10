@@ -99,11 +99,6 @@ export class User {
         return this.id === user2.id && this.email === user2.email && this.firstname === user2.firstname
             && this.lastname === user2.lastname && this.isGodfather === user2.isGodfather && this.isAdmin === user2.isAdmin;
     }
-
-    async connect() {
-        app.authentication.setAccessToken(JSON.parse(window.localStorage.getItem('user')!).accessToken);
-        await app.authenticate();
-    }
 }
 
 @Component
@@ -116,8 +111,6 @@ export default class Users extends Vue {
     userChanged = false;
 
     async loadUsers() {
-        app.authentication.setAccessToken(JSON.parse(window.localStorage.getItem('user')!).accessToken);
-        await app.authenticate();
         app.service('users').find().then(
             (data: any) => {
                 for (const user of data) {
