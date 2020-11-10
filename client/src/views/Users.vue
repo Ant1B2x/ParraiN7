@@ -99,11 +99,6 @@ export class User {
         return this.id === user2.id && this.email === user2.email && this.firstname === user2.firstname
             && this.lastname === user2.lastname && this.isGodfather === user2.isGodfather && this.isAdmin === user2.isAdmin;
     }
-
-    async connect() {
-        app.authentication.setAccessToken(JSON.parse(window.localStorage.getItem('user')!).accessToken);
-        await app.authenticate();
-    }
 }
 
 @Component

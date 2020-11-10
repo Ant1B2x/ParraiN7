@@ -177,7 +177,6 @@ export default class Questions extends Vue {
         } else if (this.addPlaceholder && (this.placeholder === '' || !this.placeholder)) {
             this.messageStateComponent.displayWarning('Attention, placeholder non précisé.');
         } else {
-            await this.user?.connect();
             const question = {
                 content: this.questionToAdd,
                 placeholder: this.addPlaceholder ? this.placeholder : null
@@ -197,7 +196,6 @@ export default class Questions extends Vue {
     }
 
     async sendQuestionModified(question: Question) {
-        await this.user?.connect();
         if (this.questionToAdd.length > 255) {
             this.messageStateComponent.displayWarning('Votre question est trop longue.');
         } else {

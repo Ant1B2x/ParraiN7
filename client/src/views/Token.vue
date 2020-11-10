@@ -71,7 +71,6 @@ export default class Token extends Vue {
             this.messageStateComponent.displayError('La token n\'a pu être validé.');
         }
         /*
-        await this.user?.connect();
         const token = {
             email: this.email,
             content: this.token,

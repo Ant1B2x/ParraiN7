@@ -123,7 +123,6 @@ export default class Rankings extends Vue {
     currentIndex = 0;
 
     async mounted() {
-        await this.user?.connect();
         await this.loadUsers();
     }
 
@@ -156,7 +155,6 @@ export default class Rankings extends Vue {
 
     async sendVote() {
         if (this.godsons[this.currentIndex]) {
-            await this.user?.connect();
             const rang = {
                 godsonId: this.godsons[this.currentIndex].id,
                 rank: this.godsons[this.currentIndex].rank,
