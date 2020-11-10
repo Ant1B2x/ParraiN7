@@ -51,9 +51,9 @@
                             </div>
                         </form>
                     </div>
-                    <button class="card-footer px-md-5"><small>Pas encore enregistré ? </small>
+                    <div class="card-footer px-md-5"><small>Pas encore enregistré ? </small>
                         <router-link to="/signup" class="small font-weight-bold">Inscrivez-vous !</router-link>
-                    </button>
+                    </div>
                 </div>
             </div>
         </div>
