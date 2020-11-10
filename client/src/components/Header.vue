@@ -61,7 +61,7 @@ import {Component, Vue, Prop} from 'vue-property-decorator';
 import {User} from "@/views/Users.vue";
 
 @Component
-export default class MenuParrain7 extends Vue {
+export default class Header extends Vue {
 
     @Prop() user?: User | null;
 
@@ -90,5 +90,5 @@ export default class MenuParrain7 extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-@import "css/MenuParrain7.css";
+@import "css/Header.css";
 </style>

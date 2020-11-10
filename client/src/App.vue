@@ -1,7 +1,7 @@
 <template>
     <div id="app" class="masterClass">
         <header>
-            <MenuParrain7 :user="this.user" @signalLogOut="logOut"/>
+            <Header :user="this.user" @signalLogOut="logOut"/>
         </header>
         <router-view :user="this.user" class="content"/>
         <footer class="footer">
@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import MenuParrain7 from '@/components/MenuParrain7.vue';
+import Header from '@/components/Header.vue';
 import Footer from '@/components/Footer.vue';
 import app from "@/feathers-client";
 import {Component, Vue} from "vue-property-decorator";
@@ -19,7 +19,7 @@ import {User} from "@/views/Users.vue";
 
 @Component({
     components: {
-        MenuParrain7,
+        Header,
         Footer
     }
 })
@@ -27,19 +27,28 @@ export default class App extends Vue  {
 
     user: User | null = null;
 
-    private beforeUpdate() {
-        const storedUser = localStorage.getItem('user');
-        if (storedUser)
-            this.user = JSON.parse(storedUser);
-        else
+    private async created() {
+        try {
+            const auth = await app.reAuthenticate();
+            this.user = auth.user;
+        } catch (err) {
             this.user = null;
+        }
+    }
+
+    private async beforeUpdate() {
+        try {
+            const auth = await app.get('authentication');
+            this.user = auth.user;
+        } catch (err) {
+            this.user = null;
+        }
     }
 
     public logOut = async () => {
-        await app.logout();
-        localStorage.removeItem('user');
-
         try {
+            await app.logout();
+            this.$forceUpdate();
             await this.$router.replace('/');
         } catch (err) {
             // pass

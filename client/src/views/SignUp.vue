@@ -19,7 +19,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><font-awesome-icon icon="user"/></span>
                                     </div>
-                                    <input v-model="signUpForm.email" type="email" class="form-control" id="input-email"
+                                    <input v-model="signUpForm.email" type="text" class="form-control" id="input-email"
                                            placeholder="prenom.nom" @keyup="handleKeyUp" @blur="checkError">
 
                                     <div class="input-group-append">
@@ -126,7 +126,6 @@ import app from "@/feathers-client";
 @Component
 export default class LogIn extends Vue {
 
-    //Yep
     private institutionalEmailRegexp =
         RegExp('^\\w+\\.\\w+@etu\\.toulouse-inp\\.fr$');
 
@@ -152,7 +151,7 @@ export default class LogIn extends Vue {
 
         this.signUpValidation.hasError = false;
         this.signUpValidation.errorMessage = 'Entrez vos informations utilisateurs';
-        app.logout();
+        await app.logout();
 
 
         const signUpFormBis = JSON.parse(JSON.stringify(this.signUpForm));
@@ -217,9 +216,9 @@ export default class LogIn extends Vue {
 
     handleKeyUp(e: any) {
         if (e.keyCode === 13) {
-            this.signUp()
+            this.signUp();
         } else {
-            this.noError()
+            this.noError();
         }
     }
 }

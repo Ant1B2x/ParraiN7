@@ -19,7 +19,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><font-awesome-icon icon="user"/></span>
                                     </div>
-                                    <input v-model="loginForm.email" type="email" class="form-control" id="input-email"
+                                    <input v-model="loginForm.email" type="text" class="form-control" id="input-email"
                                            placeholder="prenom.nom"
                                            @keyup="handleKeyUp" @blur="checkError"/>
 
@@ -33,9 +33,6 @@
 
                                     <label class="form-control-label">Mot de passe</label>
 
-                                    <!--div class="mb-2">
-                                        <a href="#" class="small text-muted text-underline--dashed border-primary" data-toggle="password-text" data-target="#input-password">Afficher le mot de passe</a>
-                                    </div-->
                                 </div>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
@@ -68,8 +65,9 @@
 </style>
 
 <script lang="ts">
-import {Component, Vue} from 'vue-property-decorator';
+import {Component, Prop, Vue} from 'vue-property-decorator';
 import app from "@/feathers-client";
+import {User} from "@/views/Users.vue";
 
 @Component
 export default class LogIn extends Vue {
@@ -87,17 +85,16 @@ export default class LogIn extends Vue {
 
         this.loginForm.errorMessage = 'Connectez-vous à votre compte pour continuer';
         this.loginForm.hasError = false;
-        await app.logout();
         try {
-            const auth = await app.authenticate({
+            await app.logout();
+            await app.authenticate({
                 strategy: 'local',
                 email: this.loginForm.email + this.institutionalEmailEnd,
                 password: this.loginForm.password
             });
-            localStorage.setItem('user', JSON.stringify(auth.user));
             this.loginForm.email = '';
             this.loginForm.password = '';
-            await this.$router.push('questions');
+            await this.$router.push('/questions');
         } catch (err) {
             if (err.code === 401) {
                 this.loginForm.errorMessage = 'Utilisateur ou mot de passe incorrect.';
@@ -121,16 +118,9 @@ export default class LogIn extends Vue {
         this.loginForm.hasError = false;
     }
 
-    handleKeyUp(e: any) {
-        /*
+    private handleKeyUp(e: any) {
         if (e.keyCode === 13) {
-            this.logIn()
-        } else if (this.institutionalEmailRegexp.test(this.loginForm.email)) {
-            this.noError();
-        }
-        */
-        if (e.keyCode === 13) {
-            this.logIn();
+            // pass
         } else {
             this.noError();
         }
