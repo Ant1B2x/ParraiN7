@@ -1,10 +1,8 @@
 <template>
     <div class="container mb-6">
         <section class="welcome">
-            <h1>
-                ParraiN7<br>
-                <small>L'appli de parrainage des élèves de l'ENSEEIHT</small>
-            </h1>
+            <h1>ParraiN7</h1>
+            <h1><small>L'appli de parrainage des élèves de l'ENSEEIHT</small></h1>
         </section>
         <hr>
         <section>
@@ -13,15 +11,31 @@
                 <div class="col-md-6 text-left text-lg-right border-right pr-lg-5">
                     <h4 class="mb-lg-5 text-center text-lg-right">1ère année</h4>
                     <h5>Création de compte</h5>
-                    <p>Vous pouvez créer votre compte en utilisant l'adresse mail de l'N7.</p>
+                    <p>
+                        Vous pouvez créer votre compte en utilisant l'adresse mail de l'N7.
+                        <br/>
+                        N'oubliez pas de sélectionner "Filleul" avant de confirmer l'inscription.
+                    </p>
                     <h5>Réponses aux questions</h5>
-                    <p>Répondez aux questions qui vous sont posées. Les réponses sont envoyées de manière anonyme.<br>
-                        Vous serez avertis si de nouvelles questions ont été proposées par les deuxièmes années.</p>
+                    <p>
+                        Répondez aux questions qui vous sont posées. Les réponses seront affichées aux 2A de manière anonyme.
+                        <br/>
+                        Vous serez avertis si de nouvelles questions ont été proposées par les deuxièmes années.
+                    </p>
+                    <h5>Obtention d'un.e parrain/marraine</h5>
+                    <p>
+                        Grâce à un algorithme d'association approximatif, vous obtiendrez un.e parrain/marraine qui
+                        vous aura sélectionné en fonction de vos réponses aux questions. Alors soyez drôles et inventifs !
+                    </p>
                 </div>
-                <div class="col-md-6 text-left pl-lg-5" id="secondYear">
-                    <h4 class="text-center text-lg-left">2ème année</h4>
+                <div class="col-md-6 text-left text-lg-left pl-lg-5" id="secondYear">
+                    <h4 class="mb-lg-5 text-center text-lg-left">2ème année</h4>
                     <h5>Création de compte</h5>
-                    <p>Vous pouvez créer votre compte en utilisant l'adresse mail de l'N7.<br>N'oubliez pas de sélectionner "Parrain" avant de confirmer l'inscription.</p>
+                    <p>
+                        Vous pouvez créer votre compte en utilisant l'adresse mail de l'N7.
+                        <br/>
+                        N'oubliez pas de sélectionner "Parrain" avant de confirmer l'inscription.
+                    </p>
                     <h5>Création des questions</h5>
                     <p>Vous créez vous-mêmes les questions qui seront posées aux premières années.</p>
                     <h5>Choix des filleuls</h5>

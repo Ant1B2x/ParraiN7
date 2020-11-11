@@ -41,6 +41,9 @@ export default class MessageStateComponent extends Vue {
         setTimeout(() => {
             this.validation.messageState = MessageState.hasError;
         }, 500);
+        setTimeout( () => {
+            this.displayNormalMessage();
+        }, 5000 );
     }
 
     displayWarning(warningMessage: string) {
@@ -48,6 +51,9 @@ export default class MessageStateComponent extends Vue {
         setTimeout(() => {
             this.validation.messageState = MessageState.hasWarning;
         }, 500);
+        setTimeout( () => {
+            this.displayNormalMessage();
+        }, 5000 );
     }
 
     getCurrentState(): MessageState {
