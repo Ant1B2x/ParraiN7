@@ -21,7 +21,7 @@
                                     </div>
                                     <input v-model="loginForm.email" type="text" class="form-control" id="input-email"
                                            placeholder="prenom.nom"
-                                           @keyup="handleKeyUp" @blur="checkError"/>
+                                           @keyup="handleKeyUp"/>
 
                                     <div class="input-group-append">
                                         <span class="input-group-text">{{institutionalEmailEnd}}</span>
@@ -85,15 +85,12 @@ export default class LogIn extends Vue {
         this.loginForm.errorMessage = 'Connectez-vous à votre compte pour continuer';
         this.loginForm.hasError = true;
         try {
-            this.loginForm.errorMessage = 'Avant';
-
-            // await app.logout();
+            await app.logout();
             await app.authenticate({
                 strategy: 'local',
                 email: this.loginForm.email + this.institutionalEmailEnd,
                 password: this.loginForm.password
             });
-            this.loginForm.errorMessage = 'Après';
 
             this.loginForm.email = '';
             this.loginForm.password = '';
@@ -105,15 +102,6 @@ export default class LogIn extends Vue {
             }
         }
 
-    }
-
-    checkError() {
-        /*
-        if (!this.institutionalEmailRegexp.test(this.loginForm.email)) {
-            this.loginForm.errorMessage = 'L\'email ne respecte pas le format attendu !';
-            this.loginForm.hasError = true;
-        }
-        */
     }
 
     noError() {

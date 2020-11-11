@@ -37,10 +37,6 @@ body.loaded>div.preloader {
   animation: hidePreloader .5s linear .5s forwards;
 }
 
-.container {
-  margin-top: 1%;
-}
-
 .card {
   transition: all 1s;
 }
