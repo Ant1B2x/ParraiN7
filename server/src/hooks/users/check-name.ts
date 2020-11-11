@@ -5,7 +5,7 @@ import {Hook, HookContext} from '@feathersjs/feathers';
 import {BadRequest} from "@feathersjs/errors";
 
 const nameRegEx =
-    RegExp('^\\w+$');
+    RegExp('^[a-zA-Z\u00C0-\u00FF]+$');
 
 // check that user's firstname and lastname are well-formed
 export default (options = {}): Hook => {

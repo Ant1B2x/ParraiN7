@@ -126,11 +126,8 @@ import app from "@/feathers-client";
 @Component
 export default class LogIn extends Vue {
 
-    private institutionalEmailRegexp =
-        RegExp('^\\w+\\.\\w+@etu\\.toulouse-inp\\.fr$');
-
     private nameValidity =
-        RegExp('^\\w+$');
+        RegExp('^[a-zA-Z\u00C0-\u00FF]+$');
 
     private signUpValidation = {
         passwordConfirm: '',
@@ -181,18 +178,6 @@ export default class LogIn extends Vue {
     }
 
     checkError() {
-        /*
-        if ((this.signUpForm.password && this.signUpValidation.passwordConfirm) && (this.signUpForm.password != this.signUpValidation.passwordConfirm)) {
-            this.signUpValidation.errorMessage = "Les mots de passe ne correspondent pas !";
-            this.signUpValidation.hasError = true;
-        } else if (!this.institutionalEmailRegexp.test(this.signUpForm.email)) {
-            this.signUpValidation.errorMessage = 'L\'email ne respecte pas le format attendu !';
-            this.signUpValidation.hasError = true;
-        } else {
-            this.noError();
-        }
-        */
-
         if ((this.signUpForm.password && this.signUpValidation.passwordConfirm) && (this.signUpForm.password != this.signUpValidation.passwordConfirm)) {
             this.signUpValidation.errorMessage = "Les mots de passe ne correspondent pas !";
             this.signUpValidation.hasError = true;

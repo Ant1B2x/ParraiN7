@@ -65,9 +65,8 @@
 </style>
 
 <script lang="ts">
-import {Component, Prop, Vue} from 'vue-property-decorator';
+import {Component, Vue} from 'vue-property-decorator';
 import app from "@/feathers-client";
-import {User} from "@/views/Users.vue";
 
 @Component
 export default class LogIn extends Vue {
