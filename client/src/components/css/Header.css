@@ -17,7 +17,6 @@ li {
     flex-basis: 100%;
     flex-grow: 1;
     align-items: center;
-    transition: max-height .75s linear;
     overflow: hidden;
     max-height: 820px;
   }
