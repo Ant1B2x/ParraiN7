@@ -1,0 +1,33 @@
+h3 {
+  margin: 40px 0 0;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+
+@media (max-width: 992px) {
+  .navbar-collapse {
+    flex-basis: 100%;
+    flex-grow: 1;
+    align-items: center;
+    overflow: hidden;
+    max-height: 820px;
+  }
+
+  .navbar-collapse:not(.show) {
+    max-height: 0;
+  }
+
+  .navbar-collapse.show {
+    margin-bottom: 40px;
+  }
+
+}
+

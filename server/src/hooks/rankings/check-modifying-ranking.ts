@@ -9,8 +9,10 @@ import {Forbidden} from "@feathersjs/errors";
 // warning : has to be included AFTER authenticate hook
 export default (options = {}): Hook => {
     return async (context: HookContext): Promise<HookContext> => {
-        const ranking: RankingData = await context.app.service('rankings').get(context.id);
         const loggedUser: UserData = context.params.user;
+        const ranking: RankingData = await context.app.service('rankings').get(context.id, {
+            user: loggedUser
+        });
         if (ranking.godfatherId !== loggedUser.id)
             throw new Forbidden(`User ${loggedUser.email} can't modify ranking ${ranking.id}!`);
 

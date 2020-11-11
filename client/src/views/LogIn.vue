@@ -1,7 +1,7 @@
 <template>
     <div class="container d-flex flex-column">
         <div class="row align-items-center justify-content-center">
-            <div class="col-md-6 col-lg-5 col-xl-5 py-6 py-md-0">
+            <div class="col-md-6 py-6 py-md-0">
                 <div class="card shadow zindex-100 mb-0">
                     <div class="card-body px-md-5 py-5" :class="{ 'hasError': loginForm.hasError }">
                         <div class="mb-5">
@@ -15,13 +15,17 @@
                                 <div class="d-flex align-items-center justify-content-between">
                                     <label class="form-control-label">Adresse email</label>
                                 </div>
-                                <div class="input-group">
+                                <div class="input-group input-group-email">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><font-awesome-icon icon="user"/></span>
                                     </div>
-                                    <input v-model="loginForm.email" type="email" class="form-control" id="input-email"
-                                           placeholder="prenom.nom@etu.toulouse-inp.fr"
-                                           v-on:keyup="handleKeyUp"/>
+                                    <input v-model="loginForm.email" type="text" class="form-control" id="input-email"
+                                           placeholder="prenom.nom"
+                                           @keyup="handleKeyUp"/>
+
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">{{institutionalEmailEnd}}</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group mb-0">
@@ -29,9 +33,6 @@
 
                                     <label class="form-control-label">Mot de passe</label>
 
-                                    <!--div class="mb-2">
-                                        <a href="#" class="small text-muted text-underline--dashed border-primary" data-toggle="password-text" data-target="#input-password">Afficher le mot de passe</a>
-                                    </div-->
                                 </div>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
@@ -44,7 +45,7 @@
                                 </div>
                             </div>
                             <div class="mt-4">
-                                <button type="button" class="btn btn-primary" v-on:click="logIn">
+                                <button type="button" class="btn btn-primary" v-on:click="logIn" :disabled="loginForm.hasError">
                                     Se connecter
                                 </button>
                             </div>
@@ -70,6 +71,8 @@ import app from "@/feathers-client";
 @Component
 export default class LogIn extends Vue {
 
+    private institutionalEmailEnd = '@etu.toulouse-inp.fr';
+
     private loginForm = {
         email: '',
         password: '',
@@ -80,41 +83,37 @@ export default class LogIn extends Vue {
     public logIn = async () => {
 
         this.loginForm.errorMessage = 'Connectez-vous à votre compte pour continuer';
-        this.loginForm.hasError = false;
-        app.logout();
-        const auth = await app.authenticate({
-            strategy: 'local',
-            email: this.loginForm.email,
-            password: this.loginForm.password,
-        }).then(
-            (data: any) => {
-                window.localStorage.setItem('user', JSON.stringify(data));
-                this.loginForm.email = '';
-                this.loginForm.password = '';
-                this.$router.push('questions');
-            }
-        ).catch( (error: any) => {
-            if (error.code === 401) {
-                // console.log("mauvais mdp");
+        this.loginForm.hasError = true;
+        try {
+            await app.logout();
+            await app.authenticate({
+                strategy: 'local',
+                email: this.loginForm.email + this.institutionalEmailEnd,
+                password: this.loginForm.password
+            });
+
+            this.loginForm.email = '';
+            this.loginForm.password = '';
+            await this.$router.push('/questions');
+        } catch (err) {
+            if (err.code === 401) {
                 this.loginForm.errorMessage = 'Utilisateur ou mot de passe incorrect.';
                 this.loginForm.hasError = true;
             }
-        });
-
-        return auth;
+        }
 
     }
 
     noError() {
-        this.loginForm.hasError = false;
         this.loginForm.errorMessage = 'Connectez-vous à votre compte pour continuer'
+        this.loginForm.hasError = false;
     }
 
-    handleKeyUp(e: any) {
+    private handleKeyUp(e: any) {
         if (e.keyCode === 13) {
-            this.logIn()
+            this.logIn();
         } else {
-            this.noError()
+            this.noError();
         }
     }
 

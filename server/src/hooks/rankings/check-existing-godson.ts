@@ -9,14 +9,14 @@ import {NotAcceptable, NotFound} from "@feathersjs/errors";
 export default (options = {}): Hook => {
     return async (context: HookContext): Promise<HookContext> => {
         const ranking: RankingData = context.data;
-        await context.app.service('users').find({
+
+        const users: Array<UserData> = await context.app.service('users').find({
             query: {
                 id: ranking.godsonId
             }
-        }).then((users: Array<UserData>) => {
-            if(!users.length)
-                throw new NotFound(`There's no user of id ${ranking.godsonId}!`);
         });
+        if(!users.length)
+            throw new NotFound(`There's no user of id ${ranking.godsonId}!`);
 
         const godson: UserData = await context.app.service('users').get(ranking.godsonId);
         if (godson.isGodfather)

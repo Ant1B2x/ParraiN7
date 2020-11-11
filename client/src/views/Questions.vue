@@ -1,16 +1,29 @@
 <template>
     <div class="questionArea">
+        <MessageStateComponent :standard-message="standardMessage" ref="MessageStateComponent"/>
         <form>
             <div class="form-group">
                 <label class="form-control-label">Question</label>
                 <div class="input-group">
                     <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1">?</span>
+                        <span class="input-group-text" id="questionInputPrepend">?</span>
                     </div>
-                    <input type="text" class="form-control" placeholder="Votre question">
+                    <input type="text" class="form-control" placeholder="Votre question"
+                           v-model="questionToAdd" @keyup.enter="sendQuestion">
                     <div class="input-group-append">
-                        <span class="input-group-text" id="basic-addon2">¿</span>
+                        <span class="input-group-text" id="questionInputAppend">¿</span>
                     </div>
+                </div>
+            </div>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="customCheck1" v-model="addPlaceholder">
+                <label class="custom-control-label" for="customCheck1">Ajouter un placeholder ?</label>
+            </div>
+            <div class="form-group col-md-8 placeholder" v-if="addPlaceholder">
+                <!--label class="form-control-label">Placeholder</label-->
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Votre placeholder"
+                           v-model="placeholder" @keyup.enter="sendQuestion">
                 </div>
             </div>
             <div class="mt-4">
@@ -46,7 +59,7 @@
                 <div class="card-body">
                     <div class="pb-4">
                         <div class="icon bg-dark text-white rounded-circle icon-shape shadow">
-                            <!--i data-feather="droplet"></i-->?
+                            ?
                         </div>
                     </div>
                     <div class="pt-2 pb-3">
@@ -54,7 +67,13 @@
                         <p class="text-muted mb-0">
                             {{ question.content }}
                         </p>
+                        <textarea class="form-control" v-model="question.content" v-if="questionIsBeingEdited(question.id)"></textarea>
+                        <p class="text-muted mb-0" v-if="question.placeholder">
+                            ({{ question.placeholder }})
+                        </p>
                     </div>
+                    <button type="button" class="btn btn-warning" v-if="isAuthorOrAdmin(question.authorId) && !questionIsBeingEdited(question.id)" v-on:click="editQuestion(question.id)">Éditer</button>
+                    <button type="button" class="btn btn-success" v-if="questionIsBeingEdited(question.id)" v-on:click="sendQuestionModified(question)">Valider</button>
                 </div>
             </div>
         </div>
@@ -67,39 +86,67 @@
 </style>
 
 <script lang="ts">
-import {Component, Vue} from 'vue-property-decorator';
+import {Component, Prop, Ref, Vue} from 'vue-property-decorator';
 import app from '@/feathers-client';
-import BACKEND_URL from "@/config";
+import {User} from "@/views/Users.vue";
+import {MessageState} from "@/views/enum";
+import MessageStateComponent from "@/components/MessageStateComponent.vue";
 
 export class Question {
-    idQuestion: number;
+    id: number;
     authorFirstname: string;
     authorLastname: string;
+    authorId: number;
     content: string;
+    placeholder?: string;
 
-    constructor(idQuestion: number, authorFirstname: string, authorLastname: string, content: string) {
-        this.idQuestion = idQuestion;
+    constructor(id: number, authorFirstname: string, authorLastname: string, authorId: number, content: string, placeholder: string) {
+        this.id = id;
         this.authorFirstname = authorFirstname;
         this.authorLastname = authorLastname;
+        this.authorId = authorId;
         this.content = content;
+        this.placeholder = placeholder;
     }
 }
 
-@Component
+@Component({
+    components: {
+        MessageStateComponent
+    }
+})
 export default class Questions extends Vue {
 
     questions: Question[] = [];
     filteredList: Question[] = [];
+    addPlaceholder = false;
+    questionToAdd = '';
+    placeholder = '';
+    standardMessage = 'Ajoutez votre question';
+    inEdition = false;
+    idEditedQuestion: number | undefined;
 
-    async loadQuestions() {
-        this.questions = await app.service('questions').find();
-        this.filteredList = JSON.parse(JSON.stringify(this.questions));
-        console.log('ok',this.questions);
-    }
+    @Prop() user?: User | null;
+    @Ref('MessageStateComponent') messageStateComponent!: MessageStateComponent;
 
     mounted() {
         this.loadQuestions();
     }
+
+    async loadQuestions() {
+        this.questions = await app.service('questions').find({
+            query: {
+                $sort: {
+                    id: 1
+                }
+            }
+        });
+        // console.log(this.questions);
+        this.filteredList = JSON.parse(JSON.stringify(this.questions)) as Question[];
+        // console.log('ok',this.questions);
+    }
+
+
 
     searchByQuestion = '';
     searchByAuthor = '';
@@ -122,8 +169,79 @@ export default class Questions extends Vue {
         )
     }
 
-    sendQuestion() {
-        // TODO: send question to the backend.
+    async sendQuestion() {
+        if (this.questionToAdd.length < 5) {
+            this.messageStateComponent.displayWarning('Votre question est trop courte.');
+        } else if (this.questionToAdd.length > 255) {
+            this.messageStateComponent.displayWarning('Votre question est trop longue.');
+        } else if (this.addPlaceholder && (this.placeholder === '' || !this.placeholder)) {
+            this.messageStateComponent.displayWarning('Attention, placeholder non précisé.');
+        } else {
+            const question = {
+                content: this.questionToAdd,
+                placeholder: this.addPlaceholder ? this.placeholder : null
+            }
+            app.service('questions').create(question).then(
+                async (data: any) => {
+                    //Send check email or smth
+                    // console.log(data);
+                    this.messageStateComponent.displaySuccess('La question a bien été ajoutée !');
+                    await this.loadQuestions();
+                }
+            ).catch((error: any) => {
+                console.log(error);
+                this.messageStateComponent.displayError('La question n\'a pas pu être ajoutée.');
+            });
+        }
+    }
+
+    async sendQuestionModified(question: Question) {
+        if (this.questionToAdd.length > 255) {
+            this.messageStateComponent.displayWarning('Votre question est trop longue.');
+        } else {
+            if (question.content.length > 0) {
+                try {
+                    const questionToModify = {
+                        content: question.content,
+                        placeholder: question.placeholder
+                    }
+                    await app.service('questions').patch(question.id, questionToModify);
+                    this.messageStateComponent.displaySuccess('La question a bien été modifiée !');
+                    this.inEdition = false;
+                    this.idEditedQuestion = undefined;
+                    await this.loadQuestions();
+                } catch (error) {
+                    console.log(error);
+                    this.messageStateComponent.displayError('La question n\'a pas pu être modifiée.');
+                }
+            } else {
+                try {
+                    await app.service('questions').remove(question.id);
+                    this.messageStateComponent.displaySuccess('La question a bien été supprimée !');
+                    this.inEdition = false;
+                    this.idEditedQuestion = undefined;
+                    await this.loadQuestions();
+                } catch (error) {
+                    console.log(error);
+                    this.messageStateComponent.displayError('La question n\'a pas pu être supprimée.');
+                }
+            }
+        }
+
+    }
+
+    isAuthorOrAdmin(idAuthor: number) {
+        return this.user?.id === idAuthor || this.user?.isAdmin;
+    }
+
+    editQuestion(idQuestion: number) {
+        this.inEdition = true;
+        this.idEditedQuestion = idQuestion;
+        console.log(this.inEdition, this.idEditedQuestion);
+    }
+
+    questionIsBeingEdited(idQuestion: number) {
+        return this.inEdition && this.idEditedQuestion === idQuestion;
     }
 
 }

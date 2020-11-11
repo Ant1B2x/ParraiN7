@@ -37,7 +37,6 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <div class="col-sm-2">Checkbox</div>
                     <div class="col-sm-10">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="isGodfatherCheck" v-model="selectedUser.isGodfather" v-on:change="hasUserChanged">
@@ -48,7 +47,6 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <div class="col-sm-2">Checkbox</div>
                     <div class="col-sm-10">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="isAdminCheck" v-model="selectedUser.isAdmin" v-on:change="hasUserChanged">
@@ -58,12 +56,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group row">
-                    <div class="col-sm-10">
-                        <button type="submit" class="btn btn-warning" :disabled="!userChanged" v-on:click="resetUser">Reset</button>
+                <div class="buttons">
+                    <div class="">
+                        <button type="button" class="btn btn-warning" :disabled="!userChanged" v-on:click="resetUser">Reset</button>
                     </div>
-                    <div class="col-sm-2">
-                        <button type="submit" class="btn btn-primary" :disabled="!userChanged" v-on:click="sendUserModifications">Valider</button>
+                    <div class="">
+                        <button type="button" class="btn btn-primary" :disabled="!userChanged" v-on:click="sendUserModifications">Valider</button>
                     </div>
                 </div>
             </form>
@@ -73,7 +71,7 @@
 
 <style scoped>
 /*@import "public/assets/css/quick-website.css";*/
-@import "css/Rankings.css";
+@import "css/Users.css";
 </style>
 
 <script lang="ts">
@@ -113,8 +111,6 @@ export default class Users extends Vue {
     userChanged = false;
 
     async loadUsers() {
-        app.authentication.setAccessToken(JSON.parse(window.localStorage.getItem('user')).accessToken);
-        await app.authenticate();
         app.service('users').find().then(
             (data: any) => {
                 for (const user of data) {

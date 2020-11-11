@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "@fancyapps/fancybox": "^3.5.7",
-    "@feathersjs/client": "^4.5.9",
+    "@feathersjs/authentication-client": "^4.5.10",
+    "@feathersjs/feathers": "^4.5.10",
     "@feathersjs/socketio-client": "^4.5.9",
     "@fortawesome/fontawesome-free": "^5.15.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
@@ -70,7 +71,6 @@
     "@vue/eslint-config-typescript": "^5.0.2",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
-    "sass-loader": "^10.0.4",
     "typescript": "~3.9.3",
     "vue-template-compiler": "^2.6.11"
   },

@@ -1,4 +1,4 @@
 INSERT INTO answers ("userId", "questionId", "content")
-VALUES (10, 4, 'Poulet mafé'),
-       (10, 5, 'Seigneur des anneaux'),
-       (10, 6, 'Grenoble');
+VALUES (2, 1, 'Poulet mafé'),
+       (2, 2, 'Seigneur des anneaux'),
+       (2, 3, 'Grenoble');

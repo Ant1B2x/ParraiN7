@@ -8,7 +8,12 @@ import {
     faUser,
     faUserSecret,
     faArrowAltCircleLeft,
-    faArrowAltCircleRight
+    faArrowAltCircleRight,
+    faStar,
+    faArrowRight,
+    faArrowLeft,
+    faAngleRight,
+    faRing
 } from "@fortawesome/free-solid-svg-icons";
 import {library} from "@fortawesome/fontawesome-svg-core";
 
@@ -18,6 +23,12 @@ library.add(faUser)
 library.add(faIdCard)
 library.add(faArrowAltCircleLeft)
 library.add(faArrowAltCircleRight)
+library.add(faStar)
+library.add(faArrowRight)
+library.add(faArrowLeft)
+library.add(faAngleRight)
+library.add(faAngleRight)
+library.add(faRing)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
