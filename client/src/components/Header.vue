@@ -31,19 +31,6 @@
                     <li class="nav-item ">
                         <router-link class="nav-link" to="/about">À propos</router-link>
                     </li>
-                    <!-- <li class="nav-item dropdown dropdown-animate" data-toggle="hover">
-                        <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pages</a>
-                        <div class="dropdown-menu dropdown-menu-single">
-                            <a href="index.html" class="dropdown-item">Homepage</a>
-                            <a href="about.html" class="dropdown-item">About us</a>
-                            <a href="contact.html" class="dropdown-item">Contact</a>
-                            <div class="dropdown-divider"></div>
-                            <a href="login.html" class="dropdown-item">Login</a>
-                        </div>
-                    </li>
-                    <li class="nav-item ">
-                        <a class="nav-link" href="docs/index.html">Docs</a>
-                    </li> -->
                 </ul>
                 <router-link class="btn btn-sm btn-primary d-lg-inline-block" to="/login" v-if="!this.user">
                     Connexion
@@ -88,7 +75,6 @@ export default class Header extends Vue {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 @import "css/Header.css";
 </style>

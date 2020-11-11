@@ -37,7 +37,6 @@
 </template>
 
 <style scoped>
-/*@import "public/assets/css/quick-website.css";*/
 @import "css/Token.css";
 </style>
 
