@@ -82,8 +82,7 @@ export default class LogIn extends Vue {
 
     public logIn = async () => {
 
-        this.loginForm.errorMessage = 'Connectez-vous à votre compte pour continuer';
-        this.loginForm.hasError = true;
+        this.noError();
         try {
             await app.logout();
             await app.authenticate({
@@ -94,7 +93,7 @@ export default class LogIn extends Vue {
 
             this.loginForm.email = '';
             this.loginForm.password = '';
-            await this.$router.push('/questions');
+            await this.$router.replace('/');
         } catch (err) {
             if (err.code === 401) {
                 this.loginForm.errorMessage = 'Utilisateur ou mot de passe incorrect.';

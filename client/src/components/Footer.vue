@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p><a href="https://github.com/Ant1B2x/ParraiN7">ParraiN7</a>, l'application de parrainage des élèves de l'ENSEEIHT. Licence <a href="https://mit-license.org/">MIT</a>.</p>
+        <p><a href="https://github.com/Ant1B2x/ParraiN7" target="_blank">ParraiN7</a>, l'application de parrainage des élèves de l'ENSEEIHT. Licence <a href="https://mit-license.org/">MIT</a>.</p>
     </div>
 </template>
 
@@ -12,7 +12,6 @@ export default class Footer extends Vue {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 @import "css/Footer.css";
 </style>

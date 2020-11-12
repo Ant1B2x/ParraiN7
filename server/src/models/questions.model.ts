@@ -15,7 +15,6 @@ export default function (app: Application): Knex {
                 table.increments('id');
                 table.string('content').notNullable();
                 table.string('placeholder').defaultTo('Votre réponse...');
-                table.integer('authorId').notNullable();
             })
                 .then(() => console.log(`Created ${tableName} table`))
                 .catch(e => console.error(`Error creating ${tableName} table`, e));

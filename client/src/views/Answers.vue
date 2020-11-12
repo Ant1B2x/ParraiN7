@@ -35,7 +35,6 @@
 </template>
 
 <style scoped>
-/*@import "public/assets/css/quick-website.css";*/
 @import "css/Answers.css";
 </style>
 
@@ -107,9 +106,8 @@ export default class Answers extends Vue {
             this.messageStateComponent.displaySuccess('La réponse a bien été prise en compte !');
             await this.getQuestions();
         } catch (error) {
-            console.log(error);
-            if (error.code === 408) {
-                this.messageStateComponent.displayError('Vous n\'êtes pas un Godson, vous ne pouvez donner de réponses.' );
+            if (error.code === 403) {
+                this.messageStateComponent.displayError("Vous n'êtes pas un filleul, vous ne pouvez donner de réponses.");
             } else {
                 this.messageStateComponent.displayError('Une erreur est survenue.' );
             }

@@ -70,7 +70,6 @@
 </template>
 
 <style scoped>
-/*@import "public/assets/css/quick-website.css";*/
 @import "css/Users.css";
 </style>
 

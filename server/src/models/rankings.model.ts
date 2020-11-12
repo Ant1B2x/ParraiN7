@@ -13,11 +13,7 @@ export default function (app: Application): Knex {
         if (!exists) {
             db.schema.createTable(tableName, table => {
                 table.increments('id');
-                table.integer('godfatherId').notNullable();
-                table.integer('godsonId').notNullable();
-                table.unique(['godfatherId', 'godsonId']);
                 table.integer('rank').notNullable();
-                table.unique(['godfatherId', 'rank']);
             })
                 .then(() => console.log(`Created ${tableName} table`))
                 .catch(e => console.error(`Error creating ${tableName} table`, e));

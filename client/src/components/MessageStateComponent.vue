@@ -41,6 +41,9 @@ export default class MessageStateComponent extends Vue {
         setTimeout(() => {
             this.validation.messageState = MessageState.hasError;
         }, 500);
+        setTimeout( () => {
+            this.displayNormalMessage();
+        }, 5000 );
     }
 
     displayWarning(warningMessage: string) {
@@ -48,6 +51,9 @@ export default class MessageStateComponent extends Vue {
         setTimeout(() => {
             this.validation.messageState = MessageState.hasWarning;
         }, 500);
+        setTimeout( () => {
+            this.displayNormalMessage();
+        }, 5000 );
     }
 
     getCurrentState(): MessageState {
@@ -68,7 +74,6 @@ export default class MessageStateComponent extends Vue {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 @import "css/MessageStateComponent.css";
 </style>
