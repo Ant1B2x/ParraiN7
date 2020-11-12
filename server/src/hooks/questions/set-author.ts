@@ -7,8 +7,9 @@ import {UserData} from '../../services/users/users.class';
 // warning : has to be included AFTER authenticate hook
 export default (options = {}): Hook => {
     return async (context: HookContext): Promise<HookContext> => {
-        const author: UserData = context.params.user;
-        context.data['authorId'] = author.id;
+        const author = context.params.user;
+        if (author)
+            context.data['authorId'] = author.id;
 
         return context;
     };

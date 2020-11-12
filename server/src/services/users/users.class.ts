@@ -30,7 +30,7 @@ export class Users extends Service<UserData> {
 
         let users: any = await super.find(params);
 
-        if (withAnswers) {
+        if (withAnswers && params?.user?.id) {
             users = users.filter((user: any) => !user.isGodfather);
 
             const db = this.app.get('knexClient');
@@ -48,7 +48,7 @@ export class Users extends Service<UserData> {
                     user['questions'].push(questionToAdd)
                 }
                 const rank = await db('rankings').select('rank')
-                    .where('godfatherId', params?.user.id)
+                    .where('godfatherId', params.user.id)
                     .andWhere('godsonId', user.id);
                 user['rank'] = rank[0] ? rank[0]['rank'] : null;
 

@@ -9,8 +9,8 @@ import {Forbidden} from "@feathersjs/errors";
 export default (options = {}): Hook => {
     return async (context: HookContext): Promise<HookContext> => {
         const newData: UserData = context.data;
-        const loggedUser: UserData = context.params.user;
-        if (!loggedUser.isAdmin && newData['isAdmin'])
+        const loggedUser = context.params.user;
+        if (loggedUser && !loggedUser.isAdmin && newData['isAdmin'])
             throw new Forbidden(`User ${loggedUser.email} can't set himself as admin!`);
 
         return context;
