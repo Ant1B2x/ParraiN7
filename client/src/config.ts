@@ -1,7 +1,7 @@
 
 const BACKEND_DICT: { [mode: string]: string } = {
     default: 'localhost:3030',
-    production: 'parrai-n-7-app.feathersjs.com'
+    production: 'parrain7.ant1b2x.com:3030'
 };
 
 let BACKEND_URL: string;

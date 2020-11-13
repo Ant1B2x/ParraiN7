@@ -1,5 +1,5 @@
 {
-  "host": "localhost",
+  "host": "127.0.0.1",
   "port": 3030,
   "public": "../public/",
   "paginate": false,
@@ -15,7 +15,7 @@
       "header": {
         "typ": "access"
       },
-      "audience": "https://parrai-n-7-app.feathersjs.com",
+      "audience": "https://parrain7.ant1b2x.com",
       "issuer": "ParraiN7",
       "algorithm": "HS256",
       "expiresIn": "1d"
