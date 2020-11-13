@@ -3,7 +3,7 @@
 import {Hook, HookContext} from '@feathersjs/feathers';
 import {RankingData} from '../../services/rankings/rankings.class';
 import {UserData} from '../../services/users/users.class';
-import {Conflict, NotAcceptable} from "@feathersjs/errors";
+import {Conflict, Forbidden, NotAcceptable} from "@feathersjs/errors";
 import {log} from "winston";
 
 // check that the provided rank is not redundant (a godfather shouldn't give the same rank to 2 godsons)
@@ -16,7 +16,11 @@ export default (options = {}): Hook => {
 
         const rank: number = context.data['rank'];
         if (rank) {
-            const loggedUser: UserData = context.params.user;
+            const loggedUser = context.params.user;
+
+            if (!loggedUser)
+                throw new Forbidden('You have to be logged in!');
+
             const rankings: Array<RankingData> = await context.app.service('rankings').find({
                 query: {
                     godfatherId: loggedUser.id,
