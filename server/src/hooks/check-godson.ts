@@ -9,8 +9,8 @@ import {Forbidden} from "@feathersjs/errors";
 // warning : has to be included AFTER authenticate hook
 export default (options = {}): Hook => {
     return async (context: HookContext): Promise<HookContext> => {
-        const user: UserData = context.params.user;
-        if(!checkGodson(context))
+        const user = context.params.user;
+        if(user && !checkGodson(context))
             throw new Forbidden(`User ${user.email} isn't godson!`);
 
         return context;

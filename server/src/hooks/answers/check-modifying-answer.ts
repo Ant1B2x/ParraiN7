@@ -10,8 +10,8 @@ import {Forbidden} from "@feathersjs/errors";
 export default (options = {}): Hook => {
     return async (context: HookContext): Promise<HookContext> => {
         const answer: AnswerData = await context.app.service('answers').get(context.id);
-        const loggedUser: UserData = context.params.user;
-        if (answer.userId !== loggedUser.id)
+        const loggedUser = context.params.user;
+        if (loggedUser && answer.userId !== loggedUser.id)
             throw new Forbidden(`User ${loggedUser.email} can't modify answer to question ${answer.questionId}!`);
 
         return context;
