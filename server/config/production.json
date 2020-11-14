@@ -1,4 +1,4 @@
 {
-  "host": "parrai-n-7-app.feathersjs.com",
-  "port": "PORT"
+  "host": "localhost",
+  "port": "3030"
 }
