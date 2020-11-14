@@ -158,7 +158,7 @@ export default class LogIn extends Vue {
             (data: any) => {
                 //Send check email or smth
                 // console.log(data);
-                this.$router.push('home');
+                this.$router.push('/');
             }
         ).catch( (error: any) => {
             console.log(error);
