@@ -3,7 +3,7 @@
         <div class="container">
             <!-- Brand -->
             <router-link class="navbar-brand" to="/">
-                <img alt="Image placeholder" src="img/brand/logo-text.svg" id="navbar-logo" style="min-height: 6.5rem;">
+                <img alt="Image placeholder" src="img/brand/logo-text.svg" id="navbar-logo">
             </router-link>
             <!-- Toggler -->
             <button class="navbar-toggler" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation"
@@ -13,29 +13,29 @@
             <!-- Collapse -->
             <div class="navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav mt-4 mt-lg-0 ml-auto">
-                    <li class="nav-item ">
+                    <li class="nav-item">
                         <router-link class="nav-link" to="/">Accueil</router-link>
                     </li>
-                    <li class="nav-item " v-if="this.isGodfather()">
+                    <li class="nav-item" v-if="this.isGodfather()">
                         <router-link class="nav-link" to="/questions">Questions</router-link>
                     </li>
-                    <li class="nav-item " v-if="this.isGodSon()">
+                    <li class="nav-item" v-if="this.isGodSon()">
                         <router-link class="nav-link" to="/answers">Réponses</router-link>
                     </li>
-                    <li class="nav-item " v-if="this.isGodfather()">
+                    <li class="nav-item" v-if="this.isGodfather()">
                         <router-link class="nav-link" to="/rankings">Choix des filleuls</router-link>
                     </li>
-                    <li class="nav-item " v-if="this.isAdmin()">
+                    <li class="nav-item" v-if="this.isAdmin()">
                         <router-link class="nav-link" to="/users">Gestion utilisateurs</router-link>
                     </li>
-                    <li class="nav-item ">
+                    <li class="nav-item">
                         <router-link class="nav-link" to="/about">À propos</router-link>
                     </li>
                 </ul>
-                <router-link class="btn btn-sm btn-primary d-lg-inline-block" to="/login" v-if="!this.user">
+                <router-link class="btn btn-sm btn-primary d-lg-inline-block" id="login-button" to="/login" v-if="!this.user">
                     Connexion
                 </router-link>
-                <button type="button" class="btn btn-sm btn-danger d-lg-inline-block" v-if="this.user" @click="signalLogOut">
+                <button type="button" class="btn btn-sm btn-danger d-lg-inline-block" id="logout-button" v-if="this.user" @click="signalLogOut">
                     Déconnexion
                 </button>
             </div>
