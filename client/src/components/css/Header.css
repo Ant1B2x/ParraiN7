@@ -1,18 +1,40 @@
-h3 {
-  margin: 40px 0 0;
+.navbar {
+  padding-bottom: 3rem;
 }
 
-ul {
-  list-style-type: none;
-  padding: 0;
+#navbar-logo {
+  min-height: 5.2rem;
 }
 
 li {
   display: inline-block;
-  margin: 0 10px;
+  margin: 0 0.625rem;
 }
 
-@media (max-width: 992px) {
+@media only screen and (min-width: 1500px) {
+  .navbar .container {
+    max-width: 1300px;
+  }
+}
+
+/* Desktops */
+@media only screen and (min-width: 992px) {
+
+  #login-button, #logout-button {
+    margin-left: 1.5rem;
+  }
+
+  .navbar-expand-lg .navbar-nav .nav-link {
+    height : 100%;
+    display : flex;
+    align-items : center;
+  }
+
+}
+
+/* Laptops */
+@media only screen and (max-width: 991px) {
+
   .navbar-collapse {
     flex-basis: 100%;
     flex-grow: 1;
@@ -22,12 +44,11 @@ li {
   }
 
   .navbar-collapse:not(.show) {
-    max-height: 0;
+    display: none;
   }
 
-  .navbar-collapse.show {
-    margin-bottom: 40px;
+  #login-button, #logout-button {
+    margin-top: 0.625rem;
   }
 
 }
-

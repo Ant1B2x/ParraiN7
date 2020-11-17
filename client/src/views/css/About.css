@@ -1,12 +1,17 @@
-h3 {
-  margin: 0 auto;
+#developers-column {
+  border-right: 1px solid #e2e8f0;
 }
 
-@media (max-width: 767px) {
-  div {
-    border-right: none;
+#source-code-button {
+  padding-top: 4rem;
+}
+
+/* Tablets */
+@media only screen and (max-width: 767px) {
+  #informations-column {
+    padding-top: 3rem;
   }
-  h4, h5, p {
-    text-align: center;
+  #developers-column {
+    border-right: none;
   }
 }

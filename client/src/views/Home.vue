@@ -1,7 +1,10 @@
 <template>
     <div class="container mb-6">
         <section class="welcome">
-            <h1>ParraiN7</h1>
+            <h1>
+                ParraiN7
+                <img src="img/brand/logo.svg" style="max-height: 3rem;"/>
+            </h1>
             <h1><small>L'appli de parrainage des élèves de l'ENSEEIHT</small></h1>
         </section>
         <hr>

@@ -5,13 +5,10 @@
             <div class="form-group">
                 <label class="form-control-label">Question</label>
                 <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="questionInputPrepend">?</span>
-                    </div>
                     <input type="text" class="form-control" placeholder="Votre question"
                            v-model="questionToAdd" @keyup.enter="sendQuestion">
                     <div class="input-group-append">
-                        <span class="input-group-text" id="questionInputAppend">¿</span>
+                        <span class="input-group-text" id="questionInputAppend">?</span>
                     </div>
                 </div>
             </div>
@@ -36,15 +33,14 @@
 
         <form>
             <div class="form-group">
+                <label class="form-control-label" for="searchByQuestionInput">Recherche par :</label>
                 <div class="form-row form-row-search">
                     <div class="col-md-3 mb-3 ng-star-inserted">
-                        <label class="form-control-label" for="searchByQuestionInput">Recherche par question</label>
                         <input type="text" placeholder="Question" v-model="searchByQuestion"
                                @keyup="filterByQuestion()" id="searchByQuestionInput"
                                class="form-control ng-dirty ng-valid ng-touched"/>
                     </div>
                     <div class="col-md-3 mb-3 ng-star-inserted">
-                        <label class="form-control-label" for="searchByAuthorInput">Recherche par auteur</label>
                         <input type="text" placeholder="Auteur" v-model="searchByAuthor"
                                @keyup="filterByAuthor()" id="searchByAuthorInput"
                                class="form-control ng-dirty ng-valid ng-touched"/>
@@ -57,23 +53,32 @@
             <div class="card hover-translate-y-n10 hover-shadow-lg" v-for="question in filteredList"
                  :key="question.idQuestion">
                 <div class="card-body">
+                    <button v-if="isAuthorOrAdmin(question.authorId)" @click="removeQuestion(question)" type="button" class="close" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                     <div class="pb-4">
                         <div class="icon bg-dark text-white rounded-circle icon-shape shadow">
                             ?
                         </div>
                     </div>
                     <div class="pt-2 pb-3">
-                        <h5>{{ question.authorFirstname }} {{question.authorLastname}}</h5>
+                        <h5>{{ question.authorFirstname }} {{ question.authorLastname }}</h5>
                         <p class="text-muted mb-0">
                             {{ question.content }}
                         </p>
-                        <textarea class="form-control" v-model="question.content" v-if="questionIsBeingEdited(question.id)"></textarea>
+                        <textarea class="form-control" v-model="question.content"
+                                  v-if="questionIsBeingEdited(question.id)"></textarea>
                         <p class="text-muted mb-0" v-if="question.placeholder">
                             ({{ question.placeholder }})
                         </p>
                     </div>
-                    <button type="button" class="btn btn-warning" v-if="isAuthorOrAdmin(question.authorId) && !questionIsBeingEdited(question.id)" v-on:click="editQuestion(question.id)">Éditer</button>
-                    <button type="button" class="btn btn-success" v-if="questionIsBeingEdited(question.id)" v-on:click="sendQuestionModified(question)">Valider</button>
+                    <button type="button" class="btn btn-warning"
+                            v-if="isAuthorOrAdmin(question.authorId) && !questionIsBeingEdited(question.id)"
+                            v-on:click="editQuestion(question.id)">Éditer
+                    </button>
+                    <button type="button" class="btn btn-success" v-if="questionIsBeingEdited(question.id)"
+                            v-on:click="sendQuestionModified(question)">Valider
+                    </button>
                 </div>
             </div>
         </div>
@@ -146,7 +151,6 @@ export default class Questions extends Vue {
     }
 
 
-
     searchByQuestion = '';
     searchByAuthor = '';
 
@@ -182,8 +186,6 @@ export default class Questions extends Vue {
             }
             app.service('questions').create(question).then(
                 async (data: any) => {
-                    //Send check email or smth
-                    // console.log(data);
                     this.messageStateComponent.displaySuccess('La question a bien été ajoutée !');
                     await this.loadQuestions();
                 }
@@ -197,36 +199,40 @@ export default class Questions extends Vue {
     async sendQuestionModified(question: Question) {
         if (this.questionToAdd.length > 255) {
             this.messageStateComponent.displayWarning('Votre question est trop longue.');
-        } else {
-            if (question.content.length > 0) {
-                try {
-                    const questionToModify = {
-                        content: question.content,
-                        placeholder: question.placeholder
-                    }
-                    await app.service('questions').patch(question.id, questionToModify);
-                    this.messageStateComponent.displaySuccess('La question a bien été modifiée !');
-                    this.inEdition = false;
-                    this.idEditedQuestion = undefined;
-                    await this.loadQuestions();
-                } catch (error) {
-                    console.log(error);
-                    this.messageStateComponent.displayError('La question n\'a pas pu être modifiée.');
-                }
-            } else {
-                try {
-                    await app.service('questions').remove(question.id);
-                    this.messageStateComponent.displaySuccess('La question a bien été supprimée !');
-                    this.inEdition = false;
-                    this.idEditedQuestion = undefined;
-                    await this.loadQuestions();
-                } catch (error) {
-                    console.log(error);
-                    this.messageStateComponent.displayError('La question n\'a pas pu être supprimée.');
-                }
-            }
+            return;
         }
 
+        if (question.content.length > 0) {
+            try {
+                const questionToModify = {
+                    content: question.content,
+                    placeholder: question.placeholder
+                }
+                await app.service('questions').patch(question.id, questionToModify);
+                this.messageStateComponent.displaySuccess('La question a bien été modifiée !');
+                this.inEdition = false;
+                this.idEditedQuestion = undefined;
+                await this.loadQuestions();
+            } catch (error) {
+                console.log(error);
+                this.messageStateComponent.displayError('La question n\'a pas pu être modifiée.');
+            }
+        } else {
+            await this.removeQuestion(question);
+        }
+    }
+
+    async removeQuestion(question: Question) {
+        try {
+            await app.service('questions').remove(question.id);
+            this.messageStateComponent.displaySuccess('La question a bien été supprimée !');
+            this.inEdition = false;
+            this.idEditedQuestion = undefined;
+            await this.loadQuestions();
+        } catch (error) {
+            console.log(error);
+            this.messageStateComponent.displayError('La question n\'a pas pu être supprimée.');
+        }
     }
 
     isAuthorOrAdmin(idAuthor: number) {
