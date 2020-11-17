@@ -93,7 +93,7 @@
 import {Component, Prop, Ref, Vue} from 'vue-property-decorator';
 import app from '@/feathers-client';
 import {User} from "@/views/Users.vue";
-import {MessageState} from "@/views/enum";
+import {MessageState} from "@/views/message-state-enum";
 import MessageStateComponent from "@/components/MessageStateComponent.vue";
 
 export class Question {

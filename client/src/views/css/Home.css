@@ -1,15 +1,17 @@
-h3 {
-  margin: 0 auto;
+#app-logo {
+  max-height: 1.2em;
 }
 
-@media (max-width: 767px) {
-  div {
+#first-year-column {
+  border-right: 1px solid #e2e8f0;
+}
+
+/* Tablets */
+@media only screen and (max-width: 767px) {
+  #first-year-column {
     border-right: none;
   }
-  h4, h5, p {
-    text-align: center;
-  }
-  #secondYear {
-    margin-top: 50px;
+  #second-year-column {
+    padding-top: 3rem;
   }
 }
