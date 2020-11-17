@@ -3,7 +3,7 @@
         <div class="container">
             <!-- Brand -->
             <router-link class="navbar-brand" to="/">
-                <img alt="Image placeholder" src="img/brand/the-godfather.svg" id="navbar-logo" style="min-height: 10.75rem;">
+                <img alt="Image placeholder" src="img/brand/logo-text.svg" id="navbar-logo" style="min-height: 6.5rem;">
             </router-link>
             <!-- Toggler -->
             <button class="navbar-toggler" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation"

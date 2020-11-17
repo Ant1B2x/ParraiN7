@@ -7,8 +7,8 @@
         <hr>
         <section>
             <div class="row mb-3">
-                <div class="col-md-6 text-left text-lg-right border-right pr-lg-5">
-                    <h4 class="mb-lg-5 text-center text-lg-right">Développeurs</h4>
+                <div class="col-md-6 text-center text-lg-right pr-lg-5" id="developers-column">
+                    <h4 class="mb-lg-5">Développeurs</h4>
                     <h5>
                         Yvan Le Duc
                         <small>(<a href="https://github.com/GBazinga" target="_blank">@GBazinga</a>)</small>
@@ -34,8 +34,8 @@
                     front-end (peu probable) ou pour l'engueuler si quelque chose ne marche pas (fort probable).
                     </p>
                 </div>
-                <div class="col-md-6 text-left text-lg-left pl-lg-5" id="secondYear">
-                    <h4 class="mb-lg-5 text-center text-lg-left">Informations</h4>
+                <div class="col-md-6 text-center text-lg-left pl-lg-5" id="informations-column">
+                    <h4 class="mb-lg-5">Informations</h4>
                     <h5>Framework back-end</h5>
                     <p>
                         Nous avons utilisé le framework JavaScript/TypeScript
@@ -64,10 +64,9 @@
                     </p>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" id="source-code-button">
                 <div class="col-md-12">
-                    <br/>
-                    <h4><a href="https://github.com/Ant1B2x/ParraiN7" target="_blank">Code Source</a></h4>
+                    <a class="btn btn-outline-primary" href="https://github.com/Ant1B2x/ParraiN7" target="_blank">Code Source</a>
                 </div>
             </div>
         </section>
@@ -77,4 +76,3 @@
 <style scoped>
 @import "css/About.css";
 </style>
-

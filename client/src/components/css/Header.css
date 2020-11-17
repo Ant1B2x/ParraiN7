@@ -12,7 +12,11 @@ li {
   margin: 0 10px;
 }
 
-@media (max-width: 992px) {
+@media only screen and (max-width: 991px) {
+  .navbar {
+    padding-bottom: 3rem;
+  }
+
   .navbar-collapse {
     flex-basis: 100%;
     flex-grow: 1;
@@ -22,12 +26,6 @@ li {
   }
 
   .navbar-collapse:not(.show) {
-    max-height: 0;
+    display: none;
   }
-
-  .navbar-collapse.show {
-    margin-bottom: 40px;
-  }
-
 }
-
