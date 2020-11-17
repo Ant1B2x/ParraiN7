@@ -1,10 +1,10 @@
 <template>
-    <div id="app" class="masterClass">
+    <div id="app" class="master-class">
         <header>
             <Header :user="this.user" @signalLogOut="logOut"/>
         </header>
         <router-view :user="this.user" class="content"/>
-        <footer class="footer">
+        <footer>
             <Footer/>
         </footer>
     </div>
@@ -67,20 +67,7 @@ export default class App extends Vue  {
     color: #2c3e50;
 }
 
-#nav {
-    padding: 30px;
-}
-
-#nav a {
-    font-weight: bold;
-    color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-    color: #42b983;
-}
-
-.masterClass {
+.master-class {
     display: flex;
     flex-flow: column;
     min-height: 100vh;

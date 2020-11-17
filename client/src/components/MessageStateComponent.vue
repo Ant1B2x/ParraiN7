@@ -9,7 +9,7 @@
 </template>
 <script lang="ts">
 import {Component, Prop, Vue} from "vue-property-decorator";
-import {MessageState} from "@/views/enum";
+import {MessageState} from "@/views/message-state-enum";
 
 @Component
 export default class MessageStateComponent extends Vue {

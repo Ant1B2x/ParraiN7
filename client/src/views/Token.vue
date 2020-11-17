@@ -44,7 +44,7 @@
 import {Component, Prop, Ref, Vue} from 'vue-property-decorator';
 import {User} from "@/views/Users.vue";
 import MessageStateComponent from "@/components/MessageStateComponent.vue";
-import {MessageState} from "@/views/enum";
+import {MessageState} from "@/views/message-state-enum";
 
 @Component({
     components: {

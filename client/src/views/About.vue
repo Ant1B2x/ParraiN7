@@ -1,6 +1,6 @@
 <template>
     <div class="container mb-6">
-        <section class="welcome">
+        <section>
             <h1>À propos</h1>
             <h1><small>Découvrez ici les techniques de production américaines</small></h1>
         </section>
@@ -15,7 +15,7 @@
                     </h5>
                     <p>
                         Aussi appelé géni-van à cause de sa capacité à comprendre rapidement de nouveaux concepts, il
-                    réussit à faire ressortir le meilleur de nous-même (j'ai été gentil lol).
+                        réussit à faire ressortir le meilleur de nous-même (j'ai été gentil lol).
                     </p>
                     <h5>
                         Antoine Bédex
@@ -23,7 +23,7 @@
                     </h5>
                     <p>
                         Grâce à son QI proche du zéro et à son extraordinaire confiance en lui, il a le toupet de
-                    développer un back-end qui ne marche pas en étant persuadé qu'il marche.
+                        développer un back-end qui ne marche pas en étant persuadé qu'il marche.
                     </p>
                     <h5>
                         Esteban Baichoo
@@ -31,7 +31,7 @@
                     </h5>
                     <p>
                         Adepte du code sale mais qui marche, n'hésitez pas à le contacter pour le féliciter sur le
-                    front-end (peu probable) ou pour l'engueuler si quelque chose ne marche pas (fort probable).
+                        front-end (peu probable) ou pour l'engueuler si quelque chose ne marche pas (fort probable).
                     </p>
                 </div>
                 <div class="col-md-6 text-center text-lg-left pl-lg-5" id="informations-column">
