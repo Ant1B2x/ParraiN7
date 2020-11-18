@@ -59,8 +59,7 @@
         </section>
         <section v-if="!this.user">
             <hr/>
-            <h3>Nouveau sur le site ?</h3>
-            <br/>
+            <h3 id="signup-question">Nouveau sur le site ?</h3>
             <router-link class="btn btn-primary" to="/signup">S'inscrire</router-link>
         </section>
     </div>
