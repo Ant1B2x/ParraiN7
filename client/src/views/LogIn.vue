@@ -7,9 +7,11 @@
                         <div class="mb-5">
                             <h6 class="h3">Connexion</h6>
                             <p class="text-muted mb-0 errorMessage"
-                               :class="{ 'alert alert-danger': loginForm.hasError }"  role="alert">{{loginForm.errorMessage}}</p>
+                               :class="{ 'alert alert-danger': loginForm.hasError }" role="alert">
+                                {{ loginForm.errorMessage }}
+                            </p>
                         </div>
-                        <span class="clearfix"></span>
+                        <span class="clearfix"/>
                         <form>
                             <div class="form-group">
                                 <div class="d-flex align-items-center justify-content-between">
@@ -22,17 +24,14 @@
                                     <input v-model="loginForm.email" type="text" class="form-control" id="input-email"
                                            placeholder="prenom.nom"
                                            @keyup="handleKeyUp"/>
-
                                     <div class="input-group-append">
-                                        <span class="input-group-text">{{institutionalEmailEnd}}</span>
+                                        <span class="input-group-text">{{ institutionalEmailEnd }}</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group mb-0">
                                 <div class="d-flex align-items-center justify-content-between">
-
                                     <label class="form-control-label">Mot de passe</label>
-
                                 </div>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
@@ -45,7 +44,8 @@
                                 </div>
                             </div>
                             <div class="mt-4">
-                                <button type="button" class="btn btn-primary" v-on:click="logIn" :disabled="loginForm.hasError">
+                                <button type="button" class="btn btn-primary" v-on:click="logIn"
+                                        :disabled="loginForm.hasError">
                                     Se connecter
                                 </button>
                             </div>
@@ -108,8 +108,8 @@ export default class LogIn extends Vue {
         this.loginForm.hasError = false;
     }
 
-    private handleKeyUp(e: any) {
-        if (e.keyCode === 13) {
+    private handleKeyUp(e: KeyboardEvent) {
+        if (e.key === "Enter") {
             this.logIn();
         } else {
             this.noError();
