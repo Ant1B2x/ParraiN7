@@ -52,13 +52,12 @@ export default async (app: Application): Promise<Knex> => {
         }
     });
 
-    // add foreign key on rankings.godfatherId, unique on [godfatherId, godsonId] and unique on [godfatherId, rank]
+    // add foreign key on rankings.godfatherId and unique on [godfatherId, godsonId]
     db.schema.hasColumn(rankingsTableName, 'godfatherId').then(async (exists) => {
         if (!exists) {
             await db.schema.table(rankingsTableName, table => {
                 table.integer('godfatherId').references('id').inTable(usersTableName).onDelete('CASCADE');
                 table.unique(['godfatherId', 'godsonId']);
-                table.unique(['godfatherId', 'rank']);
             });
         }
     });
