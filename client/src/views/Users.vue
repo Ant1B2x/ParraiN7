@@ -55,15 +55,9 @@
                     </div>
                 </div>
                 <div class="buttons">
-                    <div class="">
-                        <button type="button" class="btn btn-danger" v-on:click="removeUser">Supprimer</button>
-                    </div>
-                    <div class="">
-                        <button type="button" class="btn btn-warning" :disabled="!userChanged" v-on:click="resetUser">Réinitialiser</button>
-                    </div>
-                    <div class="">
-                        <button type="button" class="btn btn-primary" :disabled="!userChanged" v-on:click="sendUserModifications">Valider</button>
-                    </div>
+                    <button type="button" class="btn btn-danger" v-on:click="removeUser">Supprimer</button>
+                    <button type="button" class="btn btn-warning" :disabled="!userChanged" v-on:click="resetUser">Réinitialiser</button>
+                    <button type="button" class="btn btn-primary" :disabled="!userChanged" v-on:click="sendUserModifications">Valider</button>
                 </div>
             </form>
         </div>
