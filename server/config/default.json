@@ -15,8 +15,8 @@
       "header": {
         "typ": "access"
       },
-      "audience": "https://yourdomain.com",
-      "issuer": "feathers",
+      "audience": "https://parrain7.ant1b2x.com",
+      "issuer": "ParraiN7",
       "algorithm": "HS256",
       "expiresIn": "1d"
     },

@@ -1,4 +1,5 @@
 {
-  "host": "parrai-n-7-app.feathersjs.com",
-  "port": "PORT"
+  "host": "localhost",
+  "port": "3030",
+  "expirationDate": "12/25/2020"
 }

@@ -1,48 +1,59 @@
 <template>
     <div class="container d-flex flex-column">
         <div class="row align-items-center justify-content-center">
-            <div class="col-md-6 col-lg-5 col-xl-5 py-6 py-md-0">
+            <div class="col-md-6 py-2 py-md-0">
                 <div class="card shadow zindex-100 mb-0">
-                    <div class="card-body px-md-5 py-5">
+                    <div class="card-body px-md-5 py-5" :class="{ 'hasError': loginForm.hasError }">
                         <div class="mb-5">
-                            <h6 class="h3">Login</h6>
-                            <p class="text-muted mb-0">Connectez-vous à votre compte pour continuer</p>
+                            <h6 class="h3">Connexion</h6>
+                            <p class="text-muted mb-0 errorMessage"
+                               :class="{ 'alert alert-danger': loginForm.hasError }" role="alert">
+                                {{ loginForm.errorMessage }}
+                            </p>
                         </div>
-                        <span class="clearfix"></span>
+                        <span class="clearfix"/>
                         <form>
                             <div class="form-group">
                                 <div class="d-flex align-items-center justify-content-between">
-                                <label class="form-control-label">Adresse email</label>
+                                    <label class="form-control-label">Adresse email</label>
                                 </div>
-                                <div class="input-group">
+                                <div class="input-group input-group-email">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text"><font-awesome-icon icon="user" /></span>
+                                        <span class="input-group-text"><font-awesome-icon icon="user"/></span>
                                     </div>
-                                    <input type="email" class="form-control" id="input-email" placeholder="name@etu.toulouse-inp.fr">
+                                    <input v-model="loginForm.email" type="text" class="form-control" id="input-email"
+                                           placeholder="prenom.nom"
+                                           @keyup="handleKeyUp"/>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">{{ institutionalEmailEnd }}</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group mb-0">
                                 <div class="d-flex align-items-center justify-content-between">
-
-                                        <label class="form-control-label">Mot de passe</label>
-
-                                    <!--div class="mb-2">
-                                        <a href="#" class="small text-muted text-underline--dashed border-primary" data-toggle="password-text" data-target="#input-password">Afficher le mot de passe</a>
-                                    </div-->
+                                    <label class="form-control-label">Mot de passe</label>
                                 </div>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text"><font-awesome-icon icon="key" /></span>
+                                        <span class="input-group-text"><font-awesome-icon icon="key"/></span>
                                     </div>
-                                    <input type="password" class="form-control" id="input-password" placeholder="Mot de passe">
+                                    <input v-model="loginForm.password" type="password" class="form-control"
+                                           id="input-password"
+                                           placeholder="Mot de passe"
+                                           v-on:keyup="handleKeyUp"/>
                                 </div>
                             </div>
                             <div class="mt-4">
-                                <button type="button" class="btn btn-block btn-primary" v-on:click="logIn">Se connecter</button></div>
+                                <button type="button" class="btn btn-primary" v-on:click="logIn"
+                                        :disabled="loginForm.hasError">
+                                    Se connecter
+                                </button>
+                            </div>
                         </form>
                     </div>
-                    <div class="card-footer px-md-5"><small>Pas encore enregistré?</small>
-                        <a href="#" class="small font-weight-bold"> Tant pis</a></div>
+                    <div class="card-footer px-md-5"><small>Pas encore enregistré ? </small>
+                        <router-link to="/signup" class="small font-weight-bold">Inscrivez-vous !</router-link>
+                    </div>
                 </div>
             </div>
         </div>
@@ -50,61 +61,61 @@
 </template>
 
 <style scoped>
-
-@keyframes hidePreloader {
-    0% {
-        width: 100%;
-        height: 100%;
-    }
-
-    100% {
-        width: 0;
-        height: 0;
-    }
-}
-
-body>div.preloader {
-    position: fixed;
-    background: white;
-    width: 100%;
-    height: 100%;
-    z-index: 1071;
-    opacity: 0;
-    transition: opacity .5s ease;
-    overflow: hidden;
-    pointer-events: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-body:not(.loaded)>div.preloader {
-    opacity: 1;
-}
-
-body:not(.loaded) {
-    overflow: hidden;
-}
-
-body.loaded>div.preloader {
-    animation: hidePreloader .5s linear .5s forwards;
-}
-
-.container {
-    margin-top: 5%;
-}
-
+@import "css/LogIn.css";
 </style>
 
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator';
-import app from '@/feathers-client';
+import app from "@/feathers-client";
 
 @Component
 export default class LogIn extends Vue {
-    logIn = async () => {
-        console.log("...")
+
+    private institutionalEmailEnd = '@etu.toulouse-inp.fr';
+
+    private loginForm = {
+        email: '',
+        password: '',
+        errorMessage: 'Connectez-vous à votre compte pour continuer',
+        hasError: false,
     }
+
+    public logIn = async () => {
+
+        this.noError();
+        try {
+            await app.logout();
+            await app.authenticate({
+                strategy: 'local',
+                email: this.loginForm.email + this.institutionalEmailEnd,
+                password: this.loginForm.password
+            });
+
+            this.loginForm.email = '';
+            this.loginForm.password = '';
+            await this.$router.replace('/');
+        } catch (err) {
+            if (err.code === 401) {
+                this.loginForm.errorMessage = 'Utilisateur ou mot de passe incorrect.';
+                this.loginForm.hasError = true;
+            }
+        }
+
+    }
+
+    noError() {
+        this.loginForm.errorMessage = 'Connectez-vous à votre compte pour continuer'
+        this.loginForm.hasError = false;
+    }
+
+    private handleKeyUp(e: KeyboardEvent) {
+        if (e.key === "Enter") {
+            this.logIn();
+        } else {
+            this.noError();
+        }
+    }
+
 }
 
 </script>

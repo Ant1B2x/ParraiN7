@@ -1,19 +1,22 @@
 import * as feathersAuthentication from '@feathersjs/authentication';
 import checkGodfather from '../../hooks/check-godfather';
 import setAuthor from '../../hooks/questions/set-author';
+import checkExistingAuthor from '../../hooks/questions/check-existing-author';
+import checkModifyingQuestion from '../../hooks/questions/check-modifying-question';
+import checkExpirationDate from '../../hooks/check-expiration-date';
 // Don't remove this comment. It's needed to format import lines nicely.
 
 const {authenticate} = feathersAuthentication.hooks;
 
 export default {
     before: {
-        all: [],
+        all: [checkExpirationDate()],
         find: [],
         get: [],
         create: [authenticate('jwt'), checkGodfather(), setAuthor()],
-        update: [authenticate('jwt'), checkGodfather()],
-        patch: [authenticate('jwt'), checkGodfather()],
-        remove: [authenticate('jwt'), checkGodfather()]
+        update: [authenticate('jwt'), checkGodfather(), checkModifyingQuestion(), checkExistingAuthor()],
+        patch: [authenticate('jwt'), checkGodfather(), checkModifyingQuestion(), checkExistingAuthor()],
+        remove: [authenticate('jwt'), checkGodfather(), checkModifyingQuestion()]
     },
 
     after: {

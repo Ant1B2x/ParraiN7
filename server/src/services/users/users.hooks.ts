@@ -1,9 +1,15 @@
 import * as feathersAuthentication from '@feathersjs/authentication';
 import * as local from '@feathersjs/authentication-local';
-import checkEmail from '../../hooks/users/check-email';
+import checkUniqueEmail from '../../hooks/users/check-unique-email';
+import checkEmailRegex from '../../hooks/users/check-email-regex';
+import checkName from '../../hooks/users/check-name';
 import unsetAdmin from '../../hooks/users/unset-admin';
 import checkModifyingUser from '../../hooks/users/check-modifying-user';
 import checkSettingAdminUser from '../../hooks/users/check-setting-admin-user';
+import hideGodsonName from '../../hooks/users/hide-godson-name';
+import hideGodsonsNames from '../../hooks/users/hide-godsons-names';
+import addToken from '../../hooks/users/add-token';
+import hideToken from '../../hooks/users/hide-token';
 // Don't remove this comment. It's needed to format import lines nicely.
 
 const {authenticate} = feathersAuthentication.hooks;
@@ -14,9 +20,9 @@ export default {
         all: [],
         find: [authenticate('jwt')],
         get: [authenticate('jwt')],
-        create: [checkEmail(), unsetAdmin(), hashPassword('password')],
-        update: [authenticate('jwt'), checkModifyingUser(), checkSettingAdminUser(), hashPassword('password')],
-        patch: [authenticate('jwt'), checkModifyingUser(), checkSettingAdminUser(), hashPassword('password')],
+        create: [checkEmailRegex(), checkUniqueEmail(), checkName(), unsetAdmin(), addToken(), hashPassword('password')],
+        update: [authenticate('jwt'), checkModifyingUser(), checkSettingAdminUser(), checkEmailRegex(), checkName(), hashPassword('password')],
+        patch: [authenticate('jwt'), checkModifyingUser(), checkSettingAdminUser(), checkEmailRegex(), checkName(), hashPassword('password')],
         remove: [authenticate('jwt'), checkModifyingUser()]
     },
 
@@ -26,9 +32,9 @@ export default {
             // Always must be the last hook
             protect('password')
         ],
-        find: [],
-        get: [],
-        create: [],
+        find: [hideGodsonsNames(), hideToken()],
+        get: [hideGodsonName(), hideToken()],
+        create: [hideToken()],
         update: [],
         patch: [],
         remove: []

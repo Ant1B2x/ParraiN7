@@ -13,9 +13,6 @@ export default function (app: Application): Knex {
         if (!exists) {
             db.schema.createTable(tableName, table => {
                 table.increments('id');
-                table.integer('godfatherId').notNullable();
-                table.integer('godsonId').notNullable();
-                table.unique(['godfatherId', 'godsonId']);
                 table.integer('rank').notNullable();
             })
                 .then(() => console.log(`Created ${tableName} table`))

@@ -1,0 +1,48 @@
+.questionArea {
+  margin: auto;
+  width: 80%;
+  /*max-width: 1024px;*/
+  display: flex;
+  flex-flow: column;
+}
+
+.questionArea form {
+  margin: auto;
+  width: 80%;
+}
+
+.questionArea form button {
+  float: right;
+  max-width: 150px;
+}
+
+.questionArea .questionList {
+  min-width: 500px;
+  margin: auto;
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+.questionArea .questionList .card {
+  width: 49%;
+}
+
+.questionArea .card .pb-4 {
+  padding-bottom: unset !important;
+}
+
+.questionArea .card .pt-2 h5 {
+  padding-bottom: 1.5rem !important
+}
+
+@media (max-width: 600px) {
+  .questionArea .questionList {
+    min-width: unset;
+  }
+  .questionArea .questionList .card {
+    width: 100%;
+    max-width: 500px;
+  }
+}

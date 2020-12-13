@@ -1,8 +1,9 @@
 <template>
     <div class="questionArea">
+        <MessageStateComponent :standard-message="standardMessage" ref="MessageStateComponent"/>
         <!-- Afficher questions existantes -->
         <div class="questionList">
-            <div class="card hover-translate-y-n10 hover-shadow-lg" v-for="answer in answers" :key="answer.question.idQuestion">
+            <div class="card hover-translate-y-n10 hover-shadow-lg" v-for="question in questionsWithAnswers" :key="question.id">
                 <div class="card-body">
                     <div class="pb-4">
                         <div class="icon bg-dark text-white rounded-circle icon-shape shadow">
@@ -10,27 +11,21 @@
                         </div>
                     </div>
                     <div class="pt-2 pb-3">
-                        <h5>{{ /*answer.question.author*/ }} ¿?¿ </h5>
                         <p class="text-muted mb-0">
-                            {{ answer.question.content }}
+                            {{ question.content }}
                         </p>
                     </div>
 
                     <form>
                         <div class="form-group">
                             <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon1">¿</span>
-                                </div>
-                                <textarea type="text" class="form-control" placeholder="Votre réponse"
-                                v-model="answer.content"></textarea>
-                                <div class="input-group-append">
-                                    <span class="input-group-text" id="basic-addon2">?</span>
-                                </div>
+                                <textarea type="text" class="form-control" :placeholder="question.placeholder"
+                                v-model="question.answerContent"></textarea>
                             </div>
                         </div>
                         <div class="mt-4">
-                            <button type="button" class="btn btn-block btn-primary">Valider</button>
+                            <button type="button" class="btn btn-block btn-primary" v-if="!question.answerId" v-on:click="sendAnswer(question.id, question.answerContent)">Valider</button>
+                            <button type="button" class="btn btn-block btn-warning" v-if="question.answerId" v-on:click="editAnswer(question.answerId, question.answerContent)">Editer</button>
                         </div>
                     </form>
                 </div>
@@ -40,79 +35,95 @@
 </template>
 
 <style scoped>
-/*@import "public/assets/css/quick-website.css";*/
-.questionArea {
-    margin: auto;
-    width: 80%;
-    /*max-width: 1024px;*/
-    display: flex;
-    flex-flow: column;
-}
-
-.questionArea form {
-    margin: auto;
-    width: 80%;
-}
-
-.questionArea form button {
-    float: right;
-    max-width: 150px;
-}
-
-.questionArea .questionList {
-    min-width: 500px;
-    margin: auto;
-    width: 100%;
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-between;
-}
-
-.questionArea .questionList .card {
-    width: 49%;
-}
-
-.questionArea .card .pb-4 {
-    padding-bottom: unset !important;
-}
-
-.questionArea .card .pt-2 h5 {
-    padding-bottom: 1.5rem !important
-}
-
-@media (max-width: 600px) {
-    .questionArea .questionList {
-        min-width: unset;
-    }
-    .questionArea .questionList .card {
-        width: 100%;
-        max-width: 500px;
-    }
-}
+@import "css/Answers.css";
 </style>
 
 <script lang="ts">
-import {Component, Vue} from 'vue-property-decorator';
-import {Question} from "@/views/Questions.vue";
+import {Component, Prop, Ref, Vue} from 'vue-property-decorator';
+import app from "@/feathers-client";
+import {User} from "@/views/Users.vue";
+import MessageStateComponent from "@/components/MessageStateComponent.vue";
 
-export class Answer {
-    author: string;
-    question: Question;
+export class QuestionWithAnswer {
+    id?: number;
     content: string;
+    authorId: number;
+    placeholder: string;
+    answerId: number;
+    answerContent: string;
 
-    constructor(author: string, question: Question, content: string) {
-        this.author = author;
-        this.question = question;
+    constructor(id: number, content: string,  authorId: number, placeholder: string, answerId: number, answerContent: string) {
+        this.id = id;
         this.content = content;
+        this.authorId = authorId;
+        this.placeholder = placeholder;
+        this.answerId = answerId;
+        this.answerContent = answerContent;
     }
 }
 
-@Component
+@Component({
+    components: {
+        MessageStateComponent
+    }
+})
 export default class Answers extends Vue {
-    answers = [
-        new Answer('Moi', new Question(1, 'Yvan', 'Comment tu t\'appelles ?'), ''),
-        new Answer('Moi', new Question(2, 'Antoine', 'Veux-tu caliner ta mère ?'), ''),
-        new Answer('Moi', new Question(3, 'Esteban', 'Quel âge as-tu ?'), 'On ne demande pas ça à une dame, malotru !'),
-    ]
+
+    @Prop() user?: User;
+    @Ref('MessageStateComponent') messageStateComponent!: MessageStateComponent;
+
+    standardMessage = 'Veuillez répondre aux questions.';
+
+    questionsWithAnswers: QuestionWithAnswer[] = [];
+
+    mounted() {
+        this.getQuestions();
+    }
+
+    async getQuestions() {
+        try {
+            await app.service('questions').find( { query: { answers: true, godsonId: this.user?.id } } ).then(
+                (data: any) => {
+                    // console.log(data);
+                    this.questionsWithAnswers = [];
+                    for (const answer of data) {
+                        this.questionsWithAnswers.push(new QuestionWithAnswer(answer.id, answer.content,
+                            answer.authorId, answer.placeholder, answer.answerId, answer.answerContent))
+                    }
+                    console.log(this.questionsWithAnswers);
+                }
+            );
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    async sendAnswer(questionId: number, answerContent: string) {
+        const answer = { userId: this.user?.id, questionId: questionId, content: answerContent };
+        console.log(answer);
+        try {
+            await app.service('answers').create(answer);
+            this.messageStateComponent.displaySuccess('La réponse a bien été prise en compte !');
+            await this.getQuestions();
+        } catch (error) {
+            if (error.code === 403) {
+                this.messageStateComponent.displayError("Vous n'êtes pas un filleul, vous ne pouvez donner de réponses.");
+            } else {
+                this.messageStateComponent.displayError('Une erreur est survenue.' );
+            }
+        }
+    }
+
+    async editAnswer(questionId: number, answerContent: string) {
+        try {
+            const answer = { content: answerContent };
+            await app.service('answers').patch(questionId, answer);
+            this.messageStateComponent.displaySuccess('La réponse a bien été modifiée.');
+            await this.getQuestions();
+        } catch (error) {
+            console.log(error);
+            this.messageStateComponent.displayError('Une erreur est survenue.')
+        }
+    }
 }
 </script>

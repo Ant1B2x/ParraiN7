@@ -1,34 +1,39 @@
 <template>
     <div class="questionArea">
         <form>
-            <div class="form-group">
-                <label>
-                    <select class="custom-select" v-model="selectedPoulain">
-                        <option selected disabled>Choisissez un poulain</option>
-                        <option v-for="poulain in poulains" :value="poulain" :key="poulain.idUser">{{poulain.name}}</option>
-                    </select>
-                </label>
-            </div>
-            <div class="mt-4">
-                <button type="button" class="btn btn-block btn-primary" v-on:click="nextPoulain()">Next</button>
-            </div>
-            <div class="mt-4">
-                <button type="button" class="btn btn-block btn-primary" v-on:click="previousPoulain()">Précédent</button>
+            <div class="row justify-content-center">
+                <div class="col col-md-1 align-self-center mb-1 order-1 order-md-0">
+                    <font-awesome-icon icon="arrow-left" :style="{ color: '#171347' }" size="2x" v-on:click="previousPoulain()"/>
+                </div>
+                <div class="col-md-auto order-0 order-md-1">
+                    <label>
+                        <select class="custom-select" v-model="currentIndex">
+                            <option selected disabled>Choisissez un poulain</option>
+                            <option v-for="godson in godsons" :value="godsons.indexOf(godson)" :key="godson.id">Filleul #{{godson.id}}</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="col col-md-1 align-self-center mb-1 order-2 order-md-2">
+                    <font-awesome-icon icon="arrow-right" :style="{ color: '#171347' }" size="2x" v-on:click="nextPoulain()"/>
+                </div>
             </div>
         </form>
 
-        <!-- Ligne séparatrice -->
-        <hr class="separator"/>
+        <MessageStateComponent :standard-message="standardMessage" ref="MessageStateComponent"/>
 
-        <div v-if="selectedPoulain">
-            <h2 style="color: #152c5b;">{{selectedPoulain.name}}</h2>
-            <Rating :grade="selectedPoulain.rank" :maxStars="5" :hasCounter="true" @updatedStars="changeRating"/>
+        <div class="mt-4">
+            <button type="button" class="btn btn-primary" v-on:click="sendVote">Modifier</button>
+        </div>
+
+        <div v-if="godsons[this.currentIndex]">
+            <h2 style="color: #152c5b;">Filleul #{{godsons[this.currentIndex].id}}</h2>
+            <Rating :grade="godsons[this.currentIndex].rank" :maxStars="5" :hasCounter="true" @updatedStars="changeRating"/>
         </div>
 
         <!-- Afficher questions existantes -->
-        <div class="questionList" v-if="selectedPoulain">
-            <div class="card hover-translate-y-n10 hover-shadow-lg" v-for="answer in selectedPoulain.answers"
-                 :key="answer.question.idQuestion">
+        <div class="questionList" v-if="godsons[this.currentIndex]">
+            <div class="card hover-translate-y-n10 hover-shadow-lg" v-for="question in godsons[this.currentIndex].questions"
+                 :key="question.idQuestion">
                 <div class="card-body">
                     <div class="pb-4">
                         <div class="icon bg-dark text-white rounded-circle icon-shape shadow">
@@ -36,9 +41,12 @@
                         </div>
                     </div>
                     <div class="pt-2 pb-3">
-                        <h5>{{ answer.question.content }}</h5>
-                        <p class="text-muted mb-0">
-                            {{ answer.content }}
+                        <h5 class="mb-0">{{ question.questionContent }}</h5>
+                        <p class="text-muted">
+                            {{ question.answerContent }}
+                        </p>
+                        <p class="text-muted mb-0" v-if="question.placeholder">
+                            ({{ question.placeholder }})
                         </p>
                     </div>
                 </div>
@@ -48,144 +56,120 @@
 </template>
 
 <style scoped>
-/*@import "public/assets/css/quick-website.css";*/
-.questionArea {
-    margin: auto;
-    width: 80%;
-    max-width: 1024px;
-    display: flex;
-    flex-flow: column;
-}
-
-.questionArea form {
-    margin: auto;
-    width: 80%;
-}
-
-.questionArea form button {
-    float: right;
-    max-width: 150px;
-}
-
-.questionArea .separator {
-    width: 100%;
-    background-color: lightgrey;
-    border-top: 1px solid rgba(0, 0, 0, .1);
-    margin-top: 50px;
-    margin-bottom: 50px;
-}
-
-.questionArea .questionList {
-    min-width: 500px;
-    margin: auto;
-    width: 100%;
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-between;
-}
-
-.questionArea .questionList .card {
-    width: 49%;
-}
-
-.questionArea .form-row-search {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
-
-}
-
-.questionArea .card .pb-4 {
-    padding-bottom: unset !important;
-}
-
-.questionArea .card .pt-2 h5 {
-    padding-bottom: 1.5rem !important
-}
-
-@media (max-width: 600px) {
-    .questionArea .questionList {
-        min-width: unset;
-    }
-    .questionArea .questionList .card {
-        width: 100%;
-        max-width: 500px;
-    }
-}
+@import "css/Rankings.css";
 </style>
 
 <script lang="ts">
-import {Component, Vue} from 'vue-property-decorator';
-import {Answer} from "@/views/Answers.vue";
-import {Question} from "@/views/Questions.vue";
+import {Component, Vue, Prop, Ref} from 'vue-property-decorator';
 import Rating from "@/components/Rating.vue"
+import {MessageState} from "@/views/message-state-enum";
+import MessageStateComponent from "@/components/MessageStateComponent.vue";
+import app from "@/feathers-client";
+import {User} from "@/views/Users.vue";
 
-export class Poulain {
-    idUser: number;
-    name: string;
+class Question {
+    constructor(public questionId: number, public questionContent: string,
+                public answerId: number, public answerContent: string)
+    { }
+
+}
+
+
+export class Godson {
+
+    id: number;
+    email: string;
+    password: string;
+    firstname: string;
+    lastname: string;
+    isGodfather: boolean;
+    isAdmin: boolean;
+    token: string;
+    questions: Question[];
     rank: number;
-    answers: Answer[];
 
-    constructor(idQuestion: number, name: string, rank: number, answers: Answer[]) {
-        this.idUser = idQuestion;
-        this.name = name;
+    constructor(id: number, email: string, password: string, firstname: string, lastname: string,
+                isGodfather: boolean, isAdmin: boolean, token: string, questions: Question[], rank: number) {
         this.rank = rank;
-        this.answers = answers;
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.isGodfather = isGodfather;
+        this.isAdmin = isAdmin;
+        this.token = token;
+        this.questions = questions;
+        this.rank = rank;
     }
 }
 
 @Component({
     components: {
-        Rating
+        Rating,
+        MessageStateComponent,
     }
 })
-export default class Rankins extends Vue {
-    poulains = [
-        new Poulain(1,
-            'Moi',
-            1,
-            [
-                new Answer('Moi', new Question(1, 'Yvan', 'Comment tu t\'appelles ?'), 'Je suis moi, et toi ?'),
-                new Answer('Moi', new Question(2, 'Antoine', 'Veux-tu niquer ta mère ?'), 'Lui veux bien, mais il n\'est pas là.'),
-                new Answer('Moi', new Question(3, 'Esteban', 'Quel âge as-tu ?'), 'Devinnes combien de mois j\'ai.'),
-            ]
-        ),
-        new Poulain(2,
-            'Toi',
-            2,
-            [
-                new Answer('Toi', new Question(1, 'Yvan', 'Comment tu t\'appelles ?'), 'Eh bien je suis toi ! Commennt ça va ?'),
-                new Answer('Toi', new Question(2, 'Antoine', 'Veux-tu niquer ta mère ?'), 'Ne demande pas, ça ...'),
-                new Answer('Toi', new Question(3, 'Esteban', 'Quel âge as-tu ?'), 'Autant que jour que de tuiles sur mon toit.'),
-            ]
-        ),
-        new Poulain(3,
-            'Ça',
-            3,
-            [
-                new Answer('Ça', new Question(1, 'Yvan', 'Comment tu t\'appelles ?'), 'Eh bien, je vais bien, merci de demander.'),
-                new Answer('Ça', new Question(2, 'Antoine', 'Veux-tu niquer ta mère ?'), 'Toi, tu veux ?'),
-                new Answer('Ça', new Question(3, 'Esteban', 'Quel âge as-tu ?'), 'Auntant que toi moins moi.'),
-            ]
-        ),
-    ]
+export default class Rankings extends Vue {
 
-    selectedPoulain: Poulain = this.poulains[0];
+    @Prop() user?: User | null;
+    @Ref('MessageStateComponent') messageStateComponent!: MessageStateComponent;
+
+    standardMessage = 'Vous pouvez noter les filleuls';
+
+    godsons: Godson[] = [];
+
+    currentIndex = 0;
+
+    async mounted() {
+        await this.loadUsers();
+    }
+
+    async loadUsers() {
+        // console.log(await app.service('users').find({ query: { answers: true } } ));
+        this.godsons = await app.service('users').find({ query: { answers: true }, $sort: {
+                id: 1
+            } } );
+        // console.log(this.godsons);
+        for (const godson of this.godsons) {
+            godson.rank = godson.rank ? godson.rank : 1;
+        }
+    }
 
     nextPoulain() {
-        this.selectedPoulain = this.poulains[(this.poulains.indexOf(this.selectedPoulain) + 1) % this.poulains.length];
+        this.currentIndex = (this.currentIndex + 1) % this.godsons.length;
     }
 
     previousPoulain() {
-        this.selectedPoulain = this.poulains[this.mod(this.poulains.indexOf(this.selectedPoulain) - 1, this.poulains.length)];
+        this.currentIndex = this.mod((this.currentIndex - 1), this.godsons.length);
     }
 
     mod(n: number, m: number) {
         return ((n % m) + m) % m;
     }
 
-    changeRating(e: number) {
-        this.selectedPoulain.rank = e;
+    changeRating(rank: number) {
+        this.godsons[this.currentIndex].rank = rank;
+    }
+
+    async sendVote() {
+        if (this.godsons[this.currentIndex]) {
+            const rang = {
+                godsonId: this.godsons[this.currentIndex].id,
+                rank: this.godsons[this.currentIndex].rank,
+            }
+            app.service('rankings').patch(0, rang).then(
+                async (data: any) => {
+                    //Send check email or smth
+                    // console.log(data);
+                    this.messageStateComponent.displaySuccess('Le vote a bien été enregistré.');
+                    await this.loadUsers();
+                }
+            ).catch((error: any) => {
+                console.log(error);
+                this.messageStateComponent.displayError('Le vote n\'a pas pu être pris en compte.');
+            });
+        }
     }
 }
 </script>
