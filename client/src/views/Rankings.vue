@@ -171,12 +171,12 @@ export default class Rankings extends Vue {
                 async (data: any) => {
                     //Send check email or smth
                     // console.log(data);
-                    this.messageStateComponent.displaySuccess('Le vote a bien été enregistré.');
+                    this.messageStateComponent.displaySuccess('Le rang a bien été enregistré.');
                     await this.loadUsers();
                 }
             ).catch((error: any) => {
                 console.log(error);
-                this.messageStateComponent.displayError('Le vote n\'a pas pu être pris en compte.');
+                this.messageStateComponent.displayError("Le rang n'a pas pu être pris en compte.");
             });
         }
     }
