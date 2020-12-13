@@ -2,7 +2,7 @@
     <div class="card-body px-md-5 py-5 messageZone" v-bind:class="[validation.messageState]">
         <transition name="fade" mode="out-in">
             <div class="text-muted mb-0 alertMessage" role="alert" :key="validation.message">
-                {{validation.message}}
+                {{ validation.message }}
             </div>
         </transition>
     </div>
@@ -27,26 +27,32 @@ export default class MessageStateComponent extends Vue {
 
     displaySuccess(successMessage: string) {
         this.validation.message = successMessage;
-        this.validation.messageState = MessageState.hasSucceed;
         setTimeout(() => {
-            this.displayNormalMessage();
-        }, 3000);
+            this.validation.messageState = MessageState.hasSucceed;
+            setTimeout(() => {
+                this.displayNormalMessage();
+            }, 3000);
+        }, 500);
     }
 
     displayError(errorMessage: string) {
         this.validation.message = errorMessage;
-        this.validation.messageState = MessageState.hasError;
-        setTimeout( () => {
-            this.displayNormalMessage();
-        }, 5000 );
+        setTimeout(() => {
+            this.validation.messageState = MessageState.hasError;
+            setTimeout(() => {
+                this.displayNormalMessage();
+            }, 5000);
+        }, 500);
     }
 
     displayWarning(warningMessage: string) {
         this.validation.message = warningMessage;
-        this.validation.messageState = MessageState.hasWarning;
-        setTimeout( () => {
-            this.displayNormalMessage();
-        }, 5000 );
+        setTimeout(() => {
+            this.validation.messageState = MessageState.hasWarning;
+            setTimeout(() => {
+                this.displayNormalMessage();
+            }, 5000);
+        }, 500);
     }
 
     getCurrentState(): MessageState {
