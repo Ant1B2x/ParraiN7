@@ -118,7 +118,7 @@ export default class Rankings extends Vue {
     @Prop() user?: User | null;
     @Ref('MessageStateComponent') messageStateComponent!: MessageStateComponent;
 
-    standardMessage = 'Vous pouvez noter les filleuls';
+    standardMessage = 'Vous pouvez noter les filleuls.';
 
     godsons: Godson[] = [];
     godsonsOriginal: Godson[] = [];

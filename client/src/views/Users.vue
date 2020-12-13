@@ -1,5 +1,5 @@
 <template>
-    <div class="questionArea">
+    <div class="userArea">
         <form>
             <div class="form-group">
                 <label>
@@ -15,8 +15,10 @@
         <!-- Ligne séparatrice -->
         <hr class="separator"/>
 
+        <MessageStateComponent :standard-message="standardMessage" ref="MessageStateComponent"/>
+
         <!-- Afficher users existantes -->
-        <div class="questionList" v-if="selectedUser">
+        <div class="userInformation" v-if="selectedUser">
             <form>
                 <div class="form-group row">
                     <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
@@ -58,6 +60,9 @@
                 </div>
                 <div class="buttons">
                     <div class="">
+                        <button type="button" class="btn btn-danger" v-on:click="removeUser">Supprimer</button>
+                    </div>
+                    <div class="">
                         <button type="button" class="btn btn-warning" :disabled="!userChanged" v-on:click="resetUser">Reset</button>
                     </div>
                     <div class="">
@@ -74,8 +79,10 @@
 </style>
 
 <script lang="ts">
-import {Component, Vue} from 'vue-property-decorator';
+import {Component, Ref, Vue} from 'vue-property-decorator';
 import app from "@/feathers-client";
+import Rating from "@/components/Rating.vue";
+import MessageStateComponent from "@/components/MessageStateComponent.vue";
 
 export class User {
     id: number;
@@ -100,8 +107,16 @@ export class User {
     }
 }
 
-@Component
+@Component({
+    components: {
+        MessageStateComponent,
+    }
+})
 export default class Users extends Vue {
+
+    @Ref('MessageStateComponent') messageStateComponent!: MessageStateComponent;
+    standardMessage = 'Modification d\'un utilisateur.';
+
     users: User[] = []
     usersOriginal: User[] = [];
 
@@ -112,6 +127,8 @@ export default class Users extends Vue {
     async loadUsers() {
         app.service('users').find().then(
             (data: any) => {
+                this.users = [];
+                this.usersOriginal = [];
                 for (const user of data) {
                     this.users.push(new User(user.id, user.email, user.firstname, user.lastname, user.isGodfather, user.isAdmin));
                     this.usersOriginal.push(new User(user.id, user.email, user.firstname, user.lastname, user.isGodfather, user.isAdmin))
@@ -133,6 +150,17 @@ export default class Users extends Vue {
     resetUser() {
         this.selectedUser = JSON.parse(JSON.stringify(this.usersOriginal.find(user => user.id === this.selectedUser?.id)));
         this.hasUserChanged();
+    }
+
+    async removeUser() {
+        try {
+            await app.service('users').remove(this.selectedUser?.id);
+            this.messageStateComponent.displaySuccess('L\'utilmisateur a bien été supprimé.');
+            await this.loadUsers();
+        } catch (error) {
+            console.log(error);
+            this.messageStateComponent.displayError('(R1354553) Une erreur est survenue. Contactez l\'administrateur du site.');
+        }
     }
 
     async sendUserModifications() {
