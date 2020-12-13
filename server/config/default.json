@@ -27,6 +27,6 @@
   },
   "postgres": {
     "client": "pg",
-    "connection": "postgres://postgres:@localhost:5432/parrain7"
+    "connection": "postgres://postgres:postgres@localhost:5432/parrain7"
   }
 }

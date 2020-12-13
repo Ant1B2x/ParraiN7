@@ -99,6 +99,9 @@ export default class LogIn extends Vue {
                 this.loginForm.errorMessage = 'Utilisateur ou mot de passe incorrect.';
                 this.loginForm.hasError = true;
             }
+            else {
+                console.log(err);
+            }
         }
 
     }

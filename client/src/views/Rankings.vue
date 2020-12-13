@@ -21,13 +21,14 @@
 
         <MessageStateComponent :standard-message="standardMessage" ref="MessageStateComponent"/>
 
-        <div class="mt-4">
-            <button type="button" class="btn btn-primary" v-on:click="sendVote">Modifier</button>
-        </div>
-
         <div v-if="godsons[this.currentIndex]">
             <h2 style="color: #152c5b;">Filleul #{{godsons[this.currentIndex].id}}</h2>
             <Rating :grade="godsons[this.currentIndex].rank" :maxStars="5" :hasCounter="true" @updatedStars="changeRating"/>
+        </div>
+
+        <div class="mt-4">
+            <button type="button" class="btn btn-danger" v-on:click="removeVote" :disabled="!this.isRankRemovable">Supprimer</button>
+            <button type="button" class="btn btn-primary" v-on:click="sendVote" :disabled="!this.isRankDifferent">Valider</button>
         </div>
 
         <!-- Afficher questions existantes -->
@@ -45,9 +46,9 @@
                         <p class="text-muted">
                             {{ question.answerContent }}
                         </p>
-                        <p class="text-muted mb-0" v-if="question.placeholder">
+                        <!--p class="text-muted mb-0" v-if="question.placeholder">
                             ({{ question.placeholder }})
-                        </p>
+                        </p-->
                     </div>
                 </div>
             </div>
@@ -87,9 +88,10 @@ export class Godson {
     token: string;
     questions: Question[];
     rank: number;
+    rankId: number;
 
-    constructor(id: number, email: string, password: string, firstname: string, lastname: string,
-                isGodfather: boolean, isAdmin: boolean, token: string, questions: Question[], rank: number) {
+    constructor(id: number, email: string, password: string, firstname: string, lastname: string, isGodfather: boolean,
+                isAdmin: boolean, token: string, questions: Question[], rank: number, rankId: number) {
         this.rank = rank;
         this.id = id;
         this.email = email;
@@ -101,6 +103,7 @@ export class Godson {
         this.token = token;
         this.questions = questions;
         this.rank = rank;
+        this.rankId = rankId;
     }
 }
 
@@ -118,8 +121,11 @@ export default class Rankings extends Vue {
     standardMessage = 'Vous pouvez noter les filleuls';
 
     godsons: Godson[] = [];
+    godsonsOriginal: Godson[] = [];
 
     currentIndex = 0;
+    isRankDifferent = false;
+    isRankRemovable = false;
 
     async mounted() {
         await this.loadUsers();
@@ -131,9 +137,15 @@ export default class Rankings extends Vue {
                 id: 1
             } } );
         // console.log(this.godsons);
+
         for (const godson of this.godsons) {
-            godson.rank = godson.rank ? godson.rank : 1;
+            godson.rank = godson.rank ? godson.rank : 0;
         }
+        this.godsonsOriginal = JSON.parse(JSON.stringify(this.godsons)) as Godson[];
+        console.log(this.godsons);
+        this.isRankDifferent = this.godsons[this.currentIndex].rank > 0
+            && this.godsons[this.currentIndex].rank !== this.godsonsOriginal[this.currentIndex].rank;
+        this.isRankRemovable = !!this.godsons[this.currentIndex].rankId && this.godsons[this.currentIndex].rank > 0;
     }
 
     nextPoulain() {
@@ -150,6 +162,9 @@ export default class Rankings extends Vue {
 
     changeRating(rank: number) {
         this.godsons[this.currentIndex].rank = rank;
+        this.isRankDifferent = this.godsons[this.currentIndex].rank > 0
+            && this.godsons[this.currentIndex].rank !== this.godsonsOriginal[this.currentIndex].rank;
+        this.isRankRemovable = !!this.godsons[this.currentIndex].rankId && this.godsons[this.currentIndex].rank > 0;
     }
 
     async sendVote() {
@@ -169,6 +184,17 @@ export default class Rankings extends Vue {
                 console.log(error);
                 this.messageStateComponent.displayError('Le vote n\'a pas pu être pris en compte.');
             });
+        }
+    }
+
+    async removeVote() {
+        try {
+            await app.service('rankings').remove(this.godsons[this.currentIndex].rankId);
+            this.messageStateComponent.displaySuccess('Le rang a bien été supprimé.');
+            await this.loadUsers();
+        } catch (error) {
+            console.log(error);
+            this.messageStateComponent.displayError('(R1253485) Une erreur est survenue. Contactez l\'administrateur du site.');
         }
     }
 }
