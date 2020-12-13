@@ -39,22 +39,18 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <div class="col-sm-10">
+                    <label class="col-sm-2">Rôles</label>
+                    <div class="col-sm-2">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="isGodfatherCheck" v-model="selectedUser.isGodfather" v-on:change="hasUserChanged">
-                            <label class="form-check-label" for="isGodfatherCheck">
-                                Est parrain
-                            </label>
+                            <label class="form-check-label" for="isGodfatherCheck">Parrain</label>
                         </div>
                     </div>
-                </div>
-                <div class="form-group row">
-                    <div class="col-sm-10">
+                    <div class="col-sm-1"/>
+                    <div class="col-sm-2">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="isAdminCheck" v-model="selectedUser.isAdmin" v-on:change="hasUserChanged">
-                            <label class="form-check-label" for="isAdminCheck">
-                                Est admin
-                            </label>
+                            <label class="form-check-label" for="isAdminCheck">Administrateur</label>
                         </div>
                     </div>
                 </div>
@@ -63,7 +59,7 @@
                         <button type="button" class="btn btn-danger" v-on:click="removeUser">Supprimer</button>
                     </div>
                     <div class="">
-                        <button type="button" class="btn btn-warning" :disabled="!userChanged" v-on:click="resetUser">Reset</button>
+                        <button type="button" class="btn btn-warning" :disabled="!userChanged" v-on:click="resetUser">Réinitialiser</button>
                     </div>
                     <div class="">
                         <button type="button" class="btn btn-primary" :disabled="!userChanged" v-on:click="sendUserModifications">Valider</button>
@@ -81,7 +77,6 @@
 <script lang="ts">
 import {Component, Ref, Vue} from 'vue-property-decorator';
 import app from "@/feathers-client";
-import Rating from "@/components/Rating.vue";
 import MessageStateComponent from "@/components/MessageStateComponent.vue";
 
 export class User {
@@ -125,10 +120,10 @@ export default class Users extends Vue {
     userChanged = false;
 
     async loadUsers() {
-        const users = await app.service('users').find();
+        const data = await app.service('users').find();
         this.users = [];
         this.usersOriginal = [];
-        for (const user of users) {
+        for (const user of data) {
             this.users.push(new User(user.id, user.email, user.firstname, user.lastname, user.isGodfather, user.isAdmin));
             this.usersOriginal.push(new User(user.id, user.email, user.firstname, user.lastname, user.isGodfather, user.isAdmin))
         }
