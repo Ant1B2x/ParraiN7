@@ -7,7 +7,7 @@
                 </div>
                 <div class="col-md-auto order-0 order-md-1">
                     <label>
-                        <select class="custom-select" v-model="currentIndex">
+                        <select class="custom-select" v-model="currentIndex" @change="checkBooleans">
                             <option selected disabled>Choisissez un filleul</option>
                             <option v-for="godson in godsons" :value="godsons.indexOf(godson)" :key="godson.id">Filleul #{{godsons.indexOf(godson)+1}}</option>
                         </select>
@@ -139,17 +139,17 @@ export default class Rankings extends Vue {
         }
         this.godsonsOriginal = JSON.parse(JSON.stringify(this.godsons)) as Godson[];
         console.log(this.godsons);
-        this.isRankDifferent = this.godsons[this.currentIndex].rank > 0
-            && this.godsons[this.currentIndex].rank !== this.godsonsOriginal[this.currentIndex].rank;
-        this.isRankRemovable = !!this.godsons[this.currentIndex].rankId && this.godsons[this.currentIndex].rank > 0;
+        this.checkBooleans();
     }
 
     nextGodson() {
         this.currentIndex = (this.currentIndex + 1) % this.godsons.length;
+        this.checkBooleans();
     }
 
     previousGodson() {
         this.currentIndex = this.mod((this.currentIndex - 1), this.godsons.length);
+        this.checkBooleans();
     }
 
     mod(n: number, m: number) {
@@ -158,9 +158,7 @@ export default class Rankings extends Vue {
 
     changeRanking(rank: number) {
         this.godsons[this.currentIndex].rank = rank;
-        this.isRankDifferent = this.godsons[this.currentIndex].rank > 0
-            && this.godsons[this.currentIndex].rank !== this.godsonsOriginal[this.currentIndex].rank;
-        this.isRankRemovable = !!this.godsons[this.currentIndex].rankId && this.godsons[this.currentIndex].rank > 0;
+        this.checkBooleans();
     }
 
     async sendVote() {
@@ -192,6 +190,13 @@ export default class Rankings extends Vue {
             console.log(error);
             this.messageStateComponent.displayError('(R1253485) Une erreur est survenue. Contactez l\'administrateur du site.');
         }
+    }
+
+    checkBooleans() {
+        // Forced to do dirty things, because vue.js needs parameters and not function return.
+        this.isRankDifferent = this.godsons[this.currentIndex].rank > 0
+            && this.godsons[this.currentIndex].rank !== this.godsonsOriginal[this.currentIndex].rank;
+        this.isRankRemovable = !!this.godsons[this.currentIndex].rankId && this.godsons[this.currentIndex].rank > 0;
     }
 }
 </script>
