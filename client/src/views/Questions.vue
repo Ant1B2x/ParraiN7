@@ -132,8 +132,8 @@ export default class Questions extends Vue {
     @Prop() user?: User | null;
     @Ref('MessageStateComponent') messageStateComponent!: MessageStateComponent;
 
-    mounted() {
-        this.loadQuestions();
+    async mounted() {
+        await this.loadQuestions();
     }
 
     async loadQuestions() {
