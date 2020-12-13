@@ -27,20 +27,15 @@ export default class MessageStateComponent extends Vue {
 
     displaySuccess(successMessage: string) {
         this.validation.message = successMessage;
+        this.validation.messageState = MessageState.hasSucceed;
         setTimeout(() => {
-            this.validation.messageState = MessageState.hasSucceed;
-            setTimeout(() => {
-                this.validation.messageState = MessageState.none;
-                this.validation.message = this.standardMessage;
-            }, 3000);
-        }, 500);
+            this.displayNormalMessage();
+        }, 3000);
     }
 
     displayError(errorMessage: string) {
         this.validation.message = errorMessage;
-        setTimeout(() => {
-            this.validation.messageState = MessageState.hasError;
-        }, 500);
+        this.validation.messageState = MessageState.hasError;
         setTimeout( () => {
             this.displayNormalMessage();
         }, 5000 );
@@ -48,9 +43,7 @@ export default class MessageStateComponent extends Vue {
 
     displayWarning(warningMessage: string) {
         this.validation.message = warningMessage;
-        setTimeout(() => {
-            this.validation.messageState = MessageState.hasWarning;
-        }, 500);
+        this.validation.messageState = MessageState.hasWarning;
         setTimeout( () => {
             this.displayNormalMessage();
         }, 5000 );
