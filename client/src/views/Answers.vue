@@ -76,8 +76,8 @@ export default class Answers extends Vue {
 
     questionsWithAnswers: QuestionWithAnswer[] = [];
 
-    mounted() {
-        this.getQuestions();
+    async mounted() {
+        await this.getQuestions();
     }
 
     async getQuestions() {
