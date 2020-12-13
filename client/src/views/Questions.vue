@@ -142,8 +142,7 @@ export default class Questions extends Vue {
                 $sort: {
                     id: 1
                 }
-            },
-            user: this.user
+            }
         });
         this.filteredList = JSON.parse(JSON.stringify(this.questions)) as Question[];
     }

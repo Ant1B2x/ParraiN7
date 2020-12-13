@@ -39,8 +39,9 @@ export default class App extends Vue  {
     private async beforeUpdate() {
         try {
             const auth = await app.get('authentication');
-            this.user = auth.user;
-        } catch (err) {
+            this.user = auth ? auth.user : null;
+        } catch (error) {
+            console.log(error);
             this.user = null;
         }
     }
@@ -49,8 +50,10 @@ export default class App extends Vue  {
         try {
             await app.logout();
             this.$forceUpdate();
-            await this.$router.replace('/');
-        } catch (err) {
+            if(this.$router.currentRoute.path !== '/')
+                await this.$router.replace('/');
+        } catch (error) {
+            console.log(error);
             // pass
         }
     }
