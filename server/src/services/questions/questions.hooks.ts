@@ -15,9 +15,9 @@ export default {
         all: [checkExpirationDate()],
         find: [],
         get: [],
-        create: [checkContentNotNull(), authenticate('jwt'), checkGodfather(), setAuthor()],
-        update: [checkContentNotNull(), authenticate('jwt'), checkGodfather(), checkModifyingQuestion(), checkExistingAuthor(), keepQuestionForeignIds()],
-        patch: [checkContentNotNull(), authenticate('jwt'), checkGodfather(), checkModifyingQuestion(), checkExistingAuthor(), keepQuestionForeignIds()],
+        create: [authenticate('jwt'), checkContentNotNull(), checkGodfather(), setAuthor()],
+        update: [authenticate('jwt'), checkContentNotNull(), checkGodfather(), checkModifyingQuestion(), checkExistingAuthor(), keepQuestionForeignIds()],
+        patch: [authenticate('jwt'), checkContentNotNull(), checkGodfather(), checkModifyingQuestion(), checkExistingAuthor(), keepQuestionForeignIds()],
         remove: [authenticate('jwt'), checkGodfather(), checkModifyingQuestion()]
     },
 

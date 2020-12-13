@@ -3,18 +3,18 @@
         <form>
             <div class="row justify-content-center">
                 <div class="col col-md-1 align-self-center mb-1 order-1 order-md-0">
-                    <font-awesome-icon icon="arrow-left" :style="{ color: '#171347' }" size="2x" v-on:click="previousPoulain()"/>
+                    <font-awesome-icon icon="arrow-left" :style="{ color: '#171347' }" size="2x" v-on:click="previousGodson()"/>
                 </div>
                 <div class="col-md-auto order-0 order-md-1">
                     <label>
                         <select class="custom-select" v-model="currentIndex">
-                            <option selected disabled>Choisissez un poulain</option>
-                            <option v-for="godson in godsons" :value="godsons.indexOf(godson)" :key="godson.id">Filleul #{{godson.id}}</option>
+                            <option selected disabled>Choisissez un filleul</option>
+                            <option v-for="godson in godsons" :value="godsons.indexOf(godson)" :key="godson.id">Filleul #{{godsons.indexOf(godson)+1}}</option>
                         </select>
                     </label>
                 </div>
                 <div class="col col-md-1 align-self-center mb-1 order-2 order-md-2">
-                    <font-awesome-icon icon="arrow-right" :style="{ color: '#171347' }" size="2x" v-on:click="nextPoulain()"/>
+                    <font-awesome-icon icon="arrow-right" :style="{ color: '#171347' }" size="2x" v-on:click="nextGodson()"/>
                 </div>
             </div>
         </form>
@@ -22,8 +22,8 @@
         <MessageStateComponent :standard-message="standardMessage" ref="MessageStateComponent"/>
 
         <div v-if="godsons[this.currentIndex]">
-            <h2 style="color: #152c5b;">Filleul #{{godsons[this.currentIndex].id}}</h2>
-            <Rating :grade="godsons[this.currentIndex].rank" :maxStars="5" :hasCounter="true" @updatedStars="changeRating"/>
+            <h2 style="color: #152c5b;">Filleul #{{this.currentIndex+1}}</h2>
+            <Rating :grade="godsons[this.currentIndex].rank" :maxStars="5" :hasCounter="true" @updatedStars="changeRanking"/>
         </div>
 
         <div class="mt-4">
@@ -46,9 +46,6 @@
                         <p class="text-muted">
                             {{ question.answerContent }}
                         </p>
-                        <!--p class="text-muted mb-0" v-if="question.placeholder">
-                            ({{ question.placeholder }})
-                        </p-->
                     </div>
                 </div>
             </div>
@@ -63,7 +60,6 @@
 <script lang="ts">
 import {Component, Vue, Prop, Ref} from 'vue-property-decorator';
 import Rating from "@/components/Rating.vue"
-import {MessageState} from "@/views/message-state-enum";
 import MessageStateComponent from "@/components/MessageStateComponent.vue";
 import app from "@/feathers-client";
 import {User} from "@/views/Users.vue";
@@ -148,11 +144,11 @@ export default class Rankings extends Vue {
         this.isRankRemovable = !!this.godsons[this.currentIndex].rankId && this.godsons[this.currentIndex].rank > 0;
     }
 
-    nextPoulain() {
+    nextGodson() {
         this.currentIndex = (this.currentIndex + 1) % this.godsons.length;
     }
 
-    previousPoulain() {
+    previousGodson() {
         this.currentIndex = this.mod((this.currentIndex - 1), this.godsons.length);
     }
 
@@ -160,7 +156,7 @@ export default class Rankings extends Vue {
         return ((n % m) + m) % m;
     }
 
-    changeRating(rank: number) {
+    changeRanking(rank: number) {
         this.godsons[this.currentIndex].rank = rank;
         this.isRankDifferent = this.godsons[this.currentIndex].rank > 0
             && this.godsons[this.currentIndex].rank !== this.godsonsOriginal[this.currentIndex].rank;

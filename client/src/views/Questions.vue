@@ -93,7 +93,6 @@
 import {Component, Prop, Ref, Vue} from 'vue-property-decorator';
 import app from '@/feathers-client';
 import {User} from "@/views/Users.vue";
-import {MessageState} from "@/views/message-state-enum";
 import MessageStateComponent from "@/components/MessageStateComponent.vue";
 
 export class Question {
@@ -143,13 +142,11 @@ export default class Questions extends Vue {
                 $sort: {
                     id: 1
                 }
-            }
+            },
+            user: this.user
         });
-        // console.log(this.questions);
         this.filteredList = JSON.parse(JSON.stringify(this.questions)) as Question[];
-        // console.log('ok',this.questions);
     }
-
 
     searchByQuestion = '';
     searchByAuthor = '';
@@ -183,15 +180,15 @@ export default class Questions extends Vue {
             const question = {
                 content: this.questionToAdd,
                 placeholder: this.addPlaceholder ? this.placeholder : null
-            }
+            };
             app.service('questions').create(question).then(
-                async (data: any) => {
+                async () => {
                     this.messageStateComponent.displaySuccess('La question a bien été ajoutée !');
                     await this.loadQuestions();
                 }
             ).catch((error: any) => {
                 console.log(error);
-                this.messageStateComponent.displayError('La question n\'a pas pu être ajoutée.');
+                this.messageStateComponent.displayError("La question n'a pas pu être ajoutée.");
             });
         }
     }
@@ -215,7 +212,7 @@ export default class Questions extends Vue {
                 await this.loadQuestions();
             } catch (error) {
                 console.log(error);
-                this.messageStateComponent.displayError('La question n\'a pas pu être modifiée.');
+                this.messageStateComponent.displayError("La question n'a pas pu être modifiée.");
             }
         } else {
             await this.removeQuestion(question);
@@ -231,7 +228,7 @@ export default class Questions extends Vue {
             await this.loadQuestions();
         } catch (error) {
             console.log(error);
-            this.messageStateComponent.displayError('La question n\'a pas pu être supprimée.');
+            this.messageStateComponent.displayError("La question n'a pas pu être supprimée.");
         }
     }
 
