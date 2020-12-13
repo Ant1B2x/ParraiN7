@@ -120,26 +120,23 @@ export default class Users extends Vue {
     users: User[] = []
     usersOriginal: User[] = [];
 
-    selectedUser: User | null = null;
+    selectedUser: User | null | undefined = null;
 
     userChanged = false;
 
     async loadUsers() {
-        app.service('users').find().then(
-            (data: any) => {
-                this.users = [];
-                this.usersOriginal = [];
-                for (const user of data) {
-                    this.users.push(new User(user.id, user.email, user.firstname, user.lastname, user.isGodfather, user.isAdmin));
-                    this.usersOriginal.push(new User(user.id, user.email, user.firstname, user.lastname, user.isGodfather, user.isAdmin))
-                }
-                this.selectedUser = this.users[0];
-            }
-        );
+        const users = await app.service('users').find();
+        this.users = [];
+        this.usersOriginal = [];
+        for (const user of users) {
+            this.users.push(new User(user.id, user.email, user.firstname, user.lastname, user.isGodfather, user.isAdmin));
+            this.usersOriginal.push(new User(user.id, user.email, user.firstname, user.lastname, user.isGodfather, user.isAdmin))
+        }
     }
 
-    mounted() {
-        this.loadUsers();
+    async mounted() {
+        await this.loadUsers();
+        this.selectedUser = this.users[0];
     }
 
     hasUserChanged() {
@@ -148,7 +145,8 @@ export default class Users extends Vue {
     }
 
     resetUser() {
-        this.selectedUser = JSON.parse(JSON.stringify(this.usersOriginal.find(user => user.id === this.selectedUser?.id)));
+        const resetedUser = JSON.parse(JSON.stringify(this.usersOriginal.find(user => user.id === this.selectedUser?.id)));
+        this.users[this.users.indexOf(this.selectedUser!)] = this.selectedUser = resetedUser ? resetedUser : null;
         this.hasUserChanged();
     }
 
@@ -164,12 +162,13 @@ export default class Users extends Vue {
     }
 
     async sendUserModifications() {
-        await app.service('users').patch(this.selectedUser?.id, this.selectedUser).then(
-            (data: any) => {
-                this.usersOriginal[this.usersOriginal.findIndex(user => user.id === this.selectedUser?.id)] = this.selectedUser!;
-                this.hasUserChanged();
-            }
-        );
+        try {
+            await app.service('users').patch(this.selectedUser?.id, this.selectedUser);
+            await this.loadUsers();
+            this.hasUserChanged();
+        } catch (error) {
+            console.log(error);
+        }
     }
 }
 </script>
