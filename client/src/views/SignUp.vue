@@ -117,7 +117,7 @@ import app from "@/feathers-client";
 export default class LogIn extends Vue {
 
     private nameValidity =
-        RegExp('^[a-zA-Z\u00C0-\u00FF]+$');
+        RegExp("^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$");
 
     private signUpValidation = {
         passwordConfirm: '',
@@ -139,7 +139,6 @@ export default class LogIn extends Vue {
         this.signUpValidation.hasError = false;
         this.signUpValidation.errorMessage = 'Entrez vos informations utilisateurs';
         await app.logout();
-
 
         const signUpFormBis = JSON.parse(JSON.stringify(this.signUpForm));
         signUpFormBis.email = signUpFormBis.email + '@etu.toulouse-inp.fr';
