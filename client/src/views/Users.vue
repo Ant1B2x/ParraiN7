@@ -4,7 +4,7 @@
             <div class="form-group">
                 <label>
                     <select class="custom-select" v-model="selectedUser" :disabled="this.selectedUser && userChanged"
-                    :title="userChanged ? 'Vous devez valider les changements' : ''">
+                    :title="userChanged ? 'Vous devez valider les changements' : ''" @change="checkValidity">
                         <option selected disabled>Sélectionnez un utilisateur</option>
                         <option v-for="user in users" :value="user" :key="user.idUser">{{user.firstname}} {{user.lastname}}</option>
                     </select>
@@ -55,7 +55,7 @@
                     </div>
                 </div>
                 <div class="buttons">
-                    <button type="button" class="btn btn-danger" v-on:click="removeUser">Supprimer</button>
+                    <button type="button" class="btn btn-danger" v-on:click="removeUser" v-if="!isHimself">Supprimer</button>
                     <button type="button" class="btn btn-warning" :disabled="!userChanged" v-on:click="resetUser">Réinitialiser</button>
                     <button type="button" class="btn btn-primary" :disabled="!userChanged" v-on:click="sendUserModifications">Valider</button>
                 </div>
@@ -69,7 +69,7 @@
 </style>
 
 <script lang="ts">
-import {Component, Ref, Vue} from 'vue-property-decorator';
+import {Component, Prop, Ref, Vue} from 'vue-property-decorator';
 import app from "@/feathers-client";
 import MessageStateComponent from "@/components/MessageStateComponent.vue";
 
@@ -103,6 +103,7 @@ export class User {
 })
 export default class Users extends Vue {
 
+    @Prop() user?: User | null;
     @Ref('MessageStateComponent') messageStateComponent!: MessageStateComponent;
     standardMessage = 'Modification d\'un utilisateur.';
 
@@ -112,6 +113,7 @@ export default class Users extends Vue {
     selectedUser: User | null | undefined = null;
 
     userChanged = false;
+    isHimself = false;
 
     async loadUsers() {
         const data = await app.service('users').find();
@@ -126,23 +128,27 @@ export default class Users extends Vue {
     async mounted() {
         await this.loadUsers();
         this.selectedUser = this.users[0];
+        this.checkValidity();
     }
 
     hasUserChanged() {
-        const originalUser: User = this.usersOriginal.find(user => user.id === this.selectedUser!.id)!;
-        this.userChanged = !originalUser.equals(this.selectedUser!);
+        const originalUser: User | undefined = this.usersOriginal.find(user => user.id === this.selectedUser?.id);
+        if (originalUser && this.selectedUser)
+            this.userChanged = !originalUser.equals(this.selectedUser);
     }
 
     resetUser() {
-        const resetedUser = JSON.parse(JSON.stringify(this.usersOriginal.find(user => user.id === this.selectedUser?.id)));
-        this.users[this.users.indexOf(this.selectedUser!)] = this.selectedUser = resetedUser ? resetedUser : null;
-        this.hasUserChanged();
+        if (this.selectedUser) {
+            const userToReset = JSON.parse(JSON.stringify(this.usersOriginal.find(user => user.id === this.selectedUser?.id)));
+            this.users[this.users.indexOf(this.selectedUser)] = this.selectedUser = userToReset ? userToReset : null;
+            this.hasUserChanged();
+        }
     }
 
     async removeUser() {
         try {
             await app.service('users').remove(this.selectedUser?.id);
-            this.messageStateComponent.displaySuccess('L\'utilmisateur a bien été supprimé.');
+            this.messageStateComponent.displaySuccess('L\'utilisateur a bien été supprimé.');
             await this.loadUsers();
         } catch (error) {
             console.log(error);
@@ -158,6 +164,11 @@ export default class Users extends Vue {
         } catch (error) {
             console.log(error);
         }
+    }
+
+    checkValidity() {
+        console.log('ok')
+        this.isHimself = this.user?.id === this.selectedUser?.id;
     }
 }
 </script>
