@@ -25,8 +25,10 @@ const routes: Array<RouteConfig> = [
         component: () => import(/* webpackChunkName: "about" */ '../views/Questions.vue'),
         async beforeEnter(to, from, next) {
             const auth = await app.reAuthenticate();
-            if (!(auth.user as User).isGodfather)
+            if (!(auth.user as User).isGodfather && !(auth.user as User).isAdmin)
                 next('/forbidden');
+            else
+                next()
         },
     },
     {
@@ -35,8 +37,10 @@ const routes: Array<RouteConfig> = [
         component: () => import(/* webpackChunkName: "about" */ '../views/Answers.vue'),
         async beforeEnter(to, from, next) {
             const auth = await app.reAuthenticate();
-            if ((auth.user as User).isGodfather)
+            if ((auth.user as User).isGodfather && !(auth.user as User).isAdmin)
                 next('/forbidden');
+            else
+                next()
         },
     },
     {
@@ -55,8 +59,10 @@ const routes: Array<RouteConfig> = [
         component: () => import(/* webpackChunkName: "about" */ '../views/Rankings.vue'),
         async beforeEnter(to, from, next) {
             const auth = await app.reAuthenticate();
-            if (!(auth.user as User).isGodfather)
+            if (!(auth.user as User).isGodfather && !(auth.user as User).isAdmin)
                 next('/forbidden');
+            else
+                next()
         },
     },
     {
@@ -67,6 +73,8 @@ const routes: Array<RouteConfig> = [
             const auth = await app.reAuthenticate();
             if (!(auth.user as User).isAdmin)
                 next('/forbidden');
+            else
+                next()
         },
     },
     {
