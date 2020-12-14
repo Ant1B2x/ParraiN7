@@ -180,15 +180,14 @@ export default class Questions extends Vue {
                 content: this.questionToAdd,
                 placeholder: this.addPlaceholder ? this.placeholder : null
             };
-            app.service('questions').create(question).then(
-                async () => {
-                    this.messageStateComponent.displaySuccess('La question a bien été ajoutée !');
-                    await this.loadQuestions();
-                }
-            ).catch((error: any) => {
+            try {
+                await app.service('questions').create(question);
+                this.messageStateComponent.displaySuccess('La question a bien été ajoutée !');
+                await this.loadQuestions();
+            } catch(error) {
                 console.log(error);
                 this.messageStateComponent.displayError("La question n'a pas pu être ajoutée.");
-            });
+            }
         }
     }
 

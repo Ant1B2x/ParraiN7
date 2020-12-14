@@ -82,17 +82,14 @@ export default class Answers extends Vue {
 
     async getQuestions() {
         try {
-            await app.service('questions').find( { query: { answers: true, godsonId: this.user?.id } } ).then(
-                (data: any) => {
-                    // console.log(data);
-                    this.questionsWithAnswers = [];
-                    for (const answer of data) {
-                        this.questionsWithAnswers.push(new QuestionWithAnswer(answer.id, answer.content,
-                            answer.authorId, answer.placeholder, answer.answerId, answer.answerContent))
-                    }
-                    console.log(this.questionsWithAnswers);
-                }
-            );
+            const answers = await app.service('questions').find( { query: { answers: true, godsonId: this.user?.id } } );
+            // console.log(data);
+            this.questionsWithAnswers = [];
+            for (const answer of answers) {
+                this.questionsWithAnswers.push(new QuestionWithAnswer(answer.id, answer.content,
+                    answer.authorId, answer.placeholder, answer.answerId, answer.answerContent))
+            }
+            console.log(this.questionsWithAnswers);
         } catch (e) {
             console.log(e);
         }

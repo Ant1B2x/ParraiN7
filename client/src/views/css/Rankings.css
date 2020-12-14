@@ -58,6 +58,10 @@
   justify-content: space-around;
 }
 
+.buttons {
+  margin-bottom: 1.5rem;
+}
+
 @media (max-width: 600px) {
   .questionArea .questionList {
     min-width: unset;

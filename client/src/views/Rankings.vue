@@ -26,7 +26,7 @@
             <Rating :grade="godsons[this.currentIndex].rank" :maxStars="5" :hasCounter="true" @updatedStars="changeRanking"/>
         </div>
 
-        <div class="mt-4">
+        <div class="buttons">
             <button type="button" class="btn btn-danger" v-on:click="removeVote" :disabled="!this.isRankRemovable">Supprimer</button>
             <button type="button" class="btn btn-primary" v-on:click="sendVote" :disabled="!this.isRankDifferent">Valider</button>
         </div>
@@ -167,17 +167,16 @@ export default class Rankings extends Vue {
                 godsonId: this.godsons[this.currentIndex].id,
                 rank: this.godsons[this.currentIndex].rank,
             }
-            app.service('rankings').patch(0, rang).then(
-                async (data: any) => {
-                    //Send check email or smth
-                    // console.log(data);
-                    this.messageStateComponent.displaySuccess('Le rang a bien été enregistré.');
-                    await this.loadUsers();
-                }
-            ).catch((error: any) => {
+            try {
+                await app.service('rankings').patch(0, rang);
+                //Send check email or smth
+                // console.log(data);
+                this.messageStateComponent.displaySuccess('Le rang a bien été enregistré.');
+                await this.loadUsers();
+            } catch(error) {
                 console.log(error);
                 this.messageStateComponent.displayError("Le rang n'a pas pu être pris en compte.");
-            });
+            }
         }
     }
 

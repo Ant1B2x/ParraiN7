@@ -142,14 +142,12 @@ export default class LogIn extends Vue {
 
         const signUpFormBis = JSON.parse(JSON.stringify(this.signUpForm));
         signUpFormBis.email = signUpFormBis.email + '@etu.toulouse-inp.fr';
-
-        await app.service('users').create(signUpFormBis).then(
-            (data: any) => {
-                //Send check email or smth
-                // console.log(data);
-                this.$router.push('/login');
-            }
-        ).catch( (error: any) => {
+        try {
+            await app.service('users').create(signUpFormBis)
+            //Send check email or smth
+            // console.log(data);
+            await this.$router.push('/login');
+        } catch (error) {
             console.log(error);
             if (error.code === 400) {
                 this.signUpValidation.errorMessage = 'Le nom et/ou le prénom ne respecte(nt) pas le format attendu !';
@@ -163,7 +161,7 @@ export default class LogIn extends Vue {
                 this.signUpValidation.errorMessage = 'Un utilisateur existe déjà avec cet email !';
                 this.signUpValidation.hasError = true;
             }
-        });
+        }
     }
 
     checkError() {
