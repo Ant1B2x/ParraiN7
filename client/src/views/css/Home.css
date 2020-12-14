@@ -2,10 +2,6 @@
   max-height: 1.2em;
 }
 
-#signup-question {
-  padding-bottom: 1.3rem;
-}
-
 #first-year-column {
   border-right: 1px solid #e2e8f0;
 }
@@ -15,6 +11,7 @@
   #first-year-column {
     border-right: none;
   }
+
   #second-year-column {
     padding-top: 3rem;
   }
