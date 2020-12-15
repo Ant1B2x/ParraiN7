@@ -32,7 +32,8 @@ export default class App extends Vue  {
             const auth = await app.reAuthenticate();
             this.user = auth.user;
             console.log(this.user);
-        } catch (err) {
+        } catch (error) {
+            console.log(error);
             // pass
         }
     }

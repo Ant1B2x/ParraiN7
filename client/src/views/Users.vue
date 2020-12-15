@@ -151,7 +151,11 @@ export default class Users extends Vue {
             this.messageStateComponent.displaySuccess("L'utilisateur a bien été supprimé.");
             await this.loadUsers();
         } catch (error) {
-            this.messageStateComponent.displayError("Une erreur est survenue. Contactez l'administrateur du site.");
+            if (error.code === 408) {
+                this.messageStateComponent.displayError('La date d\'expiration a été atteinte, impossible de réaliser cette action.');
+            } else {
+                this.messageStateComponent.displayError("Une erreur est survenue. Contactez l'administrateur du site.");
+            }
         }
     }
 
@@ -161,7 +165,12 @@ export default class Users extends Vue {
             await this.loadUsers();
             this.hasUserChanged();
         } catch (error) {
-            // pass
+            console.log(error);
+            if (error.code === 408) {
+                this.messageStateComponent.displayError('La date d\'expiration a été atteinte, impossible de réaliser cette action.');
+            } else {
+                this.messageStateComponent.displayError("Une erreur est survenue. Contactez l'administrateur du site.");
+            }
         }
     }
 

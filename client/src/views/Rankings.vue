@@ -175,7 +175,11 @@ export default class Rankings extends Vue {
                 await this.loadUsers();
             } catch(error) {
                 console.log(error);
-                this.messageStateComponent.displayError("Le rang n'a pas pu être pris en compte.");
+                if (error.code === 408) {
+                    this.messageStateComponent.displayError('La date d\'expiration a été atteinte, impossible de réaliser cette action.');
+                } else {
+                    this.messageStateComponent.displayError("Le rang n'a pas pu être pris en compte.");
+                }
             }
         }
     }
@@ -187,7 +191,11 @@ export default class Rankings extends Vue {
             await this.loadUsers();
         } catch (error) {
             console.log(error);
-            this.messageStateComponent.displayError('(R1253485) Une erreur est survenue. Contactez l\'administrateur du site.');
+            if (error.code === 408) {
+                this.messageStateComponent.displayError('La date d\'expiration a été atteinte, impossible de réaliser cette action.');
+            } else {
+                this.messageStateComponent.displayError('(R1253485) Une erreur est survenue. Contactez l\'administrateur du site.');
+            }
         }
     }
 
