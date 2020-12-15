@@ -114,18 +114,14 @@ export default class Users extends Vue {
 
     private userChanged = false;
 
-    private cloneUsersOriginal() {
-        this.usersOriginal = [];
-        for (const user of this.users)
-            this.usersOriginal.push(new User(user.id, user.email, user.firstname, user.lastname, user.isGodfather, user.isAdmin));
-    }
-
     async loadUsers() {
         const data = await app.service('users').find({query: {$sort: {id: 1}}}); // sort users by id
         this.users = [];
-        for (const user of data)
+        this.usersOriginal = [];
+        for (const user of data) {
             this.users.push(new User(user.id, user.email, user.firstname, user.lastname, user.isGodfather, user.isAdmin));
-        this.cloneUsersOriginal();
+            this.usersOriginal.push(new User(user.id, user.email, user.firstname, user.lastname, user.isGodfather, user.isAdmin));
+        }
     }
 
     async mounted() {
