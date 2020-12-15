@@ -95,13 +95,11 @@ export default class LogIn extends Vue {
             this.loginForm.password = '';
             await this.$router.replace('/');
         } catch (err) {
-            if (err.code === 401) {
+            if (err.code === 401)
                 this.loginForm.errorMessage = 'Utilisateur ou mot de passe incorrect.';
-                this.loginForm.hasError = true;
-            }
-            else {
-                console.log(err);
-            }
+            else
+                this.loginForm.errorMessage = 'Impossible de se connecter.';
+            this.loginForm.hasError = true;
         }
 
     }

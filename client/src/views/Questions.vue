@@ -181,12 +181,11 @@ export default class Questions extends Vue {
             };
             try {
                 await app.service('questions').create(question);
-                this.messageStateComponent.displaySuccess('La question a bien été ajoutée !');
+                this.messageStateComponent.displaySuccess('La question a bien été ajoutée.');
                 await this.loadQuestions();
             } catch(error) {
-                console.log(error);
                 if (error.code === 408) {
-                    this.messageStateComponent.displayError('La date d\'expiration a été atteinte, impossible de réaliser cette action.');
+                    this.messageStateComponent.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
                 } else {
                     this.messageStateComponent.displayError("La question n'a pas pu être ajoutée.");
                 }
@@ -207,14 +206,13 @@ export default class Questions extends Vue {
                     placeholder: question.placeholder
                 }
                 await app.service('questions').patch(question.id, questionToModify);
-                this.messageStateComponent.displaySuccess('La question a bien été modifiée !');
+                this.messageStateComponent.displaySuccess('La question a bien été modifiée.');
                 this.inEdition = false;
                 this.idEditedQuestion = undefined;
                 await this.loadQuestions();
             } catch (error) {
-                console.log(error);
                 if (error.code === 408) {
-                    this.messageStateComponent.displayError('La date d\'expiration a été atteinte, impossible de réaliser cette action.');
+                    this.messageStateComponent.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
                 } else {
                     this.messageStateComponent.displayError("La question n'a pas pu être modifiée.");
                 }
@@ -227,14 +225,13 @@ export default class Questions extends Vue {
     async removeQuestion(question: Question) {
         try {
             await app.service('questions').remove(question.id);
-            this.messageStateComponent.displaySuccess('La question a bien été supprimée !');
+            this.messageStateComponent.displaySuccess('La question a bien été supprimée.');
             this.inEdition = false;
             this.idEditedQuestion = undefined;
             await this.loadQuestions();
         } catch (error) {
-            console.log(error);
             if (error.code === 408) {
-                this.messageStateComponent.displayError('La date d\'expiration a été atteinte, impossible de réaliser cette action.');
+                this.messageStateComponent.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
             } else {
                 this.messageStateComponent.displayError("La question n'a pas pu être supprimée.");
             }
@@ -248,7 +245,6 @@ export default class Questions extends Vue {
     editQuestion(idQuestion: number) {
         this.inEdition = true;
         this.idEditedQuestion = idQuestion;
-        console.log(this.inEdition, this.idEditedQuestion);
     }
 
     questionIsBeingEdited(idQuestion: number) {

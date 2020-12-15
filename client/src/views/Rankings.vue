@@ -65,10 +65,9 @@ import app from "@/feathers-client";
 import {User} from "@/views/Users.vue";
 
 class Question {
-    constructor(public questionId: number, public questionContent: string,
-                public answerId: number, public answerContent: string)
-    { }
+    constructor(public questionId: number, public questionContent: string, public answerId: number, public answerContent: string) {
 
+    }
 }
 
 
@@ -114,7 +113,7 @@ export default class Rankings extends Vue {
     @Prop() user?: User | null;
     @Ref('MessageStateComponent') messageStateComponent!: MessageStateComponent;
 
-    standardMessage = 'Vous pouvez noter les filleuls.';
+    standardMessage = 'Vous pouvez noter les filleuls';
 
     godsons: Godson[] = [];
     godsonsOriginal: Godson[] = [];
@@ -128,17 +127,14 @@ export default class Rankings extends Vue {
     }
 
     async loadUsers() {
-        // console.log(await app.service('users').find({ query: { answers: true } } ));
         this.godsons = await app.service('users').find({ query: { answers: true }, $sort: {
                 id: 1
             } } );
-        // console.log(this.godsons);
 
         for (const godson of this.godsons) {
             godson.rank = godson.rank ? godson.rank : 0;
         }
         this.godsonsOriginal = JSON.parse(JSON.stringify(this.godsons)) as Godson[];
-        console.log(this.godsons);
         this.checkBooleans();
     }
 
@@ -163,22 +159,21 @@ export default class Rankings extends Vue {
 
     async sendVote() {
         if (this.godsons[this.currentIndex]) {
-            const rang = {
+            const vote = {
                 godsonId: this.godsons[this.currentIndex].id,
                 rank: this.godsons[this.currentIndex].rank,
             }
             try {
-                await app.service('rankings').patch(0, rang);
+                await app.service('rankings').patch(0, vote);
                 //Send check email or smth
                 // console.log(data);
-                this.messageStateComponent.displaySuccess('Le rang a bien été enregistré.');
+                this.messageStateComponent.displaySuccess('Le vote a bien été pris en compte.');
                 await this.loadUsers();
             } catch(error) {
-                console.log(error);
                 if (error.code === 408) {
-                    this.messageStateComponent.displayError('La date d\'expiration a été atteinte, impossible de réaliser cette action.');
+                    this.messageStateComponent.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
                 } else {
-                    this.messageStateComponent.displayError("Le rang n'a pas pu être pris en compte.");
+                    this.messageStateComponent.displayError("Le vote n'a pas pu être pris en compte.");
                 }
             }
         }
@@ -187,14 +182,13 @@ export default class Rankings extends Vue {
     async removeVote() {
         try {
             await app.service('rankings').remove(this.godsons[this.currentIndex].rankId);
-            this.messageStateComponent.displaySuccess('Le rang a bien été supprimé.');
+            this.messageStateComponent.displaySuccess('Le vote a bien été supprimé.');
             await this.loadUsers();
         } catch (error) {
-            console.log(error);
             if (error.code === 408) {
-                this.messageStateComponent.displayError('La date d\'expiration a été atteinte, impossible de réaliser cette action.');
+                this.messageStateComponent.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
             } else {
-                this.messageStateComponent.displayError('(R1253485) Une erreur est survenue. Contactez l\'administrateur du site.');
+                this.messageStateComponent.displayError("Le vote n'a pas pu être supprimé.");
             }
         }
     }
