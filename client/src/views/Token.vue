@@ -1,5 +1,6 @@
 <template>
 <div class="container d-flex flex-column">
+    <MessageStateTest ref="NotificationTest"></MessageStateTest>
     <div class="row align-items-center justify-content-center">
         <div class="col-md-6 py-6 py-md-0">
             <MessageStateComponent :standard-message="standardMessage" ref="MessageStateComponent"/>
@@ -45,9 +46,11 @@ import {Component, Prop, Ref, Vue} from 'vue-property-decorator';
 import {User} from "@/views/Users.vue";
 import MessageStateComponent from "@/components/MessageStateComponent.vue";
 import {MessageState} from "@/views/message-state-enum";
+import MessageStateTest from "@/components/MessageStateTest.vue";
 
 @Component({
     components: {
+        MessageStateTest,
         MessageStateComponent
     }
 })
@@ -59,15 +62,18 @@ export default class Token extends Vue {
 
     @Prop() user?: User | null;
     @Ref('MessageStateComponent') messageStateComponent!: MessageStateComponent;
-
+    @Ref('NotificationTest') notificationTest!: MessageStateTest;
 
     async sendToken() {
         if(this.token === '000000') {
-            this.messageStateComponent.displaySuccess('Le token a bien été validé !')
+            this.messageStateComponent.displaySuccess('Le token a bien été validé !');
+            this.notificationTest.displayNotificationSuccess('Le token a bien été validé !');
         } else if (this.token === '111111') {
-            this.messageStateComponent.displayWarning('Attention, compte déjà validé.')
+            this.messageStateComponent.displayWarning('Attention, compte déjà validé.');
+            this.notificationTest.displayNotificationWarning('Attention, compte déjà validé.');
         } else {
-            this.messageStateComponent.displayError('La token n\'a pu être validé.');
+            // this.messageStateComponent.displayError('La token n\'a pu être validé.');
+            this.notificationTest.displayNotificationError('La token n\'a pu être validé.');
         }
         /*
         const token = {

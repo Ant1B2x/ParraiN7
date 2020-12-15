@@ -27,10 +27,11 @@ export default class App extends Vue  {
 
     user: User | null = null;
 
-    private async created() {
+    private async beforeCreate() {
         try {
             const auth = await app.reAuthenticate();
             this.user = auth.user;
+            console.log(this.user);
         } catch (err) {
             // pass
         }
