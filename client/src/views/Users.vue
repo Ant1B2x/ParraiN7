@@ -72,7 +72,6 @@
 import {Component, Prop, Ref, Vue} from 'vue-property-decorator';
 import app from "@/feathers-client";
 import MessageStateComponent from "@/components/MessageStateComponent.vue";
-import logger from "../../../server/src/logger";
 
 export class User {
     id: number;
@@ -155,7 +154,11 @@ export default class Users extends Vue {
             await this.loadUsers();
             this.selectedUser = this.users[0];
         } catch (error) {
-            this.messageStateComponent.displayError("Une erreur est survenue. Contactez l'administrateur du site.");
+            if (error.code === 408) {
+                this.messageStateComponent.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
+            } else {
+                this.messageStateComponent.displayError("Une erreur est survenue. Contactez l'administrateur du site.");
+            }
         }
     }
 
@@ -170,7 +173,11 @@ export default class Users extends Vue {
             await this.loadUsers();
             this.hasUserChanged();
         } catch (error) {
-            this.messageStateComponent.displayError("Une erreur est survenue. Contactez l'administrateur du site.");
+            if (error.code === 408) {
+                this.messageStateComponent.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
+            } else {
+                this.messageStateComponent.displayError("Une erreur est survenue. Contactez l'administrateur du site.");
+            }
         }
     }
 }
