@@ -3,8 +3,8 @@
         <form>
             <div class="form-group">
                 <label>
-                    <select class="custom-select" v-model="selectedUser" :disabled="this.selectedUser && userChanged"
-                    :title="userChanged ? 'Vous devez valider les changements' : ''" @change="checkValidity">
+                    <select class="custom-select" :disabled="this.selectedUser && userChanged"
+                    :title="userChanged ? 'Vous devez valider les changements' : ''">
                         <option selected disabled>Sélectionnez un utilisateur</option>
                         <option v-for="user in users" :value="user" :key="user.idUser">{{user.firstname}} {{user.lastname}}</option>
                     </select>
@@ -41,21 +41,21 @@
                 <div class="form-group row">
                     <label class="col-sm-2">Rôles</label>
                     <div class="col-sm-2">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="isGodfatherCheck" v-model="selectedUser.isGodfather" v-on:change="hasUserChanged">
-                            <label class="form-check-label" for="isGodfatherCheck">Parrain</label>
+                        <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input" type="checkbox" id="isGodfatherCheck" v-model="selectedUser.isGodfather" v-on:change="hasUserChanged"/>
+                            <label class="custom-control-label" for="isGodfatherCheck">Parrain</label>
                         </div>
                     </div>
                     <div class="col-sm-1"/>
                     <div class="col-sm-2">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="isAdminCheck" v-model="selectedUser.isAdmin" v-on:change="hasUserChanged">
-                            <label class="form-check-label" for="isAdminCheck">Administrateur</label>
+                        <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input" type="checkbox" id="isAdminCheck" v-model="selectedUser.isAdmin" v-on:change="hasUserChanged"/>
+                            <label class="custom-control-label" for="isAdminCheck">Administrateur</label>
                         </div>
                     </div>
                 </div>
                 <div class="buttons">
-                    <button type="button" class="btn btn-danger" v-if="!isHimself" v-on:click="removeUser">Supprimer</button>
+                    <button type="button" class="btn btn-danger" v-if="this.user.id !== this.selectedUser.id" v-on:click="removeUser">Supprimer</button>
                     <button type="button" class="btn btn-warning" :disabled="!userChanged" v-on:click="resetUser">Réinitialiser</button>
                     <button type="button" class="btn btn-primary" :disabled="!userChanged" v-on:click="sendUserModifications">Valider</button>
                 </div>
@@ -71,7 +71,8 @@
 <script lang="ts">
 import {Component, Prop, Ref, Vue} from 'vue-property-decorator';
 import app from "@/feathers-client";
-import MessageStateComponent from "@/components/MessageState.vue";
+import MessageStateComponent from "@/components/MessageStateComponent.vue";
+import logger from "../../../server/src/logger";
 
 export class User {
     id: number;
@@ -105,7 +106,7 @@ export default class Users extends Vue {
 
     @Prop() user?: User | null;
     @Ref('MessageStateComponent') messageStateComponent!: MessageStateComponent;
-    standardMessage = "Modification d'un utilisateur.";
+    private standardMessage = "Modification d'un utilisateur, vous modifier vous-même vous déconnectera";
 
     private users: User[] = [];
     private usersOriginal: User[] = [];
@@ -113,22 +114,24 @@ export default class Users extends Vue {
     private selectedUser: User | null | undefined = null;
 
     private userChanged = false;
-    private isHimself = false;
+
+    private cloneUsersOriginal() {
+        this.usersOriginal = [];
+        for (const user of this.users)
+            this.usersOriginal.push(new User(user.id, user.email, user.firstname, user.lastname, user.isGodfather, user.isAdmin));
+    }
 
     async loadUsers() {
-        const data = await app.service('users').find();
+        const data = await app.service('users').find({query: {$sort: {id: 1}}}); // sort users by id
         this.users = [];
-        this.usersOriginal = [];
-        for (const user of data) {
+        for (const user of data)
             this.users.push(new User(user.id, user.email, user.firstname, user.lastname, user.isGodfather, user.isAdmin));
-            this.usersOriginal.push(new User(user.id, user.email, user.firstname, user.lastname, user.isGodfather, user.isAdmin));
-        }
+        this.cloneUsersOriginal();
     }
 
     async mounted() {
         await this.loadUsers();
         this.selectedUser = this.users[0];
-        this.checkIfHimself();
     }
 
     hasUserChanged() {
@@ -150,6 +153,7 @@ export default class Users extends Vue {
             await app.service('users').remove(this.selectedUser?.id);
             this.messageStateComponent.displaySuccess("L'utilisateur a bien été supprimé.");
             await this.loadUsers();
+            this.selectedUser = this.users[0];
         } catch (error) {
             this.messageStateComponent.displayError("Une erreur est survenue. Contactez l'administrateur du site.");
         }
@@ -158,15 +162,16 @@ export default class Users extends Vue {
     async sendUserModifications() {
         try {
             await app.service('users').patch(this.selectedUser?.id, this.selectedUser);
+
+            // deconnect user if he modified himself
+            if (this.user?.id === this.selectedUser?.id)
+                this.$emit('signalLogOut');
+
             await this.loadUsers();
             this.hasUserChanged();
         } catch (error) {
-            // pass
+            this.messageStateComponent.displayError("Une erreur est survenue. Contactez l'administrateur du site.");
         }
-    }
-
-    checkIfHimself() {
-        this.isHimself = this.user?.id === this.selectedUser?.id;
     }
 }
 

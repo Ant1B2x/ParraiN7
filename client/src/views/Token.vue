@@ -44,7 +44,7 @@
 <script lang="ts">
 import {Component, Prop, Ref, Vue} from 'vue-property-decorator';
 import {User} from "@/views/Users.vue";
-import MessageStateComponent from "@/components/MessageState.vue";
+import MessageStateComponent from "@/components/MessageStateComponent.vue";
 import {MessageState} from "@/views/message-state-enum";
 import MessageStateTest from "@/components/MessageStateTest.vue";
 

@@ -60,7 +60,7 @@
 <script lang="ts">
 import {Component, Vue, Prop, Ref} from 'vue-property-decorator';
 import Rating from "@/components/Rating.vue"
-import MessageStateComponent from "@/components/MessageState.vue";
+import MessageStateComponent from "@/components/MessageStateComponent.vue";
 import app from "@/feathers-client";
 import {User} from "@/views/Users.vue";
 

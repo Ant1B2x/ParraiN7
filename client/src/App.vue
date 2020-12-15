@@ -3,7 +3,7 @@
         <header>
             <Header :user="this.user" @signalLogOut="logOut"/>
         </header>
-        <router-view :user="this.user" class="content"/>
+        <router-view :user="this.user" class="content" @signalLogOut="logOut"/>
         <footer>
             <Footer/>
         </footer>
@@ -31,7 +31,6 @@ export default class App extends Vue  {
         try {
             const auth = await app.reAuthenticate();
             this.user = auth.user;
-            console.log(this.user);
         } catch (err) {
             // pass
         }
