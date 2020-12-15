@@ -83,21 +83,18 @@ export default class Answers extends Vue {
     async getQuestions() {
         try {
             const answers = await app.service('questions').find( { query: { answers: true, godsonId: this.user?.id } } );
-            // console.log(data);
             this.questionsWithAnswers = [];
             for (const answer of answers) {
                 this.questionsWithAnswers.push(new QuestionWithAnswer(answer.id, answer.content,
                     answer.authorId, answer.placeholder, answer.answerId, answer.answerContent))
             }
-            console.log(this.questionsWithAnswers);
         } catch (e) {
-            console.log(e);
+            // pass
         }
     }
 
     async sendAnswer(questionId: number, answerContent: string) {
         const answer = { userId: this.user?.id, questionId: questionId, content: answerContent };
-        console.log(answer);
         try {
             await app.service('answers').create(answer);
             this.messageStateComponent.displaySuccess('La réponse a bien été prise en compte !');
@@ -118,7 +115,6 @@ export default class Answers extends Vue {
             this.messageStateComponent.displaySuccess('La réponse a bien été modifiée.');
             await this.getQuestions();
         } catch (error) {
-            console.log(error);
             this.messageStateComponent.displayError('Une erreur est survenue.')
         }
     }

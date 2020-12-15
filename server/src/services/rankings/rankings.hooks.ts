@@ -14,13 +14,13 @@ const {authenticate} = feathersAuthentication.hooks;
 export default {
     // godfathers-only features
     before: {
-        all: [checkExpirationDate(), authenticate('jwt'), checkGodfather()],
+        all: [authenticate('jwt'), checkGodfather()],
         find: [],
         get: [],
-        create: [checkExistingGodson(), checkRankRange(), setGodfather()],
-        update: [createIfNotExists(), checkModifyingRanking(), checkRankRange(), keepRankingForeignIds()],
-        patch: [createIfNotExists(), checkModifyingRanking(), checkRankRange(), keepRankingForeignIds()],
-        remove: [checkModifyingRanking()]
+        create: [checkExpirationDate(), checkExistingGodson(), checkRankRange(), setGodfather()],
+        update: [checkExpirationDate(), createIfNotExists(), checkModifyingRanking(), checkRankRange(), keepRankingForeignIds()],
+        patch: [checkExpirationDate(), createIfNotExists(), checkModifyingRanking(), checkRankRange(), keepRankingForeignIds()],
+        remove: [checkExpirationDate(), checkModifyingRanking()]
     },
 
     after: {
