@@ -3,7 +3,7 @@
         <form>
             <div class="form-group">
                 <label>
-                    <select class="custom-select" :disabled="this.selectedUser && userChanged"
+                    <select class="custom-select" v-model="selectedUser" :disabled="this.selectedUser && userChanged"
                     :title="userChanged ? 'Vous devez valider les changements' : ''">
                         <option selected disabled>Sélectionnez un utilisateur</option>
                         <option v-for="user in users" :value="user" :key="user.idUser">{{user.firstname}} {{user.lastname}}</option>
@@ -124,6 +124,12 @@ export default class Users extends Vue {
         }
     }
 
+    // reload selected user with modifications
+    reloadSelectedUser() {
+        if (this.selectedUser)
+            this.selectedUser = this.users.find(user => user.id === this.selectedUser?.id);
+    }
+
     async mounted() {
         await this.loadUsers();
         this.selectedUser = this.users[0];
@@ -163,6 +169,7 @@ export default class Users extends Vue {
                 this.$emit('signalLogOut');
 
             await this.loadUsers();
+            this.reloadSelectedUser();
             this.hasUserChanged();
         } catch (error) {
             this.messageStateComponent.displayError("Une erreur est survenue. Contactez l'administrateur du site.");
