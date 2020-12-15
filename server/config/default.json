@@ -31,6 +31,6 @@
   },
   "adminUser": {
     "email": "admin@etu.toulouse-inp.fr",
-    "password": "admin"
+    "password": "$2y$10$MM0LfrlJjg7NSsQzYzZRBekMIm68vZmUX20BvANmwEIS7z8BsKvAm"
   }
 }

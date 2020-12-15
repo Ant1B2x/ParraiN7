@@ -11,19 +11,19 @@ const {authenticate} = feathersAuthentication.hooks;
 
 export default {
     before: {
-        all: [checkExpirationDate(), authenticate('jwt')],
+        all: [authenticate('jwt')],
         find: [],
         get: [],
-        create: [checkGodson(), checkExistingQuestion(), setGodson()],
-        update: [checkGodson(), checkModifyingAnswer(), keepAnswerForeignIds()],
-        patch: [checkGodson(), checkModifyingAnswer(), keepAnswerForeignIds()],
-        remove: [checkGodson(), checkModifyingAnswer()]
+        create: [checkExpirationDate(), checkGodson(), checkExistingQuestion(), setGodson()],
+        update: [checkExpirationDate(), checkGodson(), checkModifyingAnswer(), keepAnswerForeignIds()],
+        patch: [checkExpirationDate(), checkGodson(), checkModifyingAnswer(), keepAnswerForeignIds()],
+        remove: [checkExpirationDate(), checkGodson(), checkModifyingAnswer()]
     },
 
     after: {
         all: [],
-        find: [/*showAnswersForeigns()*/],
-        get: [/*showAnswerForeigns()*/],
+        find: [],
+        get: [],
         create: [],
         update: [],
         patch: [],
