@@ -1,13 +1,13 @@
 <template>
     <div class="container d-flex flex-column">
         <div class="row align-items-center justify-content-center">
-            <div class="col-md-6 py-6 py-md-0">
+            <div class="col-md-6 py-2 py-md-0">
                 <div class="card shadow zindex-100 mb-0">
                     <div class="card-body px-md-5 py-5" :class="{ 'hasError': signUpValidation.hasError }">
                         <div class="mb-5">
                             <h6 class="h3">Inscription</h6>
                             <p class="text-muted mb-0 errorMessage"
-                               :class="{ 'alert alert-danger': signUpValidation.hasError }"  role="alert">{{signUpValidation.errorMessage}}</p>
+                               :class="{ 'alert alert-danger': signUpValidation.hasError }"  role="alert">{{ signUpValidation.errorMessage }}</p>
                         </div>
                         <span class="clearfix"></span>
                         <form>
@@ -29,12 +29,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="d-flex align-items-center justify-content-between">
-
                                     <label class="form-control-label">Mot de passe</label>
-
-                                    <!--div class="mb-2">
-                                        <a href="#" class="small text-muted text-underline--dashed border-primary" data-toggle="password-text" data-target="#input-password">Afficher le mot de passe</a>
-                                    </div-->
                                 </div>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
@@ -47,12 +42,7 @@
 
                             <div class="form-group">
                                 <div class="d-flex align-items-center justify-content-between">
-
                                     <label class="form-control-label">Confirmer mot de passe</label>
-
-                                    <!--div class="mb-2">
-                                        <a href="#" class="small text-muted text-underline--dashed border-primary" data-toggle="password-text" data-target="#input-password">Afficher le mot de passe</a>
-                                    </div-->
                                 </div>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
@@ -127,7 +117,7 @@ import app from "@/feathers-client";
 export default class LogIn extends Vue {
 
     private nameValidity =
-        RegExp('^[a-zA-Z\u00C0-\u00FF]+$');
+        RegExp("^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$");
 
     private signUpValidation = {
         passwordConfirm: '',
@@ -150,36 +140,33 @@ export default class LogIn extends Vue {
         this.signUpValidation.errorMessage = 'Entrez vos informations utilisateurs';
         await app.logout();
 
-
         const signUpFormBis = JSON.parse(JSON.stringify(this.signUpForm));
         signUpFormBis.email = signUpFormBis.email + '@etu.toulouse-inp.fr';
-
-        await app.service('users').create(signUpFormBis).then(
-            (data: any) => {
-                //Send check email or smth
-                // console.log(data);
-                this.$router.push('/login');
-            }
-        ).catch( (error: any) => {
+        try {
+            await app.service('users').create(signUpFormBis)
+            //Send check email or smth
+            // console.log(data);
+            await this.$router.push('/login');
+        } catch (error) {
             console.log(error);
             if (error.code === 400) {
                 this.signUpValidation.errorMessage = 'Le nom et/ou le prénom ne respecte(nt) pas le format attendu !';
                 this.signUpValidation.hasError = true;
             }
             if (error.code === 406) {
-                this.signUpValidation.errorMessage = 'L\'email ne respecte pas le format attendu !';
+                this.signUpValidation.errorMessage = "L'email ne respecte pas le format attendu !";
                 this.signUpValidation.hasError = true;
             }
             if (error.code === 409) {
                 this.signUpValidation.errorMessage = 'Un utilisateur existe déjà avec cet email !';
                 this.signUpValidation.hasError = true;
             }
-        });
+        }
     }
 
     checkError() {
         if ((this.signUpForm.password && this.signUpValidation.passwordConfirm) && (this.signUpForm.password != this.signUpValidation.passwordConfirm)) {
-            this.signUpValidation.errorMessage = "Les mots de passe ne correspondent pas !";
+            this.signUpValidation.errorMessage = 'Les mots de passe ne correspondent pas !';
             this.signUpValidation.hasError = true;
         } else {
             this.noError();
@@ -199,8 +186,8 @@ export default class LogIn extends Vue {
             }
     }
 
-    handleKeyUp(e: any) {
-        if (e.keyCode === 13) {
+    handleKeyUp(e: KeyboardEvent) {
+        if (e.key === "Enter") {
             this.signUp();
         } else {
             this.noError();

@@ -6,7 +6,7 @@
         </section>
         <hr>
         <section>
-            <div class="row mb-3">
+            <div class="row mb-5">
                 <div class="col-md-6 text-center text-lg-right pr-lg-5" id="developers-column">
                     <h4 class="mb-lg-5">Développeurs</h4>
                     <h5>
@@ -64,7 +64,7 @@
                     </p>
                 </div>
             </div>
-            <div class="row" id="source-code-button">
+            <div class="row">
                 <div class="col-md-12">
                     <a class="btn btn-outline-primary" href="https://github.com/Ant1B2x/ParraiN7" target="_blank">Code Source</a>
                 </div>

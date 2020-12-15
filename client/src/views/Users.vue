@@ -1,10 +1,10 @@
 <template>
-    <div class="questionArea">
+    <div class="userArea">
         <form>
             <div class="form-group">
                 <label>
                     <select class="custom-select" v-model="selectedUser" :disabled="this.selectedUser && userChanged"
-                    :title="userChanged ? 'Vous devez valider les changements' : ''">
+                    :title="userChanged ? 'Vous devez valider les changements' : ''" @change="checkValidity">
                         <option selected disabled>Sélectionnez un utilisateur</option>
                         <option v-for="user in users" :value="user" :key="user.idUser">{{user.firstname}} {{user.lastname}}</option>
                     </select>
@@ -15,8 +15,10 @@
         <!-- Ligne séparatrice -->
         <hr class="separator"/>
 
+        <MessageStateComponent :standard-message="standardMessage" ref="MessageStateComponent"/>
+
         <!-- Afficher users existantes -->
-        <div class="questionList" v-if="selectedUser">
+        <div class="userInformation" v-if="selectedUser">
             <form>
                 <div class="form-group row">
                     <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
@@ -37,32 +39,25 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <div class="col-sm-10">
+                    <label class="col-sm-2">Rôles</label>
+                    <div class="col-sm-2">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="isGodfatherCheck" v-model="selectedUser.isGodfather" v-on:change="hasUserChanged">
-                            <label class="form-check-label" for="isGodfatherCheck">
-                                Est parrain
-                            </label>
+                            <label class="form-check-label" for="isGodfatherCheck">Parrain</label>
                         </div>
                     </div>
-                </div>
-                <div class="form-group row">
-                    <div class="col-sm-10">
+                    <div class="col-sm-1"/>
+                    <div class="col-sm-2">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="isAdminCheck" v-model="selectedUser.isAdmin" v-on:change="hasUserChanged">
-                            <label class="form-check-label" for="isAdminCheck">
-                                Est admin
-                            </label>
+                            <label class="form-check-label" for="isAdminCheck">Administrateur</label>
                         </div>
                     </div>
                 </div>
                 <div class="buttons">
-                    <div class="">
-                        <button type="button" class="btn btn-warning" :disabled="!userChanged" v-on:click="resetUser">Reset</button>
-                    </div>
-                    <div class="">
-                        <button type="button" class="btn btn-primary" :disabled="!userChanged" v-on:click="sendUserModifications">Valider</button>
-                    </div>
+                    <button type="button" class="btn btn-danger" v-if="!isHimself" v-on:click="removeUser">Supprimer</button>
+                    <button type="button" class="btn btn-warning" :disabled="!userChanged" v-on:click="resetUser">Réinitialiser</button>
+                    <button type="button" class="btn btn-primary" :disabled="!userChanged" v-on:click="sendUserModifications">Valider</button>
                 </div>
             </form>
         </div>
@@ -74,8 +69,9 @@
 </style>
 
 <script lang="ts">
-import {Component, Vue} from 'vue-property-decorator';
+import {Component, Prop, Ref, Vue} from 'vue-property-decorator';
 import app from "@/feathers-client";
+import MessageStateComponent from "@/components/MessageState.vue";
 
 export class User {
     id: number;
@@ -100,48 +96,78 @@ export class User {
     }
 }
 
-@Component
+@Component({
+    components: {
+        MessageStateComponent,
+    }
+})
 export default class Users extends Vue {
-    users: User[] = []
-    usersOriginal: User[] = [];
 
-    selectedUser: User | null = null;
+    @Prop() user?: User | null;
+    @Ref('MessageStateComponent') messageStateComponent!: MessageStateComponent;
+    standardMessage = "Modification d'un utilisateur.";
 
-    userChanged = false;
+    private users: User[] = [];
+    private usersOriginal: User[] = [];
+
+    private selectedUser: User | null | undefined = null;
+
+    private userChanged = false;
+    private isHimself = false;
 
     async loadUsers() {
-        app.service('users').find().then(
-            (data: any) => {
-                for (const user of data) {
-                    this.users.push(new User(user.id, user.email, user.firstname, user.lastname, user.isGodfather, user.isAdmin));
-                    this.usersOriginal.push(new User(user.id, user.email, user.firstname, user.lastname, user.isGodfather, user.isAdmin))
-                }
-                this.selectedUser = this.users[0];
-            }
-        );
+        const data = await app.service('users').find();
+        this.users = [];
+        this.usersOriginal = [];
+        for (const user of data) {
+            this.users.push(new User(user.id, user.email, user.firstname, user.lastname, user.isGodfather, user.isAdmin));
+            this.usersOriginal.push(new User(user.id, user.email, user.firstname, user.lastname, user.isGodfather, user.isAdmin));
+        }
     }
 
-    mounted() {
-        this.loadUsers();
+    async mounted() {
+        await this.loadUsers();
+        this.selectedUser = this.users[0];
+        this.checkIfHimself();
     }
 
     hasUserChanged() {
-        const originalUser: User = this.usersOriginal.find(user => user.id === this.selectedUser!.id)!;
-        this.userChanged = !originalUser.equals(this.selectedUser!);
+        const originalUser: User | undefined = this.usersOriginal.find(user => user.id === this.selectedUser?.id);
+        if (originalUser && this.selectedUser)
+            this.userChanged = !originalUser.equals(this.selectedUser);
     }
 
     resetUser() {
-        this.selectedUser = JSON.parse(JSON.stringify(this.usersOriginal.find(user => user.id === this.selectedUser?.id)));
-        this.hasUserChanged();
+        if (this.selectedUser) {
+            const userToReset = JSON.parse(JSON.stringify(this.usersOriginal.find(user => user.id === this.selectedUser?.id)));
+            this.users[this.users.indexOf(this.selectedUser)] = this.selectedUser = userToReset ? userToReset : null;
+            this.hasUserChanged();
+        }
+    }
+
+    async removeUser() {
+        try {
+            await app.service('users').remove(this.selectedUser?.id);
+            this.messageStateComponent.displaySuccess("L'utilisateur a bien été supprimé.");
+            await this.loadUsers();
+        } catch (error) {
+            this.messageStateComponent.displayError("Une erreur est survenue. Contactez l'administrateur du site.");
+        }
     }
 
     async sendUserModifications() {
-        await app.service('users').patch(this.selectedUser?.id, this.selectedUser).then(
-            (data: any) => {
-                this.usersOriginal[this.usersOriginal.findIndex(user => user.id === this.selectedUser?.id)] = this.selectedUser!;
-                this.hasUserChanged();
-            }
-        );
+        try {
+            await app.service('users').patch(this.selectedUser?.id, this.selectedUser);
+            await this.loadUsers();
+            this.hasUserChanged();
+        } catch (error) {
+            // pass
+        }
+    }
+
+    checkIfHimself() {
+        this.isHimself = this.user?.id === this.selectedUser?.id;
     }
 }
+
 </script>

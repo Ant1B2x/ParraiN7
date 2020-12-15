@@ -47,11 +47,11 @@ export class Users extends Service<UserData> {
                     questionToAdd['answerContent'] = answer[0] ? answer[0]['answerContent'] : null;
                     user['questions'].push(questionToAdd)
                 }
-                const rank = await db('rankings').select('rank')
+                const rank = await db('rankings').select('id as rankId', 'rank')
                     .where('godfatherId', params.user.id)
                     .andWhere('godsonId', user.id);
+                user['rankId'] = rank[0] ? rank[0]['rankId'] : null;
                 user['rank'] = rank[0] ? rank[0]['rank'] : null;
-
             }
         }
 

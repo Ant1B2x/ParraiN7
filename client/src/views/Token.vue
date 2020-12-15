@@ -43,7 +43,7 @@
 <script lang="ts">
 import {Component, Prop, Ref, Vue} from 'vue-property-decorator';
 import {User} from "@/views/Users.vue";
-import MessageStateComponent from "@/components/MessageStateComponent.vue";
+import MessageStateComponent from "@/components/MessageState.vue";
 import {MessageState} from "@/views/message-state-enum";
 
 @Component({
@@ -98,10 +98,7 @@ export default class Token extends Vue {
         }
     }
 
-    isNumber(evt: any) {
-        evt = (evt) ? evt : window.event;
-        const charCode = (evt.which) ? evt.which : evt.keyCode;
-        // Allow: backspace, delete, tab, escape, enter and .
+    isNumber(evt: KeyboardEvent) {
         if ([46, 8, 9, 27, 13, 110, 190].includes(evt.keyCode) ||
             // Allow: Ctrl+A,Ctrl+C,Ctrl+V, Command+A
             ((evt.keyCode == 65 || evt.keyCode == 86 || evt.keyCode == 67) && (evt.ctrlKey === true || evt.metaKey === true)) ||
@@ -114,11 +111,12 @@ export default class Token extends Vue {
         if ((evt.shiftKey || (evt.keyCode < 48 || evt.keyCode > 57)) && (evt.keyCode < 96 || evt.keyCode > 105)) {
             evt.preventDefault();
         }
+
     }
 
-    analyzeToken(evt: any){
-        evt.target.value = evt.target.value.replace(/[^0-9]/g, '');
-        console.log(evt.target.value);
+    analyzeToken(){
+        this.token = this.token.replace(/[^0-9]/g, '');
+        console.log(this.token);
     }
 
 }

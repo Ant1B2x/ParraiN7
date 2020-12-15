@@ -42,7 +42,7 @@
 import {Component, Prop, Ref, Vue} from 'vue-property-decorator';
 import app from "@/feathers-client";
 import {User} from "@/views/Users.vue";
-import MessageStateComponent from "@/components/MessageStateComponent.vue";
+import MessageStateComponent from "@/components/MessageState.vue";
 
 export class QuestionWithAnswer {
     id?: number;
@@ -76,31 +76,25 @@ export default class Answers extends Vue {
 
     questionsWithAnswers: QuestionWithAnswer[] = [];
 
-    mounted() {
-        this.getQuestions();
+    async mounted() {
+        await this.getQuestions();
     }
 
     async getQuestions() {
         try {
-            await app.service('questions').find( { query: { answers: true, godsonId: this.user?.id } } ).then(
-                (data: any) => {
-                    // console.log(data);
-                    this.questionsWithAnswers = [];
-                    for (const answer of data) {
-                        this.questionsWithAnswers.push(new QuestionWithAnswer(answer.id, answer.content,
-                            answer.authorId, answer.placeholder, answer.answerId, answer.answerContent))
-                    }
-                    console.log(this.questionsWithAnswers);
-                }
-            );
+            const answers = await app.service('questions').find( { query: { answers: true, godsonId: this.user?.id } } );
+            this.questionsWithAnswers = [];
+            for (const answer of answers) {
+                this.questionsWithAnswers.push(new QuestionWithAnswer(answer.id, answer.content,
+                    answer.authorId, answer.placeholder, answer.answerId, answer.answerContent))
+            }
         } catch (e) {
-            console.log(e);
+            // pass
         }
     }
 
     async sendAnswer(questionId: number, answerContent: string) {
         const answer = { userId: this.user?.id, questionId: questionId, content: answerContent };
-        console.log(answer);
         try {
             await app.service('answers').create(answer);
             this.messageStateComponent.displaySuccess('La réponse a bien été prise en compte !');
@@ -121,7 +115,6 @@ export default class Answers extends Vue {
             this.messageStateComponent.displaySuccess('La réponse a bien été modifiée.');
             await this.getQuestions();
         } catch (error) {
-            console.log(error);
             this.messageStateComponent.displayError('Une erreur est survenue.')
         }
     }

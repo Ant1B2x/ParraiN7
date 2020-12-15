@@ -19,7 +19,7 @@ export default async (app: Application): Promise<Knex> => {
     db.schema.hasColumn(questionsTableName, 'authorId').then(async (exists) => {
         if (!exists) {
             await db.schema.table(questionsTableName, table => {
-                table.integer('authorId').references('id').inTable(usersTableName).onDelete('CASCADE');
+                table.integer('authorId').references('id').inTable(usersTableName).onDelete('CASCADE').notNullable();
             });
         }
     });
@@ -28,7 +28,7 @@ export default async (app: Application): Promise<Knex> => {
     db.schema.hasColumn(answersTableName, 'userId').then(async (exists) => {
        if (!exists) {
            await db.schema.table(answersTableName, table => {
-               table.integer('userId').references('id').inTable(usersTableName).onDelete('CASCADE');
+               table.integer('userId').references('id').inTable(usersTableName).onDelete('CASCADE').notNullable();
            });
        }
     });
@@ -37,7 +37,7 @@ export default async (app: Application): Promise<Knex> => {
     db.schema.hasColumn(answersTableName, 'questionId').then(async (exists) => {
         if (!exists) {
             await db.schema.table(answersTableName, table => {
-                table.integer('questionId').references('id').inTable(questionsTableName).onDelete('CASCADE');
+                table.integer('questionId').references('id').inTable(questionsTableName).onDelete('CASCADE').notNullable();
                 table.unique(['userId', 'questionId']);
             });
         }
@@ -47,18 +47,17 @@ export default async (app: Application): Promise<Knex> => {
     db.schema.hasColumn(rankingsTableName, 'godsonId').then(async (exists) => {
         if (!exists) {
             await db.schema.table(rankingsTableName, table => {
-                table.integer('godsonId').references('id').inTable(usersTableName).onDelete('CASCADE');
+                table.integer('godsonId').references('id').inTable(usersTableName).onDelete('CASCADE').notNullable();
             });
         }
     });
 
-    // add foreign key on rankings.godfatherId, unique on [godfatherId, godsonId] and unique on [godfatherId, rank]
+    // add foreign key on rankings.godfatherId and unique on [godfatherId, godsonId]
     db.schema.hasColumn(rankingsTableName, 'godfatherId').then(async (exists) => {
         if (!exists) {
             await db.schema.table(rankingsTableName, table => {
-                table.integer('godfatherId').references('id').inTable(usersTableName).onDelete('CASCADE');
+                table.integer('godfatherId').references('id').inTable(usersTableName).onDelete('CASCADE').notNullable();
                 table.unique(['godfatherId', 'godsonId']);
-                table.unique(['godfatherId', 'rank']);
             });
         }
     });

@@ -2,7 +2,7 @@
     <div class="card-body px-md-5 py-5 messageZone" v-bind:class="[validation.messageState]">
         <transition name="fade" mode="out-in">
             <div class="text-muted mb-0 alertMessage" role="alert" :key="validation.message">
-                {{validation.message}}
+                {{ validation.message }}
             </div>
         </transition>
     </div>
@@ -30,8 +30,7 @@ export default class MessageStateComponent extends Vue {
         setTimeout(() => {
             this.validation.messageState = MessageState.hasSucceed;
             setTimeout(() => {
-                this.validation.messageState = MessageState.none;
-                this.validation.message = this.standardMessage;
+                this.displayNormalMessage();
             }, 3000);
         }, 500);
     }
@@ -40,20 +39,20 @@ export default class MessageStateComponent extends Vue {
         this.validation.message = errorMessage;
         setTimeout(() => {
             this.validation.messageState = MessageState.hasError;
+            setTimeout(() => {
+                this.displayNormalMessage();
+            }, 5000);
         }, 500);
-        setTimeout( () => {
-            this.displayNormalMessage();
-        }, 5000 );
     }
 
     displayWarning(warningMessage: string) {
         this.validation.message = warningMessage;
         setTimeout(() => {
             this.validation.messageState = MessageState.hasWarning;
+            setTimeout(() => {
+                this.displayNormalMessage();
+            }, 5000);
         }, 500);
-        setTimeout( () => {
-            this.displayNormalMessage();
-        }, 5000 );
     }
 
     getCurrentState(): MessageState {
@@ -75,5 +74,5 @@ export default class MessageStateComponent extends Vue {
 </script>
 
 <style scoped>
-@import "css/MessageStateComponent.css";
+@import "css/MessageState.css";
 </style>

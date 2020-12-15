@@ -4,6 +4,7 @@ import setGodson from '../../hooks/answers/set-godson';
 import checkExistingQuestion from '../../hooks/answers/check-existing-question';
 import keepAnswerForeignIds from '../../hooks/answers/keep-answer-foreign-ids';
 import checkModifyingAnswer from '../../hooks/answers/check-modifying-answer';
+import checkExpirationDate from '../../hooks/check-expiration-date';
 // Don't remove this comment. It's needed to format import lines nicely.
 
 const {authenticate} = feathersAuthentication.hooks;
@@ -13,16 +14,16 @@ export default {
         all: [authenticate('jwt')],
         find: [],
         get: [],
-        create: [checkGodson(), checkExistingQuestion(), setGodson()],
-        update: [checkGodson(), checkModifyingAnswer(), keepAnswerForeignIds()],
-        patch: [checkGodson(), checkModifyingAnswer(), keepAnswerForeignIds()],
-        remove: [checkGodson(), checkModifyingAnswer()]
+        create: [checkExpirationDate(), checkGodson(), checkExistingQuestion(), setGodson()],
+        update: [checkExpirationDate(), checkGodson(), checkModifyingAnswer(), keepAnswerForeignIds()],
+        patch: [checkExpirationDate(), checkGodson(), checkModifyingAnswer(), keepAnswerForeignIds()],
+        remove: [checkExpirationDate(), checkGodson(), checkModifyingAnswer()]
     },
 
     after: {
         all: [],
-        find: [/*showAnswersForeigns()*/],
-        get: [/*showAnswerForeigns()*/],
+        find: [],
+        get: [],
         create: [],
         update: [],
         patch: [],
