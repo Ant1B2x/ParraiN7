@@ -134,6 +134,8 @@ export default class Answers extends Vue {
             console.log(error);
             if (error.code === 403) {
                 this.messageStateComponent.displayError("Vous n'êtes pas un filleul, vous ne pouvez donner de réponses.");
+            } else if (error.code === 408) {
+                this.messageStateComponent.displayError('La date d\'expiration a été atteinte, impossible de réaliser cette action.');
             } else {
                 this.messageStateComponent.displayError('Une erreur est survenue.' );
             }
