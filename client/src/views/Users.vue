@@ -55,7 +55,7 @@
                     </div>
                 </div>
                 <div class="buttons">
-                    <button type="button" class="btn btn-danger" v-on:click="removeUser" v-if="!isHimself">Supprimer</button>
+                    <button type="button" class="btn btn-danger" v-if="!isHimself" v-on:click="removeUser">Supprimer</button>
                     <button type="button" class="btn btn-warning" :disabled="!userChanged" v-on:click="resetUser">Réinitialiser</button>
                     <button type="button" class="btn btn-primary" :disabled="!userChanged" v-on:click="sendUserModifications">Valider</button>
                 </div>
@@ -71,7 +71,7 @@
 <script lang="ts">
 import {Component, Prop, Ref, Vue} from 'vue-property-decorator';
 import app from "@/feathers-client";
-import MessageStateComponent from "@/components/MessageStateComponent.vue";
+import MessageStateComponent from "@/components/MessageState.vue";
 
 export class User {
     id: number;
@@ -105,15 +105,15 @@ export default class Users extends Vue {
 
     @Prop() user?: User | null;
     @Ref('MessageStateComponent') messageStateComponent!: MessageStateComponent;
-    standardMessage = 'Modification d\'un utilisateur.';
+    standardMessage = "Modification d'un utilisateur.";
 
-    users: User[] = []
-    usersOriginal: User[] = [];
+    private users: User[] = [];
+    private usersOriginal: User[] = [];
 
-    selectedUser: User | null | undefined = null;
+    private selectedUser: User | null | undefined = null;
 
-    userChanged = false;
-    isHimself = false;
+    private userChanged = false;
+    private isHimself = false;
 
     async loadUsers() {
         const data = await app.service('users').find();
@@ -121,14 +121,14 @@ export default class Users extends Vue {
         this.usersOriginal = [];
         for (const user of data) {
             this.users.push(new User(user.id, user.email, user.firstname, user.lastname, user.isGodfather, user.isAdmin));
-            this.usersOriginal.push(new User(user.id, user.email, user.firstname, user.lastname, user.isGodfather, user.isAdmin))
+            this.usersOriginal.push(new User(user.id, user.email, user.firstname, user.lastname, user.isGodfather, user.isAdmin));
         }
     }
 
     async mounted() {
         await this.loadUsers();
         this.selectedUser = this.users[0];
-        this.checkValidity();
+        this.checkIfHimself();
     }
 
     hasUserChanged() {
@@ -148,11 +148,10 @@ export default class Users extends Vue {
     async removeUser() {
         try {
             await app.service('users').remove(this.selectedUser?.id);
-            this.messageStateComponent.displaySuccess('L\'utilisateur a bien été supprimé.');
+            this.messageStateComponent.displaySuccess("L'utilisateur a bien été supprimé.");
             await this.loadUsers();
         } catch (error) {
-            console.log(error);
-            this.messageStateComponent.displayError('(R1354553) Une erreur est survenue. Contactez l\'administrateur du site.');
+            this.messageStateComponent.displayError("Une erreur est survenue. Contactez l'administrateur du site.");
         }
     }
 
@@ -162,13 +161,13 @@ export default class Users extends Vue {
             await this.loadUsers();
             this.hasUserChanged();
         } catch (error) {
-            console.log(error);
+            // pass
         }
     }
 
-    checkValidity() {
-        console.log('ok')
+    checkIfHimself() {
         this.isHimself = this.user?.id === this.selectedUser?.id;
     }
 }
+
 </script>

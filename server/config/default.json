@@ -28,5 +28,9 @@
   "postgres": {
     "client": "pg",
     "connection": "postgres://postgres:postgres@localhost:5432/parrain7"
+  },
+  "adminUser": {
+    "email": "admin@etu.toulouse-inp.fr",
+    "password": "admin"
   }
 }

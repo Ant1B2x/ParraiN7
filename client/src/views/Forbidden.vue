@@ -1,8 +1,8 @@
 <template>
     <div>
-        <img width="250px" src="img/brand/png-transparent-vito-corleone-telegram-sticker-the-godfather-others-miscellaneous-boss-sticker-thumbnail-removebg-preview (2).png">
-        <h1>403</h1>
+        <h1 id="title">403</h1>
         <p>Accès interdit</p>
+        <img class="mt-5" width="250px" src="img/brand/forbidden.png"/>
     </div>
 </template>
 
@@ -19,4 +19,3 @@ export default class Forbidden extends Vue {
 }
 
 </script>
-

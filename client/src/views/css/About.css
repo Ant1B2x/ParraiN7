@@ -2,10 +2,6 @@
   border-right: 1px solid #e2e8f0;
 }
 
-#source-code-button {
-  padding-top: 3rem;
-}
-
 /* Tablets */
 @media only screen and (max-width: 767px) {
   #developers-column {
