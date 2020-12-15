@@ -78,13 +78,13 @@ export default class Answers extends Vue {
 
     questionsWithAnswers: QuestionWithAnswer[] = [];
     // Forced to use such methods to render view properly on data change, because view.js needs it.
-    answerIds: any[] = [];
+    answerIds: (number | undefined)[] = [];
 
     async mounted() {
         await this.getQuestions();
     }
 
-    questionAnswerId(index: number): number {
+    questionAnswerId(index: number): number | undefined {
         return this.answerIds[index];
     }
 
