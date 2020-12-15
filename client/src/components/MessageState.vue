@@ -74,5 +74,5 @@ export default class MessageStateComponent extends Vue {
 </script>
 
 <style scoped>
-@import "css/MessageStateComponent.css";
+@import "css/MessageState.css";
 </style>

@@ -1,5 +1,12 @@
 {
-  "host": "localhost",
-  "port": "3030",
+  "host": "parrain7.ant1b2x.com",
+  "adminUser": {
+    "email": "admin@etu.toulouse-inp.fr",
+    "password": ""
+  },
+  "emailAccount": {
+    "email": "noreply.parrain7@gmail.com",
+    "password": ""
+  },
   "expirationDate": "01/01/2021"
 }
