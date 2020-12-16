@@ -44,7 +44,7 @@
 import {Component, Prop, Ref, Vue} from 'vue-property-decorator';
 import app from "@/feathers-client";
 import {User} from "@/views/Users.vue";
-import MessageStateComponent from "@/components/MessageState.vue";
+import MessageStateComponent from "@/components/MessageStateComponent.vue";
 
 export class QuestionWithAnswer {
     id?: number;
@@ -78,7 +78,7 @@ export default class Answers extends Vue {
 
     questionsWithAnswers: QuestionWithAnswer[] = [];
     // Forced to use such methods to render view properly on data change, because view.js needs it.
-    answerIds: (number | undefined)[] = [];
+    answerIds: (number | undefined) [] = [];
 
     async mounted() {
         await this.getQuestions();
@@ -90,8 +90,6 @@ export default class Answers extends Vue {
 
     async getQuestions() {
         try {
-            console.log(this.user);
-            console.log(this.user?.id);
             const answers = await app.service('questions').find( { query: { answers: true, godsonId: this.user?.id } } );
             this.questionsWithAnswers = [];
             for (const answer of answers) {
@@ -109,32 +107,25 @@ export default class Answers extends Vue {
         questionData = questionData[0];
         const question = new QuestionWithAnswer(questionData.id, questionData.content, questionData.authorId, questionData.placeholder, questionData.answerId, questionData.answerContent);
         const index = this.questionsWithAnswers.findIndex(question => question.id === idQuestion);
-        console.log(idQuestion);
-        console.log(index);
-        console.log(questionData);
-        console.log(question);
         this.questionsWithAnswers[index] = question;
         this.answerIds[index] = question.answerId;
         this.$set(this.answerIds, index, question.answerId)
-        console.log(this.questionsWithAnswers);
-        console.log(this.answerIds);
     }
 
     async sendAnswer(questionId: number, answerContent: string) {
         const answer = { userId: this.user?.id, questionId: questionId, content: answerContent };
         try {
             await app.service('answers').create(answer);
-            this.messageStateComponent.displaySuccess('La réponse a bien été prise en compte !');
+            this.messageStateComponent.displaySuccess('La réponse a bien été ajoutée.');
             // await this.getQuestions();
             await this.reloadQuestion(answer.questionId);
         } catch (error) {
-            console.log(error);
             if (error.code === 403) {
                 this.messageStateComponent.displayError("Vous n'êtes pas un filleul, vous ne pouvez donner de réponses.");
             } else if (error.code === 408) {
-                this.messageStateComponent.displayError('La date d\'expiration a été atteinte, impossible de réaliser cette action.');
+                this.messageStateComponent.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
             } else {
-                this.messageStateComponent.displayError('Une erreur est survenue.' );
+                this.messageStateComponent.displayError("La réponse n'a pas pu être ajoutée.");
             }
         }
     }
@@ -149,10 +140,15 @@ export default class Answers extends Vue {
                 await app.service('answers').remove(answerId);
                 this.messageStateComponent.displaySuccess('La réponse a bien été supprimée.');
             }
-            // await this.getQuestions();
             await this.reloadQuestion(questionId);
         } catch (error) {
-            this.messageStateComponent.displayError('Une erreur est survenue.')
+            if (error.code === 403) {
+                this.messageStateComponent.displayError("Vous n'êtes pas un filleul, vous ne pouvez modifier des réponses.");
+            } else if (error.code === 408) {
+                this.messageStateComponent.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
+            } else {
+                this.messageStateComponent.displayError("La réponse n'a pas pu être modifiée ou supprimée.");
+            }
         }
     }
 }

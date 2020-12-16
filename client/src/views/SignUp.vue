@@ -148,17 +148,19 @@ export default class LogIn extends Vue {
             // console.log(data);
             await this.$router.push('/login');
         } catch (error) {
-            console.log(error);
             if (error.code === 400) {
-                this.signUpValidation.errorMessage = 'Le nom et/ou le prénom ne respecte(nt) pas le format attendu !';
+                this.signUpValidation.errorMessage = 'Le nom et/ou le prénom ne respecte(nt) pas le format attendu.';
                 this.signUpValidation.hasError = true;
             }
             if (error.code === 406) {
-                this.signUpValidation.errorMessage = "L'email ne respecte pas le format attendu !";
+                this.signUpValidation.errorMessage = "L'email ne respecte pas le format attendu.";
                 this.signUpValidation.hasError = true;
             }
             if (error.code === 409) {
-                this.signUpValidation.errorMessage = 'Un utilisateur existe déjà avec cet email !';
+                this.signUpValidation.errorMessage = 'Un utilisateur existe déjà avec cet email.';
+                this.signUpValidation.hasError = true;
+            } else {
+                this.signUpValidation.errorMessage = "L'utilisateur n'a pas pu être crée.";
                 this.signUpValidation.hasError = true;
             }
         }
@@ -166,7 +168,7 @@ export default class LogIn extends Vue {
 
     checkError() {
         if ((this.signUpForm.password && this.signUpValidation.passwordConfirm) && (this.signUpForm.password != this.signUpValidation.passwordConfirm)) {
-            this.signUpValidation.errorMessage = 'Les mots de passe ne correspondent pas !';
+            this.signUpValidation.errorMessage = 'Les mots de passe ne correspondent pas.';
             this.signUpValidation.hasError = true;
         } else {
             this.noError();
@@ -181,7 +183,7 @@ export default class LogIn extends Vue {
     checkNameValidity() {
         if ((this.signUpForm.firstname && !this.nameValidity.test(this.signUpForm.firstname))
             || (this.signUpForm.lastname && !this.nameValidity.test(this.signUpForm.lastname))) {
-                this.signUpValidation.errorMessage = 'Le nom et/ou le prénom ne respecte(nt) pas le format attendu !';
+                this.signUpValidation.errorMessage = 'Le nom et/ou le prénom ne respecte(nt) pas le format attendu.';
                 this.signUpValidation.hasError = true;
             }
     }

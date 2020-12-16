@@ -3,7 +3,7 @@
         <header>
             <Header :user="this.user" @signalLogOut="logOut"/>
         </header>
-        <router-view :user="this.user" class="content" v-if="this.userLoadingFinished"/>
+        <router-view :user="this.user" class="content" v-if="this.userLoadingFinished" @signalLogOut="logOut"/>
         <footer>
             <Footer/>
         </footer>

@@ -1,9 +1,7 @@
 <template>
     <div class="card-body px-md-5 py-5 messageZone" v-bind:class="[validation.messageState]">
         <transition name="fade" mode="out-in">
-            <div class="text-muted mb-0 alertMessage" role="alert" :key="validation.message">
-                {{ validation.message }}
-            </div>
+            <div class="text-muted mb-0 alertMessage" role="alert" :key="validation.message">{{ validation.message }}</div>
         </transition>
     </div>
 </template>

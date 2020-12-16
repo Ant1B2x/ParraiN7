@@ -13,14 +13,13 @@
                 </div>
             </div>
             <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="customCheck1" v-model="addPlaceholder">
-                <label class="custom-control-label" for="customCheck1">Ajouter un placeholder ?</label>
+                <input type="checkbox" class="custom-control-input" id="placeholderCheck" v-model="addPlaceholder"/>
+                <label class="custom-control-label" for="placeholderCheck">Ajouter un placeholder ?</label>
             </div>
             <div class="form-group col-md-8 placeholder" v-if="addPlaceholder">
-                <!--label class="form-control-label">Placeholder</label-->
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Votre placeholder"
-                           v-model="placeholder" @keyup.enter="sendQuestion">
+                           v-model="placeholder" @keyup.enter="sendQuestion"/>
                 </div>
             </div>
             <div class="mt-4">
@@ -93,7 +92,7 @@
 import {Component, Prop, Ref, Vue} from 'vue-property-decorator';
 import app from '@/feathers-client';
 import {User} from "@/views/Users.vue";
-import MessageStateComponent from "@/components/MessageState.vue";
+import MessageStateComponent from "@/components/MessageStateComponent.vue";
 
 export class Question {
     id: number;
@@ -182,12 +181,11 @@ export default class Questions extends Vue {
             };
             try {
                 await app.service('questions').create(question);
-                this.messageStateComponent.displaySuccess('La question a bien été ajoutée !');
+                this.messageStateComponent.displaySuccess('La question a bien été ajoutée.');
                 await this.loadQuestions();
             } catch(error) {
-                console.log(error);
                 if (error.code === 408) {
-                    this.messageStateComponent.displayError('La date d\'expiration a été atteinte, impossible de réaliser cette action.');
+                    this.messageStateComponent.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
                 } else {
                     this.messageStateComponent.displayError("La question n'a pas pu être ajoutée.");
                 }
@@ -208,14 +206,13 @@ export default class Questions extends Vue {
                     placeholder: question.placeholder
                 }
                 await app.service('questions').patch(question.id, questionToModify);
-                this.messageStateComponent.displaySuccess('La question a bien été modifiée !');
+                this.messageStateComponent.displaySuccess('La question a bien été modifiée.');
                 this.inEdition = false;
                 this.idEditedQuestion = undefined;
                 await this.loadQuestions();
             } catch (error) {
-                console.log(error);
                 if (error.code === 408) {
-                    this.messageStateComponent.displayError('La date d\'expiration a été atteinte, impossible de réaliser cette action.');
+                    this.messageStateComponent.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
                 } else {
                     this.messageStateComponent.displayError("La question n'a pas pu être modifiée.");
                 }
@@ -228,14 +225,13 @@ export default class Questions extends Vue {
     async removeQuestion(question: Question) {
         try {
             await app.service('questions').remove(question.id);
-            this.messageStateComponent.displaySuccess('La question a bien été supprimée !');
+            this.messageStateComponent.displaySuccess('La question a bien été supprimée.');
             this.inEdition = false;
             this.idEditedQuestion = undefined;
             await this.loadQuestions();
         } catch (error) {
-            console.log(error);
             if (error.code === 408) {
-                this.messageStateComponent.displayError('La date d\'expiration a été atteinte, impossible de réaliser cette action.');
+                this.messageStateComponent.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
             } else {
                 this.messageStateComponent.displayError("La question n'a pas pu être supprimée.");
             }
@@ -249,7 +245,6 @@ export default class Questions extends Vue {
     editQuestion(idQuestion: number) {
         this.inEdition = true;
         this.idEditedQuestion = idQuestion;
-        console.log(this.inEdition, this.idEditedQuestion);
     }
 
     questionIsBeingEdited(idQuestion: number) {
