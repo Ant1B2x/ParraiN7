@@ -109,7 +109,7 @@ export default class Answers extends Vue {
         const index = this.questionsWithAnswers.findIndex(question => question.id === idQuestion);
         this.questionsWithAnswers[index] = question;
         this.answerIds[index] = question.answerId;
-        this.$set(this.answerIds, index, question.answerId)
+        this.$set(this.answerIds, index, question.answerId);
     }
 
     async sendAnswer(questionId: number, answerContent: string) {
