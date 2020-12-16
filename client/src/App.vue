@@ -32,9 +32,7 @@ export default class App extends Vue  {
         try {
             const auth = await app.reAuthenticate();
             this.user = auth.user;
-            console.log(this.user);
         } catch (error) {
-            console.log(error);
             // pass
         }
         this.userLoadingFinished = true;
@@ -45,7 +43,6 @@ export default class App extends Vue  {
             const auth = await app.get('authentication');
             this.user = auth ? auth.user : null;
         } catch (error) {
-            console.log(error);
             this.user = null;
         }
     }
@@ -57,12 +54,11 @@ export default class App extends Vue  {
             if(this.$router.currentRoute.path !== '/')
                 await this.$router.replace('/');
         } catch (error) {
-            console.log(error);
             // pass
         }
     }
-
 }
+
 </script>
 
 <style>
