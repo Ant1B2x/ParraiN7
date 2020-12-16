@@ -57,8 +57,8 @@ export default class App extends Vue  {
             // pass
         }
     }
-
 }
+
 </script>
 
 <style>
