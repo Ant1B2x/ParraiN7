@@ -3,7 +3,7 @@
     <MessageStateTest ref="NotificationTest"></MessageStateTest>
     <div class="row align-items-center justify-content-center">
         <div class="col-md-6 py-6 py-md-0">
-            <MessageStateComponent :standard-message="standardMessage" ref="MessageStateComponent"/>
+            <MessageState :standard-message="standardMessage" ref="MessageState"/>
             <form>
                 <div class="form-group">
                     <label class="form-control-label">Email</label>
@@ -44,14 +44,13 @@
 <script lang="ts">
 import {Component, Prop, Ref, Vue} from 'vue-property-decorator';
 import {User} from "@/views/Users.vue";
-import MessageStateComponent from "@/components/MessageStateComponent.vue";
-import {MessageState} from "@/views/message-state-enum";
-import MessageStateTest from "@/components/MessageStateTest.vue";
+import MessageState from "@/components/MessageState.vue";
+import MessageStateTest from "@/components/MessageState.vue";
 
 @Component({
     components: {
         MessageStateTest,
-        MessageStateComponent
+        MessageState
     }
 })
 export default class Token extends Vue {
@@ -61,19 +60,19 @@ export default class Token extends Vue {
     tokenLength = 6;
 
     @Prop() user?: User | null;
-    @Ref('MessageStateComponent') messageStateComponent!: MessageStateComponent;
+    @Ref('MessageState') messageState!: MessageState;
     @Ref('NotificationTest') notificationTest!: MessageStateTest;
 
     async sendToken() {
         if(this.token === '000000') {
-            this.messageStateComponent.displaySuccess('Le token a bien été validé !');
-            this.notificationTest.displayNotificationSuccess('Le token a bien été validé !');
+            this.messageState.displaySuccess('Le token a bien été validé !');
+            this.notificationTest.displaySuccess('Le token a bien été validé !');
         } else if (this.token === '111111') {
-            this.messageStateComponent.displayWarning('Attention, compte déjà validé.');
-            this.notificationTest.displayNotificationWarning('Attention, compte déjà validé.');
+            this.messageState.displayWarning('Attention, compte déjà validé.');
+            this.notificationTest.displayWarning('Attention, compte déjà validé.');
         } else {
-            // this.messageStateComponent.displayError('La token n\'a pu être validé.');
-            this.notificationTest.displayNotificationError('La token n\'a pu être validé.');
+            // this.messageState.displayError('La token n\'a pu être validé.');
+            this.notificationTest.displayError('La token n\'a pu être validé.');
         }
         /*
         const token = {
@@ -83,25 +82,20 @@ export default class Token extends Vue {
         try {
             await // Handle token validation with backend
             // console.log(data);
-            this.messageStateComponent.displaySuccess('Le token a bien été valide !');
+            this.messageState.displaySuccess('Le token a bien été valide !');
         } catch (error) {
             console.log(error);
-            this.messageStateComponent.displayError('La token n\'a pu être validé.');
+            this.messageState.displayError('La token n\'a pu être validé.');
         }
         */
     }
 
     isLongEnough() {
         // console.log(this.token);
-        // console.log(this.messageStateComponent.getCurrentState());
-        if (this.messageStateComponent.getCurrentState() === MessageState.none ||
-            this.messageStateComponent.isOnWarning()) {
-            if (this.token.length !== 6) {
-                this.messageStateComponent.displayWarning('Le token n\'a pas la bonne longueur.');
-            } else {
-                this.messageStateComponent.displayNormalMessage();
-            }
-        }
+        // console.log(this.messageState.getCurrentState());
+        if (this.messageState.isNone() || this.messageState.isOnWarning())
+            if (this.token.length !== 6)
+                this.messageState.displayWarning("Le token n'a pas la bonne longueur.");
     }
 
     isNumber(evt: KeyboardEvent) {

@@ -1,6 +1,6 @@
 <template>
     <div class="questionArea">
-        <MessageStateComponent :standard-message="standardMessage" ref="MessageStateComponent"/>
+        <MessageState :standard-message="standardMessage" ref="MessageState"/>
         <form>
             <div class="form-group">
                 <label class="form-control-label">Question</label>
@@ -92,7 +92,7 @@
 import {Component, Prop, Ref, Vue} from 'vue-property-decorator';
 import app from '@/feathers-client';
 import {User} from "@/views/Users.vue";
-import MessageStateComponent from "@/components/MessageStateComponent.vue";
+import MessageState from "@/components/MessageState.vue";
 
 export class Question {
     id: number;
@@ -114,7 +114,7 @@ export class Question {
 
 @Component({
     components: {
-        MessageStateComponent
+        MessageState
     }
 })
 export default class Questions extends Vue {
@@ -129,7 +129,7 @@ export default class Questions extends Vue {
     idEditedQuestion: number | undefined;
 
     @Prop() user?: User | null;
-    @Ref('MessageStateComponent') messageStateComponent!: MessageStateComponent;
+    @Ref('MessageState') messageState!: MessageState;
 
     async mounted() {
         await this.loadQuestions();
@@ -169,11 +169,11 @@ export default class Questions extends Vue {
 
     async sendQuestion() {
         if (this.questionToAdd.length < 5) {
-            this.messageStateComponent.displayWarning('Votre question est trop courte.');
+            this.messageState.displayWarning('Votre question est trop courte.');
         } else if (this.questionToAdd.length > 255) {
-            this.messageStateComponent.displayWarning('Votre question est trop longue.');
+            this.messageState.displayWarning('Votre question est trop longue.');
         } else if (this.addPlaceholder && (this.placeholder === '' || !this.placeholder)) {
-            this.messageStateComponent.displayWarning('Attention, placeholder non précisé.');
+            this.messageState.displayWarning('Attention, placeholder non précisé.');
         } else {
             const question = {
                 content: this.questionToAdd,
@@ -181,13 +181,13 @@ export default class Questions extends Vue {
             };
             try {
                 await app.service('questions').create(question);
-                this.messageStateComponent.displaySuccess('La question a bien été ajoutée.');
+                this.messageState.displaySuccess('La question a bien été ajoutée.');
                 await this.loadQuestions();
             } catch(error) {
                 if (error.code === 408) {
-                    this.messageStateComponent.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
+                    this.messageState.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
                 } else {
-                    this.messageStateComponent.displayError("La question n'a pas pu être ajoutée.");
+                    this.messageState.displayError("La question n'a pas pu être ajoutée.");
                 }
             }
         }
@@ -195,7 +195,7 @@ export default class Questions extends Vue {
 
     async sendQuestionModified(question: Question) {
         if (this.questionToAdd.length > 255) {
-            this.messageStateComponent.displayWarning('Votre question est trop longue.');
+            this.messageState.displayWarning('Votre question est trop longue.');
             return;
         }
 
@@ -206,15 +206,15 @@ export default class Questions extends Vue {
                     placeholder: question.placeholder
                 }
                 await app.service('questions').patch(question.id, questionToModify);
-                this.messageStateComponent.displaySuccess('La question a bien été modifiée.');
+                this.messageState.displaySuccess('La question a bien été modifiée.');
                 this.inEdition = false;
                 this.idEditedQuestion = undefined;
                 await this.loadQuestions();
             } catch (error) {
                 if (error.code === 408) {
-                    this.messageStateComponent.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
+                    this.messageState.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
                 } else {
-                    this.messageStateComponent.displayError("La question n'a pas pu être modifiée.");
+                    this.messageState.displayError("La question n'a pas pu être modifiée.");
                 }
             }
         } else {
@@ -225,15 +225,15 @@ export default class Questions extends Vue {
     async removeQuestion(question: Question) {
         try {
             await app.service('questions').remove(question.id);
-            this.messageStateComponent.displaySuccess('La question a bien été supprimée.');
+            this.messageState.displaySuccess('La question a bien été supprimée.');
             this.inEdition = false;
             this.idEditedQuestion = undefined;
             await this.loadQuestions();
         } catch (error) {
             if (error.code === 408) {
-                this.messageStateComponent.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
+                this.messageState.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
             } else {
-                this.messageStateComponent.displayError("La question n'a pas pu être supprimée.");
+                this.messageState.displayError("La question n'a pas pu être supprimée.");
             }
         }
     }

@@ -1,38 +1,123 @@
-.alertMessage {
-  position: relative;
-  padding: .75rem 1.25rem;
-  margin-bottom: 1rem;
-  border: 1px solid transparent;
-  border-radius: .25rem;
+/*=============================================================================================================*/
+.alertify-notifier.ajs-right {
+  min-width: 250px;
+  width: auto;
+  max-width: 800px;
+  position: fixed;
+  bottom: 0;
+  right: 0;
 }
 
-.hasError .alertMessage {
-  color: #721c24 !important;
-  background-color: #f8d7da !important;
-  border-color: #f5c6cb !important;
+.alertify-notifier .notification {
+  margin-bottom: 5px;
+  margin-right: 3px;
+  z-index: -1 !important;
 }
 
-
-.hasSucceed .alertMessage {
-  color: #155724 !important;
-  background-color: #d4edda !important;
-  border-color: #c3e6cb !important;
+.alertify-notifier .hasSucceed {
+  color: #155724;
+  background-color: #d4edda;
+  border: 1px solid #26852b;
 }
 
-.hasWarning .alertMessage {
-  color: #856404 !important;
-  background-color: #fff3cd !important;
-  border-color: #ffeeba !important;
+.alertify-notifier .hasError {
+  color: #721c24;
+  background-color: #f8d7da;
+  border: 1px solid #c30;
 }
 
-.hasError .form-group .input-group > .input-group-prepend > .input-group-text > svg {
-  color: #dc6b6b;
+.alertify-notifier .hasWarning {
+  color: #856404;
+  background-color: #fff3cd;
+  border: 1px solid #ffc107;
 }
 
-.fade-enter-active, .fade-leave-active {
-  transition: all 0.5s;
+.alertify-notifier .in {
+  -webkit-animation: swing 1s ease;
+  animation: swing 1s ease;
+  -webkit-animation-iteration-count: 1;
+  animation-iteration-count: 1;
 }
 
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0.1;
+.alertify-notifier .out {
+  -webkit-animation: swingOut 1s ease-out;
+  animation: swingOut 1s ease-out;
+  -webkit-animation-iteration-count: 1;
+  animation-iteration-count: 1;
 }
+
+@keyframes swing
+{
+  0%
+  {
+    -webkit-transform: translateX(100%);
+    transform: translateX(100%);
+    opacity: 0.65;
+  }
+  15%
+  {
+    -webkit-transform: translateX(-50px);
+    transform: translateX(-50px);
+    opacity: 0.85;
+  }
+  30%
+  {
+    -webkit-transform: translateX(40px);
+    transform: translateX(40px);
+    opacity: 1;
+  }
+  50%
+  {
+    -webkit-transform: translateX(-15px);
+    transform: translateX(-15px);
+  }
+  65%
+  {
+    -webkit-transform: translateX(5px);
+    transform: translateX(5px);
+  }
+  75%
+  {
+    -webkit-transform: translateX(-3px);
+    transform: translateX(-3px);
+  }
+  85%
+  {
+    -webkit-transform: translateX(2px);
+    transform: translateX(2px);
+  }
+  925%
+  {
+    -webkit-transform: translateX(-1px);
+    transform: translateX(-1px);
+  }
+  100%
+  {
+    -webkit-transform: translateX(-3px);
+    transform: translateX(-3px);
+  }
+}
+
+@keyframes swingOut
+{
+  15%
+  {
+    -webkit-transform: translateX(-50px);
+    transform: translateX(-50px);
+  }
+  50%
+  {
+    opacity: 0.75;
+  }
+  75%
+  {
+    opacity: 0.50;
+  }
+  100%
+  {
+    -webkit-transform: translateX(100%);
+    transform: translateX(100%);
+    opacity: 0.25;
+  }
+}
+

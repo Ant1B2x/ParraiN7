@@ -19,7 +19,7 @@
             </div>
         </form>
 
-        <MessageStateComponent :standard-message="standardMessage" ref="MessageStateComponent"/>
+        <MessageState :standard-message="standardMessage" ref="MessageState"/>
 
         <div v-if="godsons[this.currentIndex]">
             <h2 style="color: #152c5b;">Filleul #{{this.currentIndex+1}}</h2>
@@ -60,7 +60,7 @@
 <script lang="ts">
 import {Component, Vue, Prop, Ref} from 'vue-property-decorator';
 import Rating from "@/components/Rating.vue"
-import MessageStateComponent from "@/components/MessageStateComponent.vue";
+import MessageState from "@/components/MessageState.vue";
 import app from "@/feathers-client";
 import {User} from "@/views/Users.vue";
 
@@ -105,13 +105,13 @@ export class Godson {
 @Component({
     components: {
         Rating,
-        MessageStateComponent,
+        MessageState,
     }
 })
 export default class Rankings extends Vue {
 
     @Prop() user?: User | null;
-    @Ref('MessageStateComponent') messageStateComponent!: MessageStateComponent;
+    @Ref('MessageState') messageState!: MessageState;
 
     standardMessage = 'Vous pouvez noter les filleuls';
 
@@ -167,13 +167,13 @@ export default class Rankings extends Vue {
                 await app.service('rankings').patch(0, vote);
                 //Send check email or smth
                 // console.log(data);
-                this.messageStateComponent.displaySuccess('Le vote a bien été pris en compte.');
+                this.messageState.displaySuccess('Le vote a bien été pris en compte.');
                 await this.loadUsers();
             } catch(error) {
                 if (error.code === 408) {
-                    this.messageStateComponent.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
+                    this.messageState.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
                 } else {
-                    this.messageStateComponent.displayError("Le vote n'a pas pu être pris en compte.");
+                    this.messageState.displayError("Le vote n'a pas pu être pris en compte.");
                 }
             }
         }
@@ -182,13 +182,13 @@ export default class Rankings extends Vue {
     async removeVote() {
         try {
             await app.service('rankings').remove(this.godsons[this.currentIndex].rankId);
-            this.messageStateComponent.displaySuccess('Le vote a bien été supprimé.');
+            this.messageState.displaySuccess('Le vote a bien été supprimé.');
             await this.loadUsers();
         } catch (error) {
             if (error.code === 408) {
-                this.messageStateComponent.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
+                this.messageState.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
             } else {
-                this.messageStateComponent.displayError("Le vote n'a pas pu être supprimé.");
+                this.messageState.displayError("Le vote n'a pas pu être supprimé.");
             }
         }
     }

@@ -1,6 +1,6 @@
 <template>
     <div class="questionArea">
-        <MessageStateComponent :standard-message="standardMessage" ref="MessageStateComponent"/>
+        <MessageState :standard-message="standardMessage" ref="MessageState"/>
         <!-- Afficher questions existantes -->
         <div class="questionList">
             <div class="card hover-translate-y-n10 hover-shadow-lg" v-for="(question, index) in questionsWithAnswers" :key="question.id">
@@ -44,7 +44,7 @@
 import {Component, Prop, Ref, Vue} from 'vue-property-decorator';
 import app from "@/feathers-client";
 import {User} from "@/views/Users.vue";
-import MessageStateComponent from "@/components/MessageStateComponent.vue";
+import MessageState from "@/components/MessageState.vue";
 
 export class QuestionWithAnswer {
     id?: number;
@@ -66,13 +66,13 @@ export class QuestionWithAnswer {
 
 @Component({
     components: {
-        MessageStateComponent
+        MessageState
     }
 })
 export default class Answers extends Vue {
 
     @Prop() user?: User;
-    @Ref('MessageStateComponent') messageStateComponent!: MessageStateComponent;
+    @Ref('MessageState') messageState!: MessageState;
 
     standardMessage = 'Veuillez répondre aux questions.';
 
@@ -116,16 +116,16 @@ export default class Answers extends Vue {
         const answer = { userId: this.user?.id, questionId: questionId, content: answerContent };
         try {
             await app.service('answers').create(answer);
-            this.messageStateComponent.displaySuccess('La réponse a bien été ajoutée.');
+            this.messageState.displaySuccess('La réponse a bien été ajoutée.');
             // await this.getQuestions();
             await this.reloadQuestion(answer.questionId);
         } catch (error) {
             if (error.code === 403) {
-                this.messageStateComponent.displayError("Vous n'êtes pas un filleul, vous ne pouvez donner de réponses.");
+                this.messageState.displayError("Vous n'êtes pas un filleul, vous ne pouvez donner de réponses.");
             } else if (error.code === 408) {
-                this.messageStateComponent.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
+                this.messageState.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
             } else {
-                this.messageStateComponent.displayError("La réponse n'a pas pu être ajoutée.");
+                this.messageState.displayError("La réponse n'a pas pu être ajoutée.");
             }
         }
     }
@@ -135,19 +135,19 @@ export default class Answers extends Vue {
             if (answerContent.length > 0) {
                 const answer = {content: answerContent};
                 await app.service('answers').patch(answerId, answer);
-                this.messageStateComponent.displaySuccess('La réponse a bien été modifiée.');
+                this.messageState.displaySuccess('La réponse a bien été modifiée.');
             } else {
                 await app.service('answers').remove(answerId);
-                this.messageStateComponent.displaySuccess('La réponse a bien été supprimée.');
+                this.messageState.displaySuccess('La réponse a bien été supprimée.');
             }
             await this.reloadQuestion(questionId);
         } catch (error) {
             if (error.code === 403) {
-                this.messageStateComponent.displayError("Vous n'êtes pas un filleul, vous ne pouvez modifier des réponses.");
+                this.messageState.displayError("Vous n'êtes pas un filleul, vous ne pouvez modifier des réponses.");
             } else if (error.code === 408) {
-                this.messageStateComponent.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
+                this.messageState.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
             } else {
-                this.messageStateComponent.displayError("La réponse n'a pas pu être modifiée ou supprimée.");
+                this.messageState.displayError("La réponse n'a pas pu être modifiée ou supprimée.");
             }
         }
     }
