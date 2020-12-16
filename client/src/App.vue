@@ -3,7 +3,7 @@
         <header>
             <Header :user="this.user" @signalLogOut="logOut"/>
         </header>
-        <router-view :user="this.user" class="content"/>
+        <router-view :user="this.user" class="content" v-if="this.userLoadingFinished"/>
         <footer>
             <Footer/>
         </footer>
@@ -26,6 +26,7 @@ import {User} from "@/views/Users.vue";
 export default class App extends Vue  {
 
     user: User | null = null;
+    userLoadingFinished = false;
 
     private async beforeCreate() {
         try {
@@ -36,6 +37,7 @@ export default class App extends Vue  {
             console.log(error);
             // pass
         }
+        this.userLoadingFinished = true;
     }
 
     private async beforeUpdate() {
