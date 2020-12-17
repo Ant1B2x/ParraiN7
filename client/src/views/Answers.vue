@@ -33,6 +33,7 @@
                 </div>
             </div>
         </div>
+        <MessageState ref="MessageState"/>
     </div>
 </template>
 
