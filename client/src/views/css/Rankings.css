@@ -1,4 +1,4 @@
-.questionArea {
+.rankingArea {
   margin: auto;
   width: 80%;
   max-width: 1024px;
@@ -6,17 +6,17 @@
   flex-flow: column;
 }
 
-.questionArea form {
+.rankingArea form {
   margin: auto;
   width: 80%;
 }
 
-.questionArea form button {
+.rankingArea form button {
   float: right;
   max-width: 150px;
 }
 
-.questionArea .separator {
+.rankingArea .separator {
   width: 100%;
   background-color: lightgrey;
   border-top: 1px solid rgba(0, 0, 0, .1);
@@ -24,7 +24,7 @@
   margin-bottom: 50px; */
 }
 
-.questionArea .questionList {
+.rankingArea .questionList {
   min-width: 500px;
   margin: auto;
   width: 100%;
@@ -33,22 +33,22 @@
   justify-content: space-between;
 }
 
-.questionArea .questionList .card {
+.rankingArea .questionList .card {
   width: 49%;
 }
 
-.questionArea .form-row-search {
+.rankingArea .form-row-search {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
 
 }
 
-.questionArea .card .pb-4 {
+.rankingArea .card .pb-4 {
   padding-bottom: unset !important;
 }
 
-.questionArea .card .pt-2 h5 {
+.rankingArea .card .pt-2 h5 {
   padding-bottom: 1.5rem !important
 }
 
@@ -63,10 +63,10 @@
 }
 
 @media (max-width: 600px) {
-  .questionArea .questionList {
+  .rankingArea .questionList {
     min-width: unset;
   }
-  .questionArea .questionList .card {
+  .rankingArea .questionList .card {
     width: 100%;
     max-width: 500px;
   }

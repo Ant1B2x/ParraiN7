@@ -1,14 +1,12 @@
 <template>
-    <div class="questionArea">
-        <MessageState :standard-message="standardMessage" ref="MessageState"/>
+    <div class="answerArea">
+        <div class="text-muted mb-5">Envoie tes meilleures réponses</div>
         <!-- Afficher questions existantes -->
         <div class="questionList">
             <div class="card hover-translate-y-n10 hover-shadow-lg" v-for="(question, index) in questionsWithAnswers" :key="question.id">
                 <div class="card-body">
                     <div class="pb-4">
-                        <div class="icon bg-dark text-white rounded-circle icon-shape shadow">
-                            <!--i data-feather="droplet"></i-->?
-                        </div>
+                        <div class="icon bg-dark text-white rounded-circle icon-shape shadow">?</div>
                     </div>
                     <div class="pt-2 pb-3">
                         <p class="text-muted mb-0">
@@ -73,8 +71,6 @@ export default class Answers extends Vue {
 
     @Prop() user?: User;
     @Ref('MessageState') messageState!: MessageState;
-
-    standardMessage = 'Veuillez répondre aux questions.';
 
     questionsWithAnswers: QuestionWithAnswer[] = [];
     // Forced to use such methods to render view properly on data change, because view.js needs it.

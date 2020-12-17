@@ -1,40 +1,40 @@
 <template>
-<div class="container d-flex flex-column">
-    <MessageStateTest ref="NotificationTest"></MessageStateTest>
-    <div class="row align-items-center justify-content-center">
-        <div class="col-md-6 py-6 py-md-0">
-            <MessageState :standard-message="standardMessage" ref="MessageState"/>
-            <form>
-                <div class="form-group">
-                    <label class="form-control-label">Email</label>
-                    <div class="input-group input-group-email">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><font-awesome-icon icon="user"/></span>
-                        </div>
-                        <input type="text" class="form-control" placeholder="prenom.nom"
-                               v-model="email" @keyup.enter="sendToken">
-                        <div class="input-group-append">
-                            <span class="input-group-text">@etu.toulouse-inp.fr</span>
+    <div class="container d-flex flex-column">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-md-6 py-6 py-md-0">
+                <div class="text-muted mb-5">Entrez votre mail et votre token pour valider votre compte</div>
+                <form>
+                    <div class="form-group">
+                        <label class="form-control-label">Email</label>
+                        <div class="input-group input-group-email">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><font-awesome-icon icon="user"/></span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="prenom.nom"
+                                   v-model="email" @keyup.enter="sendToken">
+                            <div class="input-group-append">
+                                <span class="input-group-text">@etu.toulouse-inp.fr</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-control-label">Token</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><font-awesome-icon icon="ring"/></span>
+                    <div class="form-group">
+                        <label class="form-control-label">Token</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><font-awesome-icon icon="ring"/></span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="Votre token" maxlength="6"
+                                   v-model="token" @keyup.enter="sendToken" @blur="isLongEnough" @keydown="isNumber" @keyup="analyzeToken">
                         </div>
-                        <input type="text" class="form-control" placeholder="Votre token"
-                               v-model="token" @keyup.enter="sendToken" @blur="isLongEnough" @keydown="isNumber" @keyup="analyzeToken">
                     </div>
-                </div>
-                <div class="mt-4">
-                    <button type="button" class="btn btn-primary" v-on:click="sendToken" :disabled="this.token.length !== tokenLength">Valider</button>
-                </div>
-            </form>
+                    <div class="mt-4">
+                        <button type="button" class="btn btn-primary" v-on:click="sendToken" :disabled="this.token.length !== tokenLength">Valider</button>
+                    </div>
+                </form>
+            </div>
         </div>
+        <MessageState ref="MessageState"/>
     </div>
-</div>
 </template>
 
 <style scoped>
@@ -45,34 +45,27 @@
 import {Component, Prop, Ref, Vue} from 'vue-property-decorator';
 import {User} from "@/views/Users.vue";
 import MessageState from "@/components/MessageState.vue";
-import MessageStateTest from "@/components/MessageState.vue";
 
 @Component({
     components: {
-        MessageStateTest,
         MessageState
     }
 })
 export default class Token extends Vue {
     token = '';
     email = '';
-    standardMessage = 'Entrez votre mail et votre token, pour valider votre compte.';
     tokenLength = 6;
 
     @Prop() user?: User | null;
     @Ref('MessageState') messageState!: MessageState;
-    @Ref('NotificationTest') notificationTest!: MessageStateTest;
 
     async sendToken() {
         if(this.token === '000000') {
             this.messageState.displaySuccess('Le token a bien été validé !');
-            this.notificationTest.displaySuccess('Le token a bien été validé !');
         } else if (this.token === '111111') {
             this.messageState.displayWarning('Attention, compte déjà validé.');
-            this.notificationTest.displayWarning('Attention, compte déjà validé.');
         } else {
-            // this.messageState.displayError('La token n\'a pu être validé.');
-            this.notificationTest.displayError('La token n\'a pu être validé.');
+            this.messageState.displayError("Le token n'a pas pu être validé.");
         }
         /*
         const token = {
@@ -99,9 +92,9 @@ export default class Token extends Vue {
     }
 
     isNumber(evt: KeyboardEvent) {
-        if ([46, 8, 9, 27, 13, 110, 190].includes(evt.keyCode) ||
+        if (['delete', 'backspace', 'tab', 'escape', 'enter', 'decimal point', 'period'].includes(evt.key) ||
             // Allow: Ctrl+A,Ctrl+C,Ctrl+V, Command+A
-            ((evt.keyCode == 65 || evt.keyCode == 86 || evt.keyCode == 67) && (evt.ctrlKey === true || evt.metaKey === true)) ||
+            ((evt.key === 'a' || evt.key === 'v' || evt.key === 'c') && (evt.ctrlKey === true || evt.metaKey === true)) ||
             // Allow: home, end, left, right, down, up
             (evt.keyCode >= 35 && evt.keyCode <= 40)) {
             // let it happen, don't do anything

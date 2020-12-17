@@ -1,6 +1,6 @@
 <template>
     <div class="questionArea">
-        <MessageState :standard-message="standardMessage" ref="MessageState"/>
+        <div class="text-muted mb-5">Envoie tes meilleures questions</div>
         <form>
             <div class="form-group">
                 <label class="form-control-label">Question</label>
@@ -56,9 +56,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <div class="pb-4">
-                        <div class="icon bg-dark text-white rounded-circle icon-shape shadow">
-                            ?
-                        </div>
+                        <div class="icon bg-dark text-white rounded-circle icon-shape shadow">?</div>
                     </div>
                     <div class="pt-2 pb-3">
                         <h5>{{ question.authorFirstname }} {{ question.authorLastname }}</h5>
@@ -81,6 +79,7 @@
                 </div>
             </div>
         </div>
+        <MessageState ref="MessageState"/>
     </div>
 </template>
 
@@ -124,7 +123,6 @@ export default class Questions extends Vue {
     addPlaceholder = false;
     questionToAdd = '';
     placeholder = '';
-    standardMessage = 'Ajoutez votre question';
     inEdition = false;
     idEditedQuestion: number | undefined;
 

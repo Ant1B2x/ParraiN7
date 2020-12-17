@@ -15,7 +15,7 @@
         <!-- Ligne séparatrice -->
         <hr class="separator"/>
 
-        <MessageState :standard-message="standardMessage" ref="MessageState"/>
+        <div class="text-muted mb-5">Modification d'un utilisateur, vous modifier vous-même vous déconnectera</div>
 
         <!-- Afficher users existantes -->
         <div class="userInformation" v-if="selectedUser">
@@ -61,6 +61,7 @@
                 </div>
             </form>
         </div>
+        <MessageState ref="MessageState"/>
     </div>
 </template>
 
@@ -105,7 +106,6 @@ export default class Users extends Vue {
 
     @Prop() user?: User | null;
     @Ref('MessageState') messageState!: MessageState;
-    private standardMessage = "Modification d'un utilisateur, vous modifier vous-même vous déconnectera";
 
     private users: User[] = [];
     private usersOriginal: User[] = [];

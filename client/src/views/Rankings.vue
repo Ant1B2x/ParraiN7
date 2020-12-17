@@ -1,5 +1,8 @@
 <template>
-    <div class="questionArea">
+    <div class="rankingArea">
+
+        <div class="text-muted mb-5">Note selon tes préférences</div>
+
         <form>
             <div class="row justify-content-center">
                 <div class="col col-md-1 align-self-center mb-1 order-1 order-md-0">
@@ -19,8 +22,6 @@
             </div>
         </form>
 
-        <MessageState :standard-message="standardMessage" ref="MessageState"/>
-
         <div v-if="godsons[this.currentIndex]">
             <h2 style="color: #152c5b;">Filleul #{{this.currentIndex+1}}</h2>
             <Rating :grade="godsons[this.currentIndex].rank" :maxStars="5" :hasCounter="true" @updatedStars="changeRanking"/>
@@ -37,9 +38,7 @@
                  :key="question.idQuestion">
                 <div class="card-body">
                     <div class="pb-4">
-                        <div class="icon bg-dark text-white rounded-circle icon-shape shadow">
-                            <!--i data-feather="droplet"></i-->?
-                        </div>
+                        <div class="icon bg-dark text-white rounded-circle icon-shape shadow">?</div>
                     </div>
                     <div class="pt-2 pb-3">
                         <h5 class="mb-0">{{ question.questionContent }}</h5>
@@ -50,6 +49,9 @@
                 </div>
             </div>
         </div>
+
+        <MessageState ref="MessageState"/>
+
     </div>
 </template>
 
@@ -112,8 +114,6 @@ export default class Rankings extends Vue {
 
     @Prop() user?: User | null;
     @Ref('MessageState') messageState!: MessageState;
-
-    standardMessage = 'Vous pouvez noter les filleuls';
 
     godsons: Godson[] = [];
     godsonsOriginal: Godson[] = [];
