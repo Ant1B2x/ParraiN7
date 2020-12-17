@@ -15,7 +15,7 @@
         <!-- Ligne séparatrice -->
         <hr class="separator"/>
 
-        <MessageStateComponent :standard-message="standardMessage" ref="MessageStateComponent"/>
+        <div class="text-muted mb-5">Modification d'un utilisateur, vous modifier vous-même vous déconnectera</div>
 
         <!-- Afficher users existantes -->
         <div class="userInformation" v-if="selectedUser">
@@ -61,6 +61,7 @@
                 </div>
             </form>
         </div>
+        <MessageState ref="MessageState"/>
     </div>
 </template>
 
@@ -71,7 +72,7 @@
 <script lang="ts">
 import {Component, Prop, Ref, Vue} from 'vue-property-decorator';
 import app from "@/feathers-client";
-import MessageStateComponent from "@/components/MessageStateComponent.vue";
+import MessageState from "@/components/MessageState.vue";
 
 export class User {
     id: number;
@@ -98,14 +99,13 @@ export class User {
 
 @Component({
     components: {
-        MessageStateComponent,
+        MessageState,
     }
 })
 export default class Users extends Vue {
 
     @Prop() user?: User | null;
-    @Ref('MessageStateComponent') messageStateComponent!: MessageStateComponent;
-    private standardMessage = "Modification d'un utilisateur, vous modifier vous-même vous déconnectera";
+    @Ref('MessageState') messageState!: MessageState;
 
     private users: User[] = [];
     private usersOriginal: User[] = [];
@@ -152,11 +152,11 @@ export default class Users extends Vue {
     async removeUser() {
         try {
             await app.service('users').remove(this.selectedUser?.id);
-            this.messageStateComponent.displaySuccess("L'utilisateur a bien été supprimé.");
+            this.messageState.displaySuccess("L'utilisateur a bien été supprimé.");
             await this.loadUsers();
             this.selectedUser = this.users[0];
         } catch (error) {
-            this.messageStateComponent.displayError("Une erreur est survenue. Contactez l'administrateur du site.");
+            this.messageState.displayError("Une erreur est survenue. Contactez l'administrateur du site.");
         }
     }
 
@@ -172,7 +172,7 @@ export default class Users extends Vue {
             this.reloadSelectedUser();
             this.hasUserChanged();
         } catch (error) {
-            this.messageStateComponent.displayError("Une erreur est survenue. Contactez l'administrateur du site.");
+            this.messageState.displayError("Une erreur est survenue. Contactez l'administrateur du site.");
         }
     }
 }

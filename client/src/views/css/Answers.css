@@ -1,4 +1,4 @@
-.questionArea {
+.answerArea {
   margin: auto;
   width: 80%;
   /*max-width: 1024px;*/
@@ -6,17 +6,17 @@
   flex-flow: column;
 }
 
-.questionArea form {
+.answerArea form {
   margin: auto;
   width: 80%;
 }
 
-.questionArea form button {
+.answerArea form button {
   float: right;
   max-width: 150px;
 }
 
-.questionArea .questionList {
+.answerArea .questionList {
   min-width: 500px;
   margin: auto;
   width: 100%;
@@ -25,23 +25,23 @@
   justify-content: space-between;
 }
 
-.questionArea .questionList .card {
+.answerArea .questionList .card {
   width: 49%;
 }
 
-.questionArea .card .pb-4 {
+.answerArea .card .pb-4 {
   padding-bottom: unset !important;
 }
 
-.questionArea .card .pt-2 h5 {
+.answerArea .card .pt-2 h5 {
   padding-bottom: 1.5rem !important
 }
 
 @media (max-width: 600px) {
-  .questionArea .questionList {
+  .answerArea .questionList {
     min-width: unset;
   }
-  .questionArea .questionList .card {
+  .answerArea .questionList .card {
     width: 100%;
     max-width: 500px;
   }
