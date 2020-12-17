@@ -6,7 +6,9 @@
             <div class="card hover-translate-y-n10 hover-shadow-lg" v-for="(question, index) in questionsWithAnswers" :key="question.id">
                 <div class="card-body">
                     <div class="pb-4">
-                        <div class="icon bg-dark text-white rounded-circle icon-shape shadow">?</div>
+                        <div class="icon bg-dark text-white rounded-circle icon-shape shadow">
+                            {{ question.authorInitials }}
+                        </div>
                     </div>
                     <div class="pt-2 pb-3">
                         <p class="text-muted mb-0">
@@ -48,14 +50,16 @@ export class QuestionWithAnswer {
     id?: number;
     content: string;
     authorId: number;
+    authorInitials: string;
     placeholder: string;
     answerId: number;
     answerContent: string;
 
-    constructor(id: number, content: string,  authorId: number, placeholder: string, answerId: number, answerContent: string) {
+    constructor(id: number, content: string,  authorId: number, authorInitials: string, placeholder: string, answerId: number, answerContent: string) {
         this.id = id;
         this.content = content;
         this.authorId = authorId;
+        this.authorInitials = authorInitials;
         this.placeholder = placeholder;
         this.answerId = answerId;
         this.answerContent = answerContent;
@@ -90,7 +94,7 @@ export default class Answers extends Vue {
             this.questionsWithAnswers = [];
             for (const answer of answers) {
                 this.questionsWithAnswers.push(new QuestionWithAnswer(answer.id, answer.content,
-                    answer.authorId, answer.placeholder, answer.answerId, answer.answerContent))
+                    answer.authorId, answer.authorInitials, answer.placeholder, answer.answerId, answer.answerContent))
                 this.answerIds.push(answer.answerId);
             }
         } catch (e) {
@@ -101,7 +105,8 @@ export default class Answers extends Vue {
     async reloadQuestion(idQuestion: number) {
         let questionData = await app.service('questions').find( { query: { answers: true, godsonId: this.user?.id, id: idQuestion } } );
         questionData = questionData[0];
-        const question = new QuestionWithAnswer(questionData.id, questionData.content, questionData.authorId, questionData.placeholder, questionData.answerId, questionData.answerContent);
+        const question = new QuestionWithAnswer(questionData.id, questionData.content, questionData.authorId,
+            questionData.authorInitials, questionData.placeholder, questionData.answerId, questionData.answerContent);
         const index = this.questionsWithAnswers.findIndex(question => question.id === idQuestion);
         this.questionsWithAnswers[index] = question;
         this.answerIds[index] = question.answerId;

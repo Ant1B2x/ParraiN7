@@ -56,7 +56,9 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <div class="pb-4">
-                        <div class="icon bg-dark text-white rounded-circle icon-shape shadow">?</div>
+                        <div class="icon bg-dark text-white rounded-circle icon-shape shadow">
+                            {{ question.authorInitials }}
+                        </div>
                     </div>
                     <div class="pt-2 pb-3">
                         <h5>{{ question.authorFirstname }} {{ question.authorLastname }}</h5>
@@ -98,14 +100,16 @@ export class Question {
     authorFirstname: string;
     authorLastname: string;
     authorId: number;
+    authorInitials: string;
     content: string;
     placeholder?: string;
 
-    constructor(id: number, authorFirstname: string, authorLastname: string, authorId: number, content: string, placeholder: string) {
+    constructor(id: number, authorFirstname: string, authorLastname: string, authorId: number, authorInitials: string, content: string, placeholder: string) {
         this.id = id;
         this.authorFirstname = authorFirstname;
         this.authorLastname = authorLastname;
         this.authorId = authorId;
+        this.authorInitials = authorInitials;
         this.content = content;
         this.placeholder = placeholder;
     }
