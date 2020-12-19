@@ -92,8 +92,8 @@
 <script lang="ts">
 import {Component, Prop, Ref, Vue} from 'vue-property-decorator';
 import app from '@/feathers-client';
-import {User} from "@/views/Users.vue";
-import MessageState from "@/components/MessageState.vue";
+import {User} from '@/views/Users.vue';
+import MessageState from '@/components/MessageState.vue';
 
 export class Question {
     id: number;

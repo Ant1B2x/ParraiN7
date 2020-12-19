@@ -165,8 +165,6 @@ export default class Rankings extends Vue {
             }
             try {
                 await app.service('rankings').patch(0, vote);
-                //Send check email or smth
-                // console.log(data);
                 this.messageState.displaySuccess('Le vote a bien été pris en compte.');
                 await this.loadUsers();
             } catch(error) {
