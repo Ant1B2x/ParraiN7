@@ -2,7 +2,7 @@
     <div class="alertify-notifier ajs-bottom ajs-right">
         <div v-for="(notification, index) in notifications"  :key="index" class="notification" :class="[notification.state, notification.step]">
             <div class="d-flex px-3 py-2 align-items-center">
-                    <span class="icon"><font-awesome-icon :icon="notification.icon"/></span>
+                <span class="icon"><font-awesome-icon :icon="notification.icon"/></span>
                 <div class="alert-text-body" role="status">{{notification.message}}</div>
             </div>
         </div>
@@ -51,14 +51,13 @@ export default class MessageState extends Vue {
     }
 
     displayError(message: string) {
-        this.displayNotification(message, States.hasError, 'biohazard');
+        this.displayNotification(message, States.hasError, 'times-circle');
     }
 
     displayNotification(message: string, state: States, icon: string) {
         this.notifications.push(new Notification(message, state, NotificationStep.in, icon));
         setTimeout(() => {
             this.notifications.shift();
-            console.log('plap');
         }, 6000);
     }
 
@@ -78,18 +77,6 @@ export default class MessageState extends Vue {
         return this.getLastNotification().state === States.hasWarning;
     }
 
-    public getIconFromState(state: States) {
-        switch (state) {
-            case States.hasSucceed:
-                return 'check';
-            case States.hasError:
-                return 'exclamation-triangle';
-            case States.hasWarning:
-                return 'exclamation-triangle';
-            case States.none:
-                return 'user-ninja';
-        }
-    }
 }
 
 </script>

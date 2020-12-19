@@ -16,7 +16,7 @@ import {
     faRing,
     faCheck,
     faExclamationTriangle,
-    faBiohazard
+    faTimesCircle
 } from "@fortawesome/free-solid-svg-icons";
 import {library} from "@fortawesome/fontawesome-svg-core";
 
@@ -34,7 +34,7 @@ library.add(faAngleRight);
 library.add(faRing);
 library.add(faCheck);
 library.add(faExclamationTriangle);
-library.add(faBiohazard);
+library.add(faTimesCircle);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
