@@ -10,7 +10,6 @@ export interface UserData {
     lastname?: string;
     isGodfather: boolean;
     isAdmin: boolean;
-    token: number;
 }
 
 export class Users extends Service<UserData> {
