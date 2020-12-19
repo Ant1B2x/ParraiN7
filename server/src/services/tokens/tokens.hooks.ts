@@ -1,6 +1,7 @@
 import * as authentication from '@feathersjs/authentication';
 import checkAdmin from '../../hooks/check-admin';
-import checkToken from '../../hooks/tokens/check-token';
+import tryToken from '../../hooks/tokens/try-token';
+import checkTokenLength from '../../hooks/tokens/check-token-length';
 // Don't remove this comment. It's needed to format import lines nicely.
 
 const {authenticate} = authentication.hooks;
@@ -10,10 +11,10 @@ export default {
         all: [authenticate('jwt')],
         find: [checkAdmin()],
         get: [checkAdmin()],
-        create: [checkAdmin()],
+        create: [checkAdmin(), checkTokenLength()],
         update: [checkAdmin()],
         patch: [checkAdmin()],
-        remove: [checkToken()]
+        remove: [tryToken()]
     },
 
     after: {
