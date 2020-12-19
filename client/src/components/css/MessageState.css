@@ -6,12 +6,12 @@
   position: fixed;
   bottom: 0;
   right: 0;
+  z-index: 100;
 }
 
 .alertify-notifier .notification {
   margin-bottom: 5px;
   margin-right: 3px;
-  z-index: 10000;
 }
 
 .alertify-notifier .hasSucceed {
@@ -33,17 +33,24 @@
 }
 
 .alertify-notifier .in {
-  -webkit-animation: swing 1s ease;
-  animation: swing 1s ease;
-  -webkit-animation-iteration-count: 1;
-  animation-iteration-count: 1;
+  animation: swing 7000ms;
 }
 
 .alertify-notifier .out {
-  -webkit-animation: swingOut 1s ease-out;
-  animation: swingOut 1s ease-out;
-  -webkit-animation-iteration-count: 1;
-  animation-iteration-count: 1;
+  opacity: 0;
+}
+
+.alertify-notifier .notification .icon {
+  margin-right: 15px;
+}
+
+.alertify-notifier .notification .alert-text-body {
+  vertical-align: middle;
+}
+
+.alertify-notifier .notification .icon svg {
+  width: 1.125em;
+  height: unset;
 }
 
 @keyframes swing
@@ -52,72 +59,33 @@
   {
     -webkit-transform: translateX(100%);
     transform: translateX(100%);
-    opacity: 0.65;
-  }
-  15%
-  {
-    -webkit-transform: translateX(-50px);
-    transform: translateX(-50px);
     opacity: 0.85;
   }
-  30%
+  10%
   {
-    -webkit-transform: translateX(40px);
-    transform: translateX(40px);
+    -webkit-transform: translateX(-10%);
+    transform: translateX(-10%);
+    opacity: 0.85;
+  }
+  20%
+  {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
     opacity: 1;
   }
-  50%
+  79%
   {
-    -webkit-transform: translateX(-15px);
-    transform: translateX(-15px);
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+    opacity: 1;
   }
-  65%
+  90%
   {
-    -webkit-transform: translateX(5px);
-    transform: translateX(5px);
-  }
-  75%
-  {
-    -webkit-transform: translateX(-3px);
-    transform: translateX(-3px);
-  }
-  85%
-  {
-    -webkit-transform: translateX(2px);
-    transform: translateX(2px);
-  }
-  925%
-  {
-    -webkit-transform: translateX(-1px);
-    transform: translateX(-1px);
+    opacity: 0.5;
   }
   100%
   {
-    -webkit-transform: translateX(-3px);
-    transform: translateX(-3px);
-  }
-}
-
-@keyframes swingOut
-{
-  15%
-  {
-    -webkit-transform: translateX(-50px);
-    transform: translateX(-50px);
-  }
-  50%
-  {
-    opacity: 0.75;
-  }
-  75%
-  {
-    opacity: 0.50;
-  }
-  100%
-  {
-    -webkit-transform: translateX(100%);
-    transform: translateX(100%);
-    opacity: 0.25;
+    opacity: 0;
   }
 }
 
