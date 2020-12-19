@@ -170,7 +170,7 @@ export default class Questions extends Vue {
     }
 
     async sendQuestion() {
-        if (this.questionToAdd.length < 5) {
+        if (this.questionToAdd.trim().length < 5) {
             this.messageState.displayWarning('Votre question est trop courte.');
         } else if (this.questionToAdd.length > 255) {
             this.messageState.displayWarning('Votre question est trop longue.');
@@ -203,7 +203,7 @@ export default class Questions extends Vue {
             return;
         }
 
-        if (question.content.length > 0) {
+        if (question.content.trim().length > 0) {
             try {
                 const questionToModify = {
                     content: question.content,

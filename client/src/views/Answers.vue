@@ -115,28 +115,31 @@ export default class Answers extends Vue {
     }
 
     async sendAnswer(questionId: number, answerContent: string) {
-        const answer = { userId: this.user?.id, questionId: questionId, content: answerContent };
-        try {
-            await app.service('answers').create(answer);
-            this.messageState.displaySuccess('La réponse a bien été ajoutée.');
-            // await this.getQuestions();
-            await this.reloadQuestion(answer.questionId);
-        } catch (error) {
-            if (error.code === 403) {
-                this.messageState.displayError("Vous n'êtes pas un filleul, vous ne pouvez donner de réponses.");
-            } else if (error.code === 405) {
-                this.messageState.displayError("Votre compte n'est pas encore validé.");
-            } else if (error.code === 408) {
-                this.messageState.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
-            } else {
-                this.messageState.displayError("La réponse n'a pas pu être ajoutée.");
+        if (answerContent.trim().length > 0) {
+            try {
+                const answer = {userId: this.user?.id, questionId: questionId, content: answerContent};
+                await app.service('answers').create(answer);
+                this.messageState.displaySuccess('La réponse a bien été ajoutée.');
+                // await this.getQuestions();
+                await this.reloadQuestion(answer.questionId);
+            } catch (error) {
+                if (error.code === 403) {
+                    this.messageState.displayError("Vous n'êtes pas un filleul, vous ne pouvez donner de réponses.");
+                } else if (error.code === 405) {
+                    this.messageState.displayError("Votre compte n'est pas encore validé.");
+                } else if (error.code === 408) {
+                    this.messageState.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
+                } else {
+                    this.messageState.displayError("La réponse n'a pas pu être ajoutée.");
+                }
             }
-        }
+        } else
+            this.messageState.displayError("Vous ne pouvez envoyer de réponse vide ou uniquement constitué d'espaces.");
     }
 
     async editAnswer(questionId: number, answerId: number, answerContent: string) {
         try {
-            if (answerContent.length > 0) {
+            if (answerContent.trim().length > 0) {
                 const answer = {content: answerContent};
                 await app.service('answers').patch(answerId, answer);
                 this.messageState.displaySuccess('La réponse a bien été modifiée.');
