@@ -188,6 +188,8 @@ export default class Questions extends Vue {
             } catch(error) {
                 if (error.code === 408) {
                     this.messageState.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
+                } else if (error.code === 405) {
+                    this.messageState.displayError("Votre compte n'est pas encore validé.");
                 } else {
                     this.messageState.displayError("La question n'a pas pu être ajoutée.");
                 }
@@ -215,6 +217,8 @@ export default class Questions extends Vue {
             } catch (error) {
                 if (error.code === 408) {
                     this.messageState.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
+                } else if (error.code === 405) {
+                    this.messageState.displayError("Votre compte n'est pas encore validé.");
                 } else {
                     this.messageState.displayError("La question n'a pas pu être modifiée.");
                 }
@@ -234,6 +238,8 @@ export default class Questions extends Vue {
         } catch (error) {
             if (error.code === 408) {
                 this.messageState.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
+            } else if (error.code === 405) {
+                this.messageState.displayError("Votre compte n'est pas encore validé.");
             } else {
                 this.messageState.displayError("La question n'a pas pu être supprimée.");
             }

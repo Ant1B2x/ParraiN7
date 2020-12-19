@@ -156,7 +156,10 @@ export default class Users extends Vue {
             await this.loadUsers();
             this.selectedUser = this.users[0];
         } catch (error) {
-            this.messageState.displayError("Une erreur est survenue. Contactez l'administrateur du site.");
+            if (error.code === 405) {
+                this.messageState.displayError("Votre compte n'est pas encore validé.");
+            } else
+                this.messageState.displayError("Une erreur est survenue. Contactez l'administrateur du site.");
         }
     }
 
@@ -172,7 +175,10 @@ export default class Users extends Vue {
             this.reloadSelectedUser();
             this.hasUserChanged();
         } catch (error) {
-            this.messageState.displayError("Une erreur est survenue. Contactez l'administrateur du site.");
+            if (error.code === 405) {
+                this.messageState.displayError("Votre compte n'est pas encore validé.");
+            } else
+                this.messageState.displayError("Une erreur est survenue. Contactez l'administrateur du site.");
         }
     }
 }

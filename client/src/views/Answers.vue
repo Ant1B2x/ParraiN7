@@ -124,6 +124,8 @@ export default class Answers extends Vue {
         } catch (error) {
             if (error.code === 403) {
                 this.messageState.displayError("Vous n'êtes pas un filleul, vous ne pouvez donner de réponses.");
+            } else if (error.code === 405) {
+                this.messageState.displayError("Votre compte n'est pas encore validé.");
             } else if (error.code === 408) {
                 this.messageState.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
             } else {
@@ -146,6 +148,8 @@ export default class Answers extends Vue {
         } catch (error) {
             if (error.code === 403) {
                 this.messageState.displayError("Vous n'êtes pas un filleul, vous ne pouvez modifier des réponses.");
+            } else if (error.code === 405) {
+                this.messageState.displayError("Votre compte n'est pas encore validé.");
             } else if (error.code === 408) {
                 this.messageState.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
             } else {

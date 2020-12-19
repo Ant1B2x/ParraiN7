@@ -170,6 +170,8 @@ export default class Rankings extends Vue {
             } catch(error) {
                 if (error.code === 408) {
                     this.messageState.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
+                } else if (error.code === 405) {
+                    this.messageState.displayError("Votre compte n'est pas encore validé.");
                 } else {
                     this.messageState.displayError("Le vote n'a pas pu être pris en compte.");
                 }
@@ -185,6 +187,8 @@ export default class Rankings extends Vue {
         } catch (error) {
             if (error.code === 408) {
                 this.messageState.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
+            } else if (error.code === 405) {
+                this.messageState.displayError("Votre compte n'est pas encore validé.");
             } else {
                 this.messageState.displayError("Le vote n'a pas pu être supprimé.");
             }
