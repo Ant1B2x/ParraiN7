@@ -9,7 +9,6 @@ import checkSettingAdminUser from '../../hooks/users/check-setting-admin-user';
 import hideGodsonName from '../../hooks/users/hide-godson-name';
 import hideGodsonsNames from '../../hooks/users/hide-godsons-names';
 import sendToken from '../../hooks/users/send-token';
-import hideToken from '../../hooks/users/hide-token';
 // Don't remove this comment. It's needed to format import lines nicely.
 
 const {authenticate} = feathersAuthentication.hooks;
@@ -32,9 +31,9 @@ export default {
             // Always must be the last hook
             protect('password')
         ],
-        find: [hideGodsonsNames(), hideToken()],
-        get: [hideGodsonName(), hideToken()],
-        create: [sendToken(), hideToken()],
+        find: [hideGodsonsNames()],
+        get: [hideGodsonName()],
+        create: [sendToken()],
         update: [],
         patch: [],
         remove: []
