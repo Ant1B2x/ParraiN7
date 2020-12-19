@@ -157,7 +157,7 @@ export default class LogIn extends Vue {
         signUpFormBis.email = signUpFormBis.email + '@etu.toulouse-inp.fr';
         try {
             await app.service('users').create(signUpFormBis);
-            await this.$router.push('/login');
+            await this.$router.push('/token');
         } catch (error) {
             if (error.code === 400)
                 this.messageState.displayError('Le nom et/ou le prénom ne respecte(nt) pas le format attendu.');

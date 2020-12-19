@@ -1,0 +1,5 @@
+bloquer tout si pas authentifié, erreur côté client => check authenticated global
+
+si user pas admin, alors cacher code sur find et get (before de tokens find / get)
+
+si un user veut supprimer token, supprimer seulement si c'est le userid ou un admin ET si userid alors vérifier token de data
