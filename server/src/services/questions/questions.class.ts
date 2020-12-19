@@ -27,6 +27,7 @@ export class Questions extends Service<QuestionData> {
             .where('id', question.authorId) )[0];
         question['authorFirstname'] = author['firstname'];
         question['authorLastname'] = author['lastname'];
+        question['authorInitials'] = author['firstname'][0] + author['lastname'][0];
 
         return question;
     }
@@ -59,6 +60,7 @@ export class Questions extends Service<QuestionData> {
                 .where('id', question.authorId) )[0];
             question['authorFirstname'] = author['firstname'];
             question['authorLastname'] = author['lastname'];
+            question['authorInitials'] = author['firstname'][0] + author['lastname'][0];
         }
 
         return questions;

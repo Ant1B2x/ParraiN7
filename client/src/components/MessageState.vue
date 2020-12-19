@@ -1,76 +1,86 @@
 <template>
-    <div class="card-body px-md-5 py-5 messageZone" v-bind:class="[validation.messageState]">
-        <transition name="fade" mode="out-in">
-            <div class="text-muted mb-0 alertMessage" role="alert" :key="validation.message">
-                {{ validation.message }}
+    <div class="alertify-notifier ajs-bottom ajs-right">
+        <div v-for="(notification, index) in notifications"  :key="index" class="notification" :class="[notification.state, notification.step]">
+            <div class="d-flex px-3 py-2">
+                <div class="pr-2">
+                    <i class="fa fa-check" aria-hidden="true"></i>
+                </div>
+                <div class="alert-text-body" role="status">{{notification.message}}</div>
             </div>
-        </transition>
+        </div>
     </div>
 </template>
 <script lang="ts">
-import {Component, Prop, Vue} from "vue-property-decorator";
-import {MessageState} from "@/views/message-state-enum";
+import {Component, Vue} from "vue-property-decorator";
 
-@Component
-export default class MessageStateComponent extends Vue {
-    @Prop() standardMessage!: string;
+enum States {
+    hasError = 'hasError',
+    hasSucceed = 'hasSucceed',
+    hasWarning = 'hasWarning',
+    none = 'none',
+}
 
-    private validation = {
-        messageState: MessageState.none,
-        message: this.standardMessage,
-    }
+enum NotificationStep {
+    in = 'in',
+    out = 'out',
+}
 
-    displayNormalMessage() {
-        this.validation.messageState = MessageState.none;
-        this.validation.message = this.standardMessage;
-    }
+class Notification {
+    message: string;
+    state: States;
+    step: NotificationStep;
 
-    displaySuccess(successMessage: string) {
-        this.validation.message = successMessage;
-        setTimeout(() => {
-            this.validation.messageState = MessageState.hasSucceed;
-            setTimeout(() => {
-                this.displayNormalMessage();
-            }, 3000);
-        }, 500);
-    }
-
-    displayError(errorMessage: string) {
-        this.validation.message = errorMessage;
-        setTimeout(() => {
-            this.validation.messageState = MessageState.hasError;
-            setTimeout(() => {
-                this.displayNormalMessage();
-            }, 5000);
-        }, 500);
-    }
-
-    displayWarning(warningMessage: string) {
-        this.validation.message = warningMessage;
-        setTimeout(() => {
-            this.validation.messageState = MessageState.hasWarning;
-            setTimeout(() => {
-                this.displayNormalMessage();
-            }, 5000);
-        }, 500);
-    }
-
-    getCurrentState(): MessageState {
-        return this.validation.messageState;
-    }
-
-    isOnError() {
-        return this.validation.messageState === MessageState.hasError;
-    }
-
-    isOnWarning() {
-        return this.validation.messageState === MessageState.hasWarning;
-    }
-
-    isOnErrorOrWarning() {
-        return this.isOnError() || this.isOnWarning();
+    constructor(message: string, state: States, step: NotificationStep) {
+        this.message = message;
+        this.state = state;
+        this.step = step;
     }
 }
+
+@Component
+export default class MessageState extends Vue {
+
+    notifications: Notification[] = [];
+
+    displaySuccess(message: string) {
+        this.displayNotification(message, States.hasSucceed)
+    }
+
+    displayWarning(message: string) {
+        this.displayNotification(message, States.hasWarning)
+    }
+
+    displayError(message: string) {
+        this.displayNotification(message, States.hasError)
+    }
+
+    displayNotification(message: string, state: States) {
+        this.notifications.push(new Notification(message, state, NotificationStep.in));
+        setTimeout(() => {
+            this.notifications[0].step = NotificationStep.out;
+            setTimeout(() => {
+                this.notifications.shift();
+            }, 985);
+        }, 6750);
+    }
+
+    private getLastNotification() {
+        return this.notifications[this.notifications.length - 1];
+    }
+
+    public isNone() {
+        return this.getLastNotification().state === States.none;
+    }
+
+    public isOnError() {
+        return this.getLastNotification().state === States.hasError;
+    }
+
+    public isOnWarning() {
+        return this.getLastNotification().state === States.hasWarning;
+    }
+}
+
 </script>
 
 <style scoped>

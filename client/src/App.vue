@@ -3,7 +3,7 @@
         <header>
             <Header :user="this.user" @signalLogOut="logOut"/>
         </header>
-        <router-view :user="this.user" class="content"/>
+        <router-view :user="this.user" class="content" v-if="this.userLoadingFinished" @signalLogOut="logOut"/>
         <footer>
             <Footer/>
         </footer>
@@ -26,14 +26,16 @@ import {User} from "@/views/Users.vue";
 export default class App extends Vue  {
 
     user: User | null = null;
+    userLoadingFinished = false;
 
-    private async created() {
+    private async beforeCreate() {
         try {
             const auth = await app.reAuthenticate();
             this.user = auth.user;
-        } catch (err) {
+        } catch (error) {
             // pass
         }
+        this.userLoadingFinished = true;
     }
 
     private async beforeUpdate() {
@@ -41,7 +43,6 @@ export default class App extends Vue  {
             const auth = await app.get('authentication');
             this.user = auth ? auth.user : null;
         } catch (error) {
-            console.log(error);
             this.user = null;
         }
     }
@@ -53,12 +54,11 @@ export default class App extends Vue  {
             if(this.$router.currentRoute.path !== '/')
                 await this.$router.replace('/');
         } catch (error) {
-            console.log(error);
             // pass
         }
     }
-
 }
+
 </script>
 
 <style>
@@ -78,5 +78,14 @@ export default class App extends Vue  {
 
 .content {
     flex-grow: 1; /* 4 */
+}
+
+/* Hide scrollbar on website */
+html {
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none; /* Firefox */
+}
+html::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
 }
 </style>

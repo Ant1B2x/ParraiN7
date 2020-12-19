@@ -1,6 +1,6 @@
 <template>
     <div class="questionArea">
-        <MessageStateComponent :standard-message="standardMessage" ref="MessageStateComponent"/>
+        <div class="text-muted mb-5">Envoie tes meilleures questions</div>
         <form>
             <div class="form-group">
                 <label class="form-control-label">Question</label>
@@ -13,14 +13,13 @@
                 </div>
             </div>
             <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="customCheck1" v-model="addPlaceholder">
-                <label class="custom-control-label" for="customCheck1">Ajouter un placeholder ?</label>
+                <input type="checkbox" class="custom-control-input" id="placeholderCheck" v-model="addPlaceholder"/>
+                <label class="custom-control-label" for="placeholderCheck">Ajouter un placeholder ?</label>
             </div>
             <div class="form-group col-md-8 placeholder" v-if="addPlaceholder">
-                <!--label class="form-control-label">Placeholder</label-->
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Votre placeholder"
-                           v-model="placeholder" @keyup.enter="sendQuestion">
+                           v-model="placeholder" @keyup.enter="sendQuestion"/>
                 </div>
             </div>
             <div class="mt-4">
@@ -58,7 +57,7 @@
                     </button>
                     <div class="pb-4">
                         <div class="icon bg-dark text-white rounded-circle icon-shape shadow">
-                            ?
+                            {{ question.authorInitials }}
                         </div>
                     </div>
                     <div class="pt-2 pb-3">
@@ -82,6 +81,7 @@
                 </div>
             </div>
         </div>
+        <MessageState ref="MessageState"/>
     </div>
 </template>
 
@@ -92,22 +92,24 @@
 <script lang="ts">
 import {Component, Prop, Ref, Vue} from 'vue-property-decorator';
 import app from '@/feathers-client';
-import {User} from "@/views/Users.vue";
-import MessageStateComponent from "@/components/MessageState.vue";
+import {User} from '@/views/Users.vue';
+import MessageState from '@/components/MessageState.vue';
 
 export class Question {
     id: number;
     authorFirstname: string;
     authorLastname: string;
     authorId: number;
+    authorInitials: string;
     content: string;
     placeholder?: string;
 
-    constructor(id: number, authorFirstname: string, authorLastname: string, authorId: number, content: string, placeholder: string) {
+    constructor(id: number, authorFirstname: string, authorLastname: string, authorId: number, authorInitials: string, content: string, placeholder: string) {
         this.id = id;
         this.authorFirstname = authorFirstname;
         this.authorLastname = authorLastname;
         this.authorId = authorId;
+        this.authorInitials = authorInitials;
         this.content = content;
         this.placeholder = placeholder;
     }
@@ -115,7 +117,7 @@ export class Question {
 
 @Component({
     components: {
-        MessageStateComponent
+        MessageState
     }
 })
 export default class Questions extends Vue {
@@ -125,12 +127,11 @@ export default class Questions extends Vue {
     addPlaceholder = false;
     questionToAdd = '';
     placeholder = '';
-    standardMessage = 'Ajoutez votre question';
     inEdition = false;
     idEditedQuestion: number | undefined;
 
     @Prop() user?: User | null;
-    @Ref('MessageStateComponent') messageStateComponent!: MessageStateComponent;
+    @Ref('MessageState') messageState!: MessageState;
 
     async mounted() {
         await this.loadQuestions();
@@ -170,11 +171,11 @@ export default class Questions extends Vue {
 
     async sendQuestion() {
         if (this.questionToAdd.length < 5) {
-            this.messageStateComponent.displayWarning('Votre question est trop courte.');
+            this.messageState.displayWarning('Votre question est trop courte.');
         } else if (this.questionToAdd.length > 255) {
-            this.messageStateComponent.displayWarning('Votre question est trop longue.');
+            this.messageState.displayWarning('Votre question est trop longue.');
         } else if (this.addPlaceholder && (this.placeholder === '' || !this.placeholder)) {
-            this.messageStateComponent.displayWarning('Attention, placeholder non précisé.');
+            this.messageState.displayWarning('Attention, placeholder non précisé.');
         } else {
             const question = {
                 content: this.questionToAdd,
@@ -182,18 +183,21 @@ export default class Questions extends Vue {
             };
             try {
                 await app.service('questions').create(question);
-                this.messageStateComponent.displaySuccess('La question a bien été ajoutée !');
+                this.messageState.displaySuccess('La question a bien été ajoutée.');
                 await this.loadQuestions();
             } catch(error) {
-                console.log(error);
-                this.messageStateComponent.displayError("La question n'a pas pu être ajoutée.");
+                if (error.code === 408) {
+                    this.messageState.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
+                } else {
+                    this.messageState.displayError("La question n'a pas pu être ajoutée.");
+                }
             }
         }
     }
 
     async sendQuestionModified(question: Question) {
         if (this.questionToAdd.length > 255) {
-            this.messageStateComponent.displayWarning('Votre question est trop longue.');
+            this.messageState.displayWarning('Votre question est trop longue.');
             return;
         }
 
@@ -204,13 +208,16 @@ export default class Questions extends Vue {
                     placeholder: question.placeholder
                 }
                 await app.service('questions').patch(question.id, questionToModify);
-                this.messageStateComponent.displaySuccess('La question a bien été modifiée !');
+                this.messageState.displaySuccess('La question a bien été modifiée.');
                 this.inEdition = false;
                 this.idEditedQuestion = undefined;
                 await this.loadQuestions();
             } catch (error) {
-                console.log(error);
-                this.messageStateComponent.displayError("La question n'a pas pu être modifiée.");
+                if (error.code === 408) {
+                    this.messageState.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
+                } else {
+                    this.messageState.displayError("La question n'a pas pu être modifiée.");
+                }
             }
         } else {
             await this.removeQuestion(question);
@@ -220,13 +227,16 @@ export default class Questions extends Vue {
     async removeQuestion(question: Question) {
         try {
             await app.service('questions').remove(question.id);
-            this.messageStateComponent.displaySuccess('La question a bien été supprimée !');
+            this.messageState.displaySuccess('La question a bien été supprimée.');
             this.inEdition = false;
             this.idEditedQuestion = undefined;
             await this.loadQuestions();
         } catch (error) {
-            console.log(error);
-            this.messageStateComponent.displayError("La question n'a pas pu être supprimée.");
+            if (error.code === 408) {
+                this.messageState.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
+            } else {
+                this.messageState.displayError("La question n'a pas pu être supprimée.");
+            }
         }
     }
 
@@ -237,7 +247,6 @@ export default class Questions extends Vue {
     editQuestion(idQuestion: number) {
         this.inEdition = true;
         this.idEditedQuestion = idQuestion;
-        console.log(this.inEdition, this.idEditedQuestion);
     }
 
     questionIsBeingEdited(idQuestion: number) {

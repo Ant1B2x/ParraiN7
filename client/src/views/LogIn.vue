@@ -6,10 +6,7 @@
                     <div class="card-body px-md-5 py-5" :class="{ 'hasError': loginForm.hasError }">
                         <div class="mb-5">
                             <h6 class="h3">Connexion</h6>
-                            <p class="text-muted mb-0 errorMessage"
-                               :class="{ 'alert alert-danger': loginForm.hasError }" role="alert">
-                                {{ loginForm.errorMessage }}
-                            </p>
+                            <div class="text-muted mb-0">Connectez-vous à votre compte pour continuer</div>
                         </div>
                         <span class="clearfix"/>
                         <form>
@@ -57,6 +54,7 @@
                 </div>
             </div>
         </div>
+        <MessageState ref="MessageState"/>
     </div>
 </template>
 
@@ -65,23 +63,28 @@
 </style>
 
 <script lang="ts">
-import {Component, Vue} from 'vue-property-decorator';
-import app from "@/feathers-client";
+import {Component, Ref, Vue} from 'vue-property-decorator';
+import app from '@/feathers-client';
+import MessageState from '@/components/MessageState.vue';
 
-@Component
+@Component({
+    components: {
+        MessageState
+    }
+})
 export default class LogIn extends Vue {
+
+    @Ref('MessageState') messageState!: MessageState;
 
     private institutionalEmailEnd = '@etu.toulouse-inp.fr';
 
     private loginForm = {
         email: '',
         password: '',
-        errorMessage: 'Connectez-vous à votre compte pour continuer',
         hasError: false,
     }
 
-    public logIn = async () => {
-
+    public async logIn() {
         this.noError();
         try {
             await app.logout();
@@ -95,19 +98,16 @@ export default class LogIn extends Vue {
             this.loginForm.password = '';
             await this.$router.replace('/');
         } catch (err) {
-            if (err.code === 401) {
-                this.loginForm.errorMessage = 'Utilisateur ou mot de passe incorrect.';
-                this.loginForm.hasError = true;
-            }
-            else {
-                console.log(err);
-            }
+            if (err.code === 401)
+                this.messageState.displayError('Utilisateur ou mot de passe incorrect.');
+            else
+                this.messageState.displayError('Impossible de se connecter.');
+            this.loginForm.hasError = true;
         }
 
     }
 
     noError() {
-        this.loginForm.errorMessage = 'Connectez-vous à votre compte pour continuer'
         this.loginForm.hasError = false;
     }
 

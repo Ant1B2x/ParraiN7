@@ -1,13 +1,13 @@
 <template>
-    <div class="questionArea">
-        <MessageStateComponent :standard-message="standardMessage" ref="MessageStateComponent"/>
+    <div class="answerArea">
+        <div class="text-muted mb-5">Envoie tes meilleures réponses</div>
         <!-- Afficher questions existantes -->
         <div class="questionList">
-            <div class="card hover-translate-y-n10 hover-shadow-lg" v-for="question in questionsWithAnswers" :key="question.id">
+            <div class="card hover-translate-y-n10 hover-shadow-lg" v-for="(question, index) in questionsWithAnswers" :key="question.id">
                 <div class="card-body">
                     <div class="pb-4">
                         <div class="icon bg-dark text-white rounded-circle icon-shape shadow">
-                            <!--i data-feather="droplet"></i-->?
+                            {{ question.authorInitials }}
                         </div>
                     </div>
                     <div class="pt-2 pb-3">
@@ -24,13 +24,16 @@
                             </div>
                         </div>
                         <div class="mt-4">
-                            <button type="button" class="btn btn-block btn-primary" v-if="!question.answerId" v-on:click="sendAnswer(question.id, question.answerContent)">Valider</button>
-                            <button type="button" class="btn btn-block btn-warning" v-if="question.answerId" v-on:click="editAnswer(question.answerId, question.answerContent)">Editer</button>
+                            <button type="button" class="btn btn-block btn-primary" v-if="!questionAnswerId(index)"
+                                    v-on:click="sendAnswer(question.id, question.answerContent)">Valider</button>
+                            <button type="button" class="btn btn-block btn-warning" v-if="questionAnswerId(index)"
+                                    v-on:click="editAnswer(question.id, question.answerId, question.answerContent)">Editer</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
+        <MessageState ref="MessageState"/>
     </div>
 </template>
 
@@ -42,20 +45,22 @@
 import {Component, Prop, Ref, Vue} from 'vue-property-decorator';
 import app from "@/feathers-client";
 import {User} from "@/views/Users.vue";
-import MessageStateComponent from "@/components/MessageState.vue";
+import MessageState from "@/components/MessageState.vue";
 
 export class QuestionWithAnswer {
     id?: number;
     content: string;
     authorId: number;
+    authorInitials: string;
     placeholder: string;
     answerId: number;
     answerContent: string;
 
-    constructor(id: number, content: string,  authorId: number, placeholder: string, answerId: number, answerContent: string) {
+    constructor(id: number, content: string,  authorId: number, authorInitials: string, placeholder: string, answerId: number, answerContent: string) {
         this.id = id;
         this.content = content;
         this.authorId = authorId;
+        this.authorInitials = authorInitials;
         this.placeholder = placeholder;
         this.answerId = answerId;
         this.answerContent = answerContent;
@@ -64,20 +69,24 @@ export class QuestionWithAnswer {
 
 @Component({
     components: {
-        MessageStateComponent
+        MessageState
     }
 })
 export default class Answers extends Vue {
 
     @Prop() user?: User;
-    @Ref('MessageStateComponent') messageStateComponent!: MessageStateComponent;
-
-    standardMessage = 'Veuillez répondre aux questions.';
+    @Ref('MessageState') messageState!: MessageState;
 
     questionsWithAnswers: QuestionWithAnswer[] = [];
+    // Forced to use such methods to render view properly on data change, because view.js needs it.
+    answerIds: (number | undefined) [] = [];
 
     async mounted() {
         await this.getQuestions();
+    }
+
+    questionAnswerId(index: number): number | undefined {
+        return this.answerIds[index];
     }
 
     async getQuestions() {
@@ -86,36 +95,62 @@ export default class Answers extends Vue {
             this.questionsWithAnswers = [];
             for (const answer of answers) {
                 this.questionsWithAnswers.push(new QuestionWithAnswer(answer.id, answer.content,
-                    answer.authorId, answer.placeholder, answer.answerId, answer.answerContent))
+                    answer.authorId, answer.authorInitials, answer.placeholder, answer.answerId, answer.answerContent))
+                this.answerIds.push(answer.answerId);
             }
         } catch (e) {
             // pass
         }
     }
 
+    async reloadQuestion(idQuestion: number) {
+        let questionData = await app.service('questions').find( { query: { answers: true, godsonId: this.user?.id, id: idQuestion } } );
+        questionData = questionData[0];
+        const question = new QuestionWithAnswer(questionData.id, questionData.content, questionData.authorId,
+            questionData.authorInitials, questionData.placeholder, questionData.answerId, questionData.answerContent);
+        const index = this.questionsWithAnswers.findIndex(question => question.id === idQuestion);
+        this.questionsWithAnswers[index] = question;
+        this.answerIds[index] = question.answerId;
+        this.$set(this.answerIds, index, question.answerId);
+    }
+
     async sendAnswer(questionId: number, answerContent: string) {
         const answer = { userId: this.user?.id, questionId: questionId, content: answerContent };
         try {
             await app.service('answers').create(answer);
-            this.messageStateComponent.displaySuccess('La réponse a bien été prise en compte !');
-            await this.getQuestions();
+            this.messageState.displaySuccess('La réponse a bien été ajoutée.');
+            // await this.getQuestions();
+            await this.reloadQuestion(answer.questionId);
         } catch (error) {
             if (error.code === 403) {
-                this.messageStateComponent.displayError("Vous n'êtes pas un filleul, vous ne pouvez donner de réponses.");
+                this.messageState.displayError("Vous n'êtes pas un filleul, vous ne pouvez donner de réponses.");
+            } else if (error.code === 408) {
+                this.messageState.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
             } else {
-                this.messageStateComponent.displayError('Une erreur est survenue.' );
+                this.messageState.displayError("La réponse n'a pas pu être ajoutée.");
             }
         }
     }
 
-    async editAnswer(questionId: number, answerContent: string) {
+    async editAnswer(questionId: number, answerId: number, answerContent: string) {
         try {
-            const answer = { content: answerContent };
-            await app.service('answers').patch(questionId, answer);
-            this.messageStateComponent.displaySuccess('La réponse a bien été modifiée.');
-            await this.getQuestions();
+            if (answerContent.length > 0) {
+                const answer = {content: answerContent};
+                await app.service('answers').patch(answerId, answer);
+                this.messageState.displaySuccess('La réponse a bien été modifiée.');
+            } else {
+                await app.service('answers').remove(answerId);
+                this.messageState.displaySuccess('La réponse a bien été supprimée.');
+            }
+            await this.reloadQuestion(questionId);
         } catch (error) {
-            this.messageStateComponent.displayError('Une erreur est survenue.')
+            if (error.code === 403) {
+                this.messageState.displayError("Vous n'êtes pas un filleul, vous ne pouvez modifier des réponses.");
+            } else if (error.code === 408) {
+                this.messageState.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
+            } else {
+                this.messageState.displayError("La réponse n'a pas pu être modifiée ou supprimée.");
+            }
         }
     }
 }
