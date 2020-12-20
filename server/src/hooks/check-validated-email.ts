@@ -8,7 +8,7 @@ export default (options = {}): Hook => {
     return async (context: HookContext): Promise<HookContext> => {
         const tokens = await context.app.service('tokens').find({
             query: {
-                userId: context.params.user.id
+                userId: context.params?.user?.id
             }
         });
 

@@ -3,6 +3,7 @@
 import {Hook, HookContext} from '@feathersjs/feathers';
 import nodemailer from 'nodemailer';
 import {UserData} from "../../services/users/users.class";
+import {NotImplemented} from "@feathersjs/errors";
 
 
 // send a generate token to user email in order to confirm his account
@@ -48,10 +49,12 @@ export default (options = {}): Hook => {
                     <h3>${token}</h3>`
             };
             transporter.sendMail(mailOptions, function(error, info) {
-                if (error)
+                if (error) {
                     console.log(error);
-                else
+                    throw new NotImplemented('Mail server is not working!');
+                } else {
                     console.log('Email send: ' + info.response);
+                }
             });
 
         }

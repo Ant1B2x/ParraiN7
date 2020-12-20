@@ -9,7 +9,7 @@ import {TokenData} from "../../services/tokens/tokens.class";
 export default (options = {}): Hook => {
     return async (context: HookContext): Promise<HookContext> => {
 
-        const loggedUser: UserData = context.params.user;
+        const loggedUser = context.params.user;
         if (loggedUser && !loggedUser.isAdmin)
             throw new Forbidden('Only admins can delete tokens!')
 
