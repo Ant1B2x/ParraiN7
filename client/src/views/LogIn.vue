@@ -40,7 +40,7 @@
                                            v-on:keyup="handleKeyUp"/>
                                 </div>
                             </div>
-                            <div class="mt-4">
+                            <div class="mt-5">
                                 <button type="button" class="btn btn-primary" v-on:click="logIn"
                                         :disabled="loginForm.hasError">
                                     Se connecter
@@ -90,7 +90,7 @@ export default class LogIn extends Vue {
     }
 
     public async logIn() {
-        this.noError();
+        this.loginForm.hasError = false;
         try {
             await app.logout();
             await app.authenticate({
@@ -101,9 +101,9 @@ export default class LogIn extends Vue {
 
             this.loginForm.email = '';
             this.loginForm.password = '';
-            await this.$router.replace('/');
-        } catch (err) {
-            if (err.code === 401)
+            await this.$router.push('/');
+        } catch (error) {
+            if (error.code === 401)
                 this.messageState.displayError('Utilisateur ou mot de passe incorrect.');
             else
                 this.messageState.displayError('Impossible de se connecter.');
@@ -112,15 +112,11 @@ export default class LogIn extends Vue {
 
     }
 
-    noError() {
-        this.loginForm.hasError = false;
-    }
-
     private handleKeyUp(e: KeyboardEvent) {
         if (e.key === "Enter") {
             this.logIn();
         } else {
-            this.noError();
+            this.loginForm.hasError = false;
         }
     }
 

@@ -3,40 +3,45 @@
         <div class="row align-items-center justify-content-center">
             <div class="py-2 py-md-0">
                 <div class="card shadow zindex-100 mb-0">
-                    <div class="card-body px-md-5 py-5">
+                    <div class="card-body px-md-5 py-5" :class="{ 'hasError': tokenForm.hasError }">
                         <div class="mb-5">
                             <h6 class="h3">Confirmation</h6>
                             <div class="text-muted mb-0">Entrez votre email et votre token pour valider votre compte</div>
                         </div>
                         <span class="clearfix"/>
                         <form>
-                            <div class="form-group text-left">
-                                <label class="form-control-label">Email</label>
+                            <div class="form-group">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <label class="form-control-label">Adresse email</label>
+                                </div>
                                 <div class="input-group input-group-email">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><font-awesome-icon icon="user"/></span>
                                     </div>
                                     <input type="text" class="form-control" placeholder="prenom.nom"
-                                           v-model="email" @keyup.enter="sendToken">
+                                           v-model="tokenForm.email" @keyup.enter="sendToken"/>
                                     <div class="input-group-append">
                                         <span class="input-group-text">{{ institutionalEmailEnd }}</span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group text-left">
-                                <label class="form-control-label">Token</label>
+                            <div class="form-group mb-0">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <label class="form-control-label">Token</label>
+                                </div>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><font-awesome-icon icon="ring"/></span>
                                     </div>
                                     <input type="text" class="form-control" placeholder="Votre token" maxlength="6"
-                                           v-model="token" @keyup.enter="sendToken" @blur="isLongEnough"
-                                           @keydown="isNumber" @keyup="analyzeToken">
+                                           v-model="tokenForm.token" @keyup.enter="sendToken" @blur="isLongEnough"
+                                           @keydown="isNumber"/>
                                 </div>
                             </div>
                             <div class="mt-5">
                                 <button type="button" class="btn btn-primary" v-on:click="sendToken"
-                                        :disabled="this.token.length !== tokenLength">Valider
+                                        :disabled="this.tokenForm.token.length !== tokenLength">
+                                    Valider
                                 </button>
                             </div>
                         </form>
@@ -72,59 +77,43 @@ export default class Token extends Vue {
         };
     }
 
-    token = '';
-    email = '';
-    tokenLength = 6;
+    private tokenLength = 6;
 
     @Prop() user?: User | null;
     @Ref('MessageState') messageState!: MessageState;
 
-    async sendToken() {
+    private tokenForm = {
+        email: '',
+        token: '',
+        hasError: false
+    }
 
+    async sendToken() {
+        this.tokenForm.hasError = false;
         try {
-            app.service('tokens').remove(null, {
+            await app.service('tokens').remove(null, {
                 query: {
-                    email: this.email + institutionalEmailEnd,
-                    token: this.token
+                    email: this.tokenForm.email + institutionalEmailEnd,
+                    token: this.tokenForm.token
                 }
             });
+            await this.$router.push('/login');
         } catch (error) {
-            console.log("VV",error);
+            if (error.code === 403)
+                this.messageState.displayError('Un utilisateur ne peut pas valider les tokens des autres.');
+            else if (error.code === 404)
+                this.messageState.displayError("Aucun utilisateur n'existe pour cette adresse email.");
+            else if (error.code === 406)
+                this.messageState.displayError('Le token saisi est invalide.');
+            else
+                this.messageState.displayError("Le token n'a pas pu être confirmé.");
+            this.tokenForm.hasError = true;
         }
-
-
-
-        /*if (this.token === '000000') {
-            this.messageState.displaySuccess('Le token a bien été validé !');
-        } else if (this.token === '111111') {
-            this.messageState.displayWarning('Attention, compte déjà validé.');
-        } else {
-            this.messageState.displayError("Le token n'a pas pu être validé.");
-        }*/
-
-
-
-        /*
-        const token = {
-            email: this.email,
-            content: this.token,
-        }
-        try {
-            await // Handle token validation with backend
-            // console.log(data);
-            this.messageState.displaySuccess('Le token a bien été valide !');
-        } catch (error) {
-            console.log(error);
-            this.messageState.displayError('La token n\'a pu être validé.');
-        }
-        */
     }
 
     isLongEnough() {
-        // console.log(this.token);
-        // console.log(this.messageState.getCurrentState());
         if (this.messageState.isNone() || this.messageState.isOnWarning())
-            if (this.token.length !== 6)
+            if (this.tokenForm.token.length !== 6)
                 this.messageState.displayWarning("Le token n'a pas la bonne longueur.");
     }
 
@@ -144,10 +133,6 @@ export default class Token extends Vue {
 
     }
 
-    analyzeToken() {
-        this.token = this.token.replace(/[^0-9]/g, '');
-        console.log(this.token);
-    }
-
 }
+
 </script>

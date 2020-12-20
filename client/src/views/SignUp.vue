@@ -98,7 +98,8 @@
                             </div>
                             <div class="mt-5">
                                 <button type="button" class="btn btn-primary" v-on:click="signUp"
-                                        :disabled="signUpValidation.hasError">S'inscrire
+                                        :disabled="signUpValidation.hasError">
+                                    S'inscrire
                                 </button>
                             </div>
                         </form>

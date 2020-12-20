@@ -1,7 +1,7 @@
 // Use this hook to manipulate incoming or outgoing data.
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
 import {Hook, HookContext} from '@feathersjs/feathers';
-import {Forbidden, NotAcceptable, NotFound} from "@feathersjs/errors";
+import {Forbidden, LengthRequired, NotAcceptable, NotFound} from "@feathersjs/errors";
 import {UserData} from "../../services/users/users.class";
 import {TokenData} from "../../services/tokens/tokens.class";
 
@@ -17,7 +17,7 @@ export default (options = {}): Hook => {
         const token: number = Number(context.params.query?.token);
 
         if (!email || !token)
-            throw new NotAcceptable('You have to supply email and token in order to delete token');
+            throw new LengthRequired('You have to supply email and token in order to delete token');
 
         const user: UserData = (await context.app.service('users').find({
             query: {
