@@ -1,7 +1,7 @@
 import {Service, KnexServiceOptions} from 'feathers-knex';
 import {Application} from '../../declarations';
 
-export interface UserData {
+export interface TokenData {
     id?: number;
     token: number;
     userId: number;

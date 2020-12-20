@@ -1,4 +1,6 @@
 
+export const institutionalEmailEnd = '@etu.toulouse-inp.fr';
+
 const BACKEND_DICT: { [mode: string]: string } = {
     default: 'localhost:3030',
     production: 'https://api.ant1b2x.com'

@@ -19,7 +19,7 @@
                                     <input type="text" class="form-control" placeholder="prenom.nom"
                                            v-model="email" @keyup.enter="sendToken">
                                     <div class="input-group-append">
-                                        <span class="input-group-text">@etu.toulouse-inp.fr</span>
+                                        <span class="input-group-text">{{ institutionalEmailEnd }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -56,6 +56,8 @@
 import {Component, Prop, Ref, Vue} from 'vue-property-decorator';
 import {User} from "@/views/Users.vue";
 import MessageState from "@/components/MessageState.vue";
+import app from "@/feathers-client";
+import {institutionalEmailEnd} from '@/config';
 
 @Component({
     components: {
@@ -63,6 +65,13 @@ import MessageState from "@/components/MessageState.vue";
     }
 })
 export default class Token extends Vue {
+
+    public data() {
+        return {
+            institutionalEmailEnd: institutionalEmailEnd
+        };
+    }
+
     token = '';
     email = '';
     tokenLength = 6;
@@ -71,13 +80,30 @@ export default class Token extends Vue {
     @Ref('MessageState') messageState!: MessageState;
 
     async sendToken() {
-        if (this.token === '000000') {
+
+        try {
+            app.service('tokens').remove(null, {
+                query: {
+                    email: this.email + institutionalEmailEnd,
+                    token: this.token
+                }
+            });
+        } catch (error) {
+            console.log("VV",error);
+        }
+
+
+
+        /*if (this.token === '000000') {
             this.messageState.displaySuccess('Le token a bien été validé !');
         } else if (this.token === '111111') {
             this.messageState.displayWarning('Attention, compte déjà validé.');
         } else {
             this.messageState.displayError("Le token n'a pas pu être validé.");
-        }
+        }*/
+
+
+
         /*
         const token = {
             email: this.email,

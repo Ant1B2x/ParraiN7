@@ -1,1 +1,0 @@
-si un user veut supprimer token, supprimer seulement si c'est le userid ou un admin ET si userid alors vérifier token de data

@@ -8,12 +8,12 @@ const {authenticate} = authentication.hooks;
 
 export default {
     before: {
-        all: [authenticate('jwt')],
-        find: [checkAdmin()],
-        get: [checkAdmin()],
-        create: [checkAdmin(), checkTokenLength()],
-        update: [checkAdmin()],
-        patch: [checkAdmin()],
+        all: [],
+        find: [authenticate('jwt'), checkAdmin()],
+        get: [authenticate('jwt'), checkAdmin()],
+        create: [authenticate('jwt'), checkAdmin(), checkTokenLength()],
+        update: [authenticate('jwt'), checkAdmin()],
+        patch: [authenticate('jwt'), checkAdmin()],
         remove: [tryToken()]
     },
 

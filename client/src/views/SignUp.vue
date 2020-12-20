@@ -22,7 +22,7 @@
                                            placeholder="prenom.nom" @keyup="handleKeyUp" @blur="checkError">
 
                                     <div class="input-group-append">
-                                        <span class="input-group-text">@etu.toulouse-inp.fr</span>
+                                        <span class="input-group-text">{{ institutionalEmailEnd }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -121,6 +121,7 @@
 import {Component, Ref, Vue} from 'vue-property-decorator';
 import app from "@/feathers-client";
 import MessageState from '@/components/MessageState.vue';
+import {institutionalEmailEnd} from '@/config';
 
 @Component({
     components: {
@@ -128,6 +129,12 @@ import MessageState from '@/components/MessageState.vue';
     }
 })
 export default class LogIn extends Vue {
+
+    public data() {
+        return {
+            institutionalEmailEnd: institutionalEmailEnd
+        };
+    }
 
     @Ref('MessageState') messageState!: MessageState;
 
@@ -154,7 +161,7 @@ export default class LogIn extends Vue {
         await app.logout();
 
         const signUpFormBis = JSON.parse(JSON.stringify(this.signUpForm));
-        signUpFormBis.email = signUpFormBis.email + '@etu.toulouse-inp.fr';
+        signUpFormBis.email = signUpFormBis.email + institutionalEmailEnd;
         try {
             await app.service('users').create(signUpFormBis);
             await this.$router.push('/token');

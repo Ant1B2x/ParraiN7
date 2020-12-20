@@ -66,6 +66,7 @@
 import {Component, Ref, Vue} from 'vue-property-decorator';
 import app from '@/feathers-client';
 import MessageState from '@/components/MessageState.vue';
+import {institutionalEmailEnd} from '@/config';
 
 @Component({
     components: {
@@ -74,9 +75,13 @@ import MessageState from '@/components/MessageState.vue';
 })
 export default class LogIn extends Vue {
 
-    @Ref('MessageState') messageState!: MessageState;
+    public data() {
+        return {
+            institutionalEmailEnd: institutionalEmailEnd
+        };
+    }
 
-    private institutionalEmailEnd = '@etu.toulouse-inp.fr';
+    @Ref('MessageState') messageState!: MessageState;
 
     private loginForm = {
         email: '',
@@ -90,7 +95,7 @@ export default class LogIn extends Vue {
             await app.logout();
             await app.authenticate({
                 strategy: 'local',
-                email: this.loginForm.email + this.institutionalEmailEnd,
+                email: this.loginForm.email + institutionalEmailEnd,
                 password: this.loginForm.password
             });
 
