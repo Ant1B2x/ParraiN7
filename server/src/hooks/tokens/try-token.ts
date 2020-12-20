@@ -35,7 +35,7 @@ export default (options = {}): Hook => {
         }))[0];
 
         if (!storedToken || storedToken.token !== token)
-            if (!loggedUser || !loggedUser.isAdmin)
+            if (!loggedUser || !loggedUser.isAdmin) // admin can delete every token
                 throw new NotAcceptable('This token is invalid!');
 
         context.id = storedToken.id;
