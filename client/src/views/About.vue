@@ -1,10 +1,10 @@
 <template>
-    <div class="container mb-6">
+    <div class="container mb-3">
         <section>
             <h1>À propos</h1>
             <h1><small>Découvrez ici les techniques de production américaines</small></h1>
         </section>
-        <hr>
+        <hr/>
         <section>
             <div class="row mb-5">
                 <div class="col-md-6 text-center text-lg-right pr-lg-5" id="developers-column">

@@ -13,22 +13,28 @@ import {
     faArrowRight,
     faArrowLeft,
     faAngleRight,
-    faRing
+    faRing,
+    faCheck,
+    faExclamationTriangle,
+    faTimesCircle
 } from "@fortawesome/free-solid-svg-icons";
 import {library} from "@fortawesome/fontawesome-svg-core";
 
-library.add(faUserSecret)
-library.add(faKey)
-library.add(faUser)
-library.add(faIdCard)
-library.add(faArrowAltCircleLeft)
-library.add(faArrowAltCircleRight)
-library.add(faStar)
-library.add(faArrowRight)
-library.add(faArrowLeft)
-library.add(faAngleRight)
-library.add(faAngleRight)
-library.add(faRing)
+library.add(faUserSecret);
+library.add(faKey);
+library.add(faUser);
+library.add(faIdCard);
+library.add(faArrowAltCircleLeft);
+library.add(faArrowAltCircleRight);
+library.add(faStar);
+library.add(faArrowRight);
+library.add(faArrowLeft);
+library.add(faAngleRight);
+library.add(faAngleRight);
+library.add(faRing);
+library.add(faCheck);
+library.add(faExclamationTriangle);
+library.add(faTimesCircle);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

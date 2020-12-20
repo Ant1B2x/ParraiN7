@@ -1,7 +1,7 @@
 <template>
     <div class="container d-flex flex-column">
         <div class="row align-items-center justify-content-center">
-            <div class="col-md-6 py-2 py-md-0">
+            <div class="py-2 py-md-0">
                 <div class="card shadow zindex-100 mb-0">
                     <div class="card-body px-md-5 py-5" :class="{ 'hasError': signUpValidation.hasError }">
                         <div class="mb-5">
@@ -22,7 +22,7 @@
                                            placeholder="prenom.nom" @keyup="handleKeyUp" @blur="checkError">
 
                                     <div class="input-group-append">
-                                        <span class="input-group-text">@etu.toulouse-inp.fr</span>
+                                        <span class="input-group-text">{{ institutionalEmailEnd }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -96,9 +96,10 @@
                                     <label class="custom-control-label" for="godsonRadio">Filleul</label>
                                 </div>
                             </div>
-                            <div class="mt-4">
-                                <button type="button" class="btn btn-block btn-primary" v-on:click="signUp"
-                                        :disabled="signUpValidation.hasError">S'inscrire
+                            <div class="mt-5">
+                                <button type="button" class="btn btn-primary" v-on:click="signUp"
+                                        :disabled="signUpValidation.hasError">
+                                    S'inscrire
                                 </button>
                             </div>
                         </form>
@@ -121,6 +122,7 @@
 import {Component, Ref, Vue} from 'vue-property-decorator';
 import app from "@/feathers-client";
 import MessageState from '@/components/MessageState.vue';
+import {institutionalEmailEnd} from '@/config';
 
 @Component({
     components: {
@@ -128,6 +130,12 @@ import MessageState from '@/components/MessageState.vue';
     }
 })
 export default class LogIn extends Vue {
+
+    public data() {
+        return {
+            institutionalEmailEnd: institutionalEmailEnd
+        };
+    }
 
     @Ref('MessageState') messageState!: MessageState;
 
@@ -154,10 +162,10 @@ export default class LogIn extends Vue {
         await app.logout();
 
         const signUpFormBis = JSON.parse(JSON.stringify(this.signUpForm));
-        signUpFormBis.email = signUpFormBis.email + '@etu.toulouse-inp.fr';
+        signUpFormBis.email = signUpFormBis.email + institutionalEmailEnd;
         try {
             await app.service('users').create(signUpFormBis);
-            await this.$router.push('/login');
+            await this.$router.push('/token');
         } catch (error) {
             if (error.code === 400)
                 this.messageState.displayError('Le nom et/ou le prénom ne respecte(nt) pas le format attendu.');

@@ -6,6 +6,7 @@ import checkModifyingQuestion from '../../hooks/questions/check-modifying-questi
 import checkExpirationDate from '../../hooks/check-expiration-date';
 import checkContentNotNull from '../../hooks/questions/check-content-not-null';
 import keepQuestionForeignIds from "../../hooks/questions/keep-question-foreign-ids";
+import checkValidatedEmail from '../../hooks/check-validated-email';
 // Don't remove this comment. It's needed to format import lines nicely.
 
 const {authenticate} = feathersAuthentication.hooks;
@@ -15,10 +16,10 @@ export default {
         all: [],
         find: [],
         get: [],
-        create: [checkExpirationDate(), authenticate('jwt'), checkContentNotNull(), checkGodfather(), setAuthor()],
-        update: [checkExpirationDate(), authenticate('jwt'), checkContentNotNull(), checkGodfather(), checkModifyingQuestion(), checkExistingAuthor(), keepQuestionForeignIds()],
-        patch: [checkExpirationDate(), authenticate('jwt'), checkContentNotNull(), checkGodfather(), checkModifyingQuestion(), checkExistingAuthor(), keepQuestionForeignIds()],
-        remove: [checkExpirationDate(), authenticate('jwt'), checkGodfather(), checkModifyingQuestion()]
+        create: [checkExpirationDate(), authenticate('jwt'), checkValidatedEmail(), checkContentNotNull(), checkGodfather(), setAuthor()],
+        update: [checkExpirationDate(), authenticate('jwt'), checkValidatedEmail(), checkContentNotNull(), checkGodfather(), checkModifyingQuestion(), checkExistingAuthor(), keepQuestionForeignIds()],
+        patch: [checkExpirationDate(), authenticate('jwt'), checkValidatedEmail(), checkContentNotNull(), checkGodfather(), checkModifyingQuestion(), checkExistingAuthor(), keepQuestionForeignIds()],
+        remove: [checkExpirationDate(), authenticate('jwt'), checkValidatedEmail(), checkGodfather(), checkModifyingQuestion()]
     },
 
     after: {

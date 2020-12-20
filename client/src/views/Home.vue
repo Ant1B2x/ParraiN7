@@ -1,5 +1,5 @@
 <template>
-    <div class="container mb-6">
+    <div class="container mb-3">
         <section>
             <h1>
                 ParraiN7
@@ -7,7 +7,7 @@
             </h1>
             <h1><small>L'appli de parrainage des élèves de l'ENSEEIHT</small></h1>
         </section>
-        <hr>
+        <hr/>
         <section>
             <h3 class="mb-6">Comment ça marche ?</h3>
             <div class="row mb-3">

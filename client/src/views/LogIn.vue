@@ -1,7 +1,7 @@
 <template>
     <div class="container d-flex flex-column">
         <div class="row align-items-center justify-content-center">
-            <div class="col-md-6 py-2 py-md-0">
+            <div class="py-2 py-md-0">
                 <div class="card shadow zindex-100 mb-0">
                     <div class="card-body px-md-5 py-5" :class="{ 'hasError': loginForm.hasError }">
                         <div class="mb-5">
@@ -40,7 +40,7 @@
                                            v-on:keyup="handleKeyUp"/>
                                 </div>
                             </div>
-                            <div class="mt-4">
+                            <div class="mt-5">
                                 <button type="button" class="btn btn-primary" v-on:click="logIn"
                                         :disabled="loginForm.hasError">
                                     Se connecter
@@ -66,6 +66,7 @@
 import {Component, Ref, Vue} from 'vue-property-decorator';
 import app from '@/feathers-client';
 import MessageState from '@/components/MessageState.vue';
+import {institutionalEmailEnd} from '@/config';
 
 @Component({
     components: {
@@ -74,9 +75,13 @@ import MessageState from '@/components/MessageState.vue';
 })
 export default class LogIn extends Vue {
 
-    @Ref('MessageState') messageState!: MessageState;
+    public data() {
+        return {
+            institutionalEmailEnd: institutionalEmailEnd
+        };
+    }
 
-    private institutionalEmailEnd = '@etu.toulouse-inp.fr';
+    @Ref('MessageState') messageState!: MessageState;
 
     private loginForm = {
         email: '',
@@ -85,20 +90,20 @@ export default class LogIn extends Vue {
     }
 
     public async logIn() {
-        this.noError();
+        this.loginForm.hasError = false;
         try {
             await app.logout();
             await app.authenticate({
                 strategy: 'local',
-                email: this.loginForm.email + this.institutionalEmailEnd,
+                email: this.loginForm.email + institutionalEmailEnd,
                 password: this.loginForm.password
             });
 
             this.loginForm.email = '';
             this.loginForm.password = '';
-            await this.$router.replace('/');
-        } catch (err) {
-            if (err.code === 401)
+            await this.$router.push('/');
+        } catch (error) {
+            if (error.code === 401)
                 this.messageState.displayError('Utilisateur ou mot de passe incorrect.');
             else
                 this.messageState.displayError('Impossible de se connecter.');
@@ -107,15 +112,11 @@ export default class LogIn extends Vue {
 
     }
 
-    noError() {
-        this.loginForm.hasError = false;
-    }
-
     private handleKeyUp(e: KeyboardEvent) {
         if (e.key === "Enter") {
             this.logIn();
         } else {
-            this.noError();
+            this.loginForm.hasError = false;
         }
     }
 

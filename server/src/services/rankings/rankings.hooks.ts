@@ -7,6 +7,7 @@ import setGodfather from '../../hooks/rankings/set-godfather';
 import keepRankingForeignIds from '../../hooks/rankings/keep-ranking-foreign-ids';
 import createIfNotExists from '../../hooks/rankings/create-if-not-exists';
 import checkExpirationDate from '../../hooks/check-expiration-date';
+import checkValidatedEmail from '../../hooks/check-validated-email';
 // Don't remove this comment. It's needed to format import lines nicely.
 
 const {authenticate} = feathersAuthentication.hooks;
@@ -14,7 +15,7 @@ const {authenticate} = feathersAuthentication.hooks;
 export default {
     // godfathers-only features
     before: {
-        all: [authenticate('jwt'), checkGodfather()],
+        all: [authenticate('jwt'), checkValidatedEmail(), checkGodfather()],
         find: [],
         get: [],
         create: [checkExpirationDate(), checkExistingGodson(), checkRankRange(), setGodfather()],

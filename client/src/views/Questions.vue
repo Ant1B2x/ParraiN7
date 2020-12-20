@@ -3,7 +3,6 @@
         <div class="text-muted mb-5">Envoie tes meilleures questions</div>
         <form>
             <div class="form-group">
-                <label class="form-control-label">Question</label>
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Votre question"
                            v-model="questionToAdd" @keyup.enter="sendQuestion">
@@ -14,7 +13,7 @@
             </div>
             <div class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" id="placeholderCheck" v-model="addPlaceholder"/>
-                <label class="custom-control-label" for="placeholderCheck">Ajouter un placeholder ?</label>
+                <label class="custom-control-label text-muted" for="placeholderCheck">Ajouter un placeholder ?</label>
             </div>
             <div class="form-group col-md-8 placeholder" v-if="addPlaceholder">
                 <div class="input-group">
@@ -22,14 +21,11 @@
                            v-model="placeholder" @keyup.enter="sendQuestion"/>
                 </div>
             </div>
-            <div class="mt-4">
-                <button type="button" class="btn btn-block btn-primary" v-on:click="sendQuestion">Ajouter</button>
-            </div>
+            <button type="button" class="btn btn-block btn-primary mt-5" v-on:click="sendQuestion">Ajouter</button>
+
         </form>
-
         <!-- Ligne séparatrice -->
-        <hr class="separator"/>
-
+        <hr/>
         <form>
             <div class="form-group">
                 <label class="form-control-label" for="searchByQuestionInput">Recherche par :</label>
@@ -52,7 +48,8 @@
             <div class="card hover-translate-y-n10 hover-shadow-lg" v-for="question in filteredList"
                  :key="question.idQuestion">
                 <div class="card-body">
-                    <button v-if="isAuthorOrAdmin(question.authorId)" @click="removeQuestion(question)" type="button" class="close" aria-label="Close">
+                    <button v-if="isAuthorOrAdmin(question.authorId)" @click="removeQuestion(question)" type="button"
+                            class="close" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <div class="pb-4">
@@ -170,7 +167,7 @@ export default class Questions extends Vue {
     }
 
     async sendQuestion() {
-        if (this.questionToAdd.length < 5) {
+        if (this.questionToAdd.trim().length < 5) {
             this.messageState.displayWarning('Votre question est trop courte.');
         } else if (this.questionToAdd.length > 255) {
             this.messageState.displayWarning('Votre question est trop longue.');
@@ -185,9 +182,11 @@ export default class Questions extends Vue {
                 await app.service('questions').create(question);
                 this.messageState.displaySuccess('La question a bien été ajoutée.');
                 await this.loadQuestions();
-            } catch(error) {
+            } catch (error) {
                 if (error.code === 408) {
                     this.messageState.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
+                } else if (error.code === 405) {
+                    this.messageState.displayError("Votre compte n'est pas encore validé.");
                 } else {
                     this.messageState.displayError("La question n'a pas pu être ajoutée.");
                 }
@@ -201,7 +200,7 @@ export default class Questions extends Vue {
             return;
         }
 
-        if (question.content.length > 0) {
+        if (question.content.trim().length > 0) {
             try {
                 const questionToModify = {
                     content: question.content,
@@ -215,6 +214,8 @@ export default class Questions extends Vue {
             } catch (error) {
                 if (error.code === 408) {
                     this.messageState.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
+                } else if (error.code === 405) {
+                    this.messageState.displayError("Votre compte n'est pas encore validé.");
                 } else {
                     this.messageState.displayError("La question n'a pas pu être modifiée.");
                 }
@@ -234,6 +235,8 @@ export default class Questions extends Vue {
         } catch (error) {
             if (error.code === 408) {
                 this.messageState.displayError("La date d'expiration a été atteinte, impossible de réaliser cette action.");
+            } else if (error.code === 405) {
+                this.messageState.displayError("Votre compte n'est pas encore validé.");
             } else {
                 this.messageState.displayError("La question n'a pas pu être supprimée.");
             }

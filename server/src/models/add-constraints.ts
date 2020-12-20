@@ -9,9 +9,10 @@ export default async (app: Application): Promise<Knex> => {
     const questionsTableName = 'questions';
     const answersTableName = 'answers';
     const rankingsTableName = 'rankings';
+    const tokensTableName = 'tokens';
 
     // wait for all database tables to be created
-    const tableNames = [usersTableName, questionsTableName, answersTableName, rankingsTableName];
+    const tableNames = [usersTableName, questionsTableName, answersTableName, rankingsTableName, tokensTableName];
     for (let tableName of tableNames)
         while (! await db.schema.hasTable(tableName)) {}
 
@@ -58,6 +59,15 @@ export default async (app: Application): Promise<Knex> => {
             await db.schema.table(rankingsTableName, table => {
                 table.integer('godfatherId').references('id').inTable(usersTableName).onDelete('CASCADE').notNullable();
                 table.unique(['godfatherId', 'godsonId']);
+            });
+        }
+    });
+
+    // add unique foreign key on tokens.userId
+    db.schema.hasColumn(tokensTableName, 'userId').then(async (exists) => {
+        if (!exists) {
+            await db.schema.table(tokensTableName, table => {
+                table.integer('userId').references('id').inTable(usersTableName).onDelete('CASCADE').notNullable().unique();
             });
         }
     });
