@@ -91,9 +91,7 @@ export default class Token extends Vue {
             this.messageState.displaySuccess('Le token a bien été validé.');
             await this.$router.push('/login');
         } catch (error) {
-            if (error.code === 403)
-                this.messageState.displayError('Un utilisateur ne peut pas valider les tokens des autres.');
-            else if (error.code === 404)
+            if (error.code === 404)
                 this.messageState.displayError("Aucun utilisateur n'existe pour cette adresse email.");
             else if (error.code === 406)
                 this.messageState.displayError('Le token saisi est invalide.');

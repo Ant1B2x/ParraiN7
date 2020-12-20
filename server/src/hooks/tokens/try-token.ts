@@ -1,17 +1,13 @@
 // Use this hook to manipulate incoming or outgoing data.
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
 import {Hook, HookContext} from '@feathersjs/feathers';
-import {Forbidden, LengthRequired, NotAcceptable, NotFound} from "@feathersjs/errors";
+import {LengthRequired, NotAcceptable, NotFound} from "@feathersjs/errors";
 import {UserData} from "../../services/users/users.class";
 import {TokenData} from "../../services/tokens/tokens.class";
 
 // check that a sent token is correct, in order to delete it
 export default (options = {}): Hook => {
     return async (context: HookContext): Promise<HookContext> => {
-
-        const loggedUser = context.params.user;
-        if (loggedUser && !loggedUser.isAdmin)
-            throw new Forbidden('Only admins can delete tokens!')
 
         const email: string = context.params.query?.email;
         const token: number = Number(context.params.query?.token);
@@ -34,9 +30,11 @@ export default (options = {}): Hook => {
             }
         }))[0];
 
-        if (!storedToken || storedToken.token !== token)
+        if (!storedToken || storedToken.token !== token) {
+            const loggedUser = context.params.user;
             if (!loggedUser || !loggedUser.isAdmin) // admin can delete every token
                 throw new NotAcceptable('This token is invalid!');
+        }
 
         context.id = storedToken.id;
         delete context.params.query;
