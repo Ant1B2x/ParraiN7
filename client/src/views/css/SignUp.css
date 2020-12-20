@@ -5,9 +5,6 @@
 }
 
 .separator {
-  width: 100%;
-  background-color: lightgrey;
-  border-top: 1px solid rgba(0, 0, 0, .1);
   margin-top: 10px;
   margin-bottom: 10px;
 }
@@ -64,9 +61,8 @@ body.loaded > div.preloader {
 }
 
 .hasError {
-  color: #721c24 !important;
-  background-color: #f8d7da !important;
-  border-color: #f5c6cb !important;
+  color: #dc6b6b;
+  border-color: #f5c6cb;
 }
 
 .hasError .form-group .input-group > .input-group-prepend > .input-group-text > svg {

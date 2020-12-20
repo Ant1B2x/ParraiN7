@@ -110,7 +110,6 @@
                 </div>
             </div>
         </div>
-        <MessageState ref="MessageState"/>
     </div>
 </template>
 
@@ -119,25 +118,17 @@
 </style>
 
 <script lang="ts">
-import {Component, Ref, Vue} from 'vue-property-decorator';
+import {Component, Prop, Vue} from 'vue-property-decorator';
 import app from "@/feathers-client";
 import MessageState from '@/components/MessageState.vue';
 import {institutionalEmailEnd} from '@/config';
 
-@Component({
-    components: {
-        MessageState
-    }
-})
+@Component
 export default class LogIn extends Vue {
 
-    public data() {
-        return {
-            institutionalEmailEnd: institutionalEmailEnd
-        };
-    }
+    private institutionalEmailEnd = institutionalEmailEnd;
 
-    @Ref('MessageState') messageState!: MessageState;
+    @Prop() messageState!: MessageState;
 
     private nameValidity =
         RegExp("^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$");

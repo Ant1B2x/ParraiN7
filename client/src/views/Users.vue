@@ -15,7 +15,7 @@
         <!-- Ligne séparatrice -->
         <hr class="separator"/>
 
-        <div class="text-muted mb-5">Modification d'un utilisateur, vous modifier vous-même vous déconnectera</div>
+        <div class="text-muted">Modification d'un utilisateur, vous modifier vous-même vous déconnectera</div>
 
         <!-- Afficher users existantes -->
         <div class="userInformation" v-if="selectedUser">
@@ -54,14 +54,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="buttons">
+                <div class="buttons mt-5">
                     <button type="button" class="btn btn-danger" v-if="this.user.id !== this.selectedUser.id" v-on:click="removeUser">Supprimer</button>
                     <button type="button" class="btn btn-warning" :disabled="!userChanged" v-on:click="resetUser">Réinitialiser</button>
                     <button type="button" class="btn btn-primary" :disabled="!userChanged" v-on:click="sendUserModifications">Valider</button>
                 </div>
             </form>
         </div>
-        <MessageState ref="MessageState"/>
     </div>
 </template>
 
@@ -70,7 +69,7 @@
 </style>
 
 <script lang="ts">
-import {Component, Prop, Ref, Vue} from 'vue-property-decorator';
+import {Component, Prop, Vue} from 'vue-property-decorator';
 import app from "@/feathers-client";
 import MessageState from "@/components/MessageState.vue";
 
@@ -97,15 +96,11 @@ export class User {
     }
 }
 
-@Component({
-    components: {
-        MessageState,
-    }
-})
+@Component
 export default class Users extends Vue {
 
     @Prop() user?: User | null;
-    @Ref('MessageState') messageState!: MessageState;
+    @Prop() messageState!: MessageState;
 
     private users: User[] = [];
     private usersOriginal: User[] = [];

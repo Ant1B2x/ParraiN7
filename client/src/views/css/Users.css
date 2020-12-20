@@ -16,14 +16,6 @@
   max-width: 150px;
 }
 
-.userArea .separator {
-  width: 100%;
-  background-color: lightgrey;
-  border-top: 1px solid rgba(0, 0, 0, .1);
-  margin-top: 50px;
-  margin-bottom: 50px;
-}
-
 .userArea .userInformation {
   min-width: 500px;
   margin: auto;
@@ -52,21 +44,19 @@
   padding-bottom: 1.5rem !important
 }
 
-.arrows {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-around;
-}
-
-.buttons {
+.userArea .buttons {
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-end;
 }
 
-.buttons button  {
+.userArea .buttons button  {
   margin-right: 20px;
   margin-bottom: 30px;
+}
+
+.userArea .separator {
+  margin-top: unset;
 }
 
 @media (max-width: 900px) {

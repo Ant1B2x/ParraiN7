@@ -6,11 +6,11 @@
                 <font-awesome-icon icon="star"/>
             </li>
         </ul>
-        <div v-if="hasCounter" class="info counter">
+        <!--div v-if="hasCounter" class="info counter">
             <span class="score-rating">{{ grade }}</span>
             <span class="divider">/</span>
             <span class="score-max">{{ maxStars }}</span>
-        </div>
+        </div-->
     </div>
 </template>
 <script lang="ts">
