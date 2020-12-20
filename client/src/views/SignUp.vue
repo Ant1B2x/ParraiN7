@@ -1,7 +1,7 @@
 <template>
     <div class="container d-flex flex-column">
         <div class="row align-items-center justify-content-center">
-            <div class="col-md-6 py-2 py-md-0">
+            <div class="py-2 py-md-0">
                 <div class="card shadow zindex-100 mb-0">
                     <div class="card-body px-md-5 py-5" :class="{ 'hasError': signUpValidation.hasError }">
                         <div class="mb-5">
@@ -96,8 +96,8 @@
                                     <label class="custom-control-label" for="godsonRadio">Filleul</label>
                                 </div>
                             </div>
-                            <div class="mt-4">
-                                <button type="button" class="btn btn-block btn-primary" v-on:click="signUp"
+                            <div class="mt-5">
+                                <button type="button" class="btn btn-primary" v-on:click="signUp"
                                         :disabled="signUpValidation.hasError">S'inscrire
                                 </button>
                             </div>
