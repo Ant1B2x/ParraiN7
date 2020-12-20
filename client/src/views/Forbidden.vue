@@ -2,7 +2,7 @@
     <div>
         <h1 id="title">403</h1>
         <p>Accès interdit</p>
-        <img width="250px" src="img/brand/forbidden.png"/>
+        <img class="mt-5" width="250px" src="img/brand/forbidden.png"/>
     </div>
 </template>
 
