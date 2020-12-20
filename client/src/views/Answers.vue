@@ -33,7 +33,6 @@
                 </div>
             </div>
         </div>
-        <MessageState ref="MessageState"/>
     </div>
 </template>
 
@@ -42,7 +41,7 @@
 </style>
 
 <script lang="ts">
-import {Component, Prop, Ref, Vue} from 'vue-property-decorator';
+import {Component, Prop, Vue} from 'vue-property-decorator';
 import app from "@/feathers-client";
 import {User} from "@/views/Users.vue";
 import MessageState from "@/components/MessageState.vue";
@@ -67,15 +66,11 @@ export class QuestionWithAnswer {
     }
 }
 
-@Component({
-    components: {
-        MessageState
-    }
-})
+@Component
 export default class Answers extends Vue {
 
     @Prop() user?: User;
-    @Ref('MessageState') messageState!: MessageState;
+    @Prop() messageState!: MessageState;
 
     questionsWithAnswers: QuestionWithAnswer[] = [];
     // Forced to use such methods to render view properly on data change, because view.js needs it.

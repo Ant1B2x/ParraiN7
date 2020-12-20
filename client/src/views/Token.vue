@@ -49,7 +49,6 @@
                 </div>
             </div>
         </div>
-        <MessageState ref="MessageState"/>
     </div>
 </template>
 
@@ -58,29 +57,21 @@
 </style>
 
 <script lang="ts">
-import {Component, Prop, Ref, Vue} from 'vue-property-decorator';
+import {Component, Prop, Vue} from 'vue-property-decorator';
 import {User} from "@/views/Users.vue";
 import MessageState from "@/components/MessageState.vue";
 import app from "@/feathers-client";
 import {institutionalEmailEnd} from '@/config';
 
-@Component({
-    components: {
-        MessageState
-    }
-})
+@Component
 export default class Token extends Vue {
 
-    public data() {
-        return {
-            institutionalEmailEnd: institutionalEmailEnd
-        };
-    }
+    private institutionalEmailEnd = institutionalEmailEnd;
 
     private tokenLength = 6;
 
     @Prop() user?: User | null;
-    @Ref('MessageState') messageState!: MessageState;
+    @Prop() messageState!: MessageState;
 
     private tokenForm = {
         email: '',
@@ -97,6 +88,7 @@ export default class Token extends Vue {
                     token: this.tokenForm.token
                 }
             });
+            this.messageState.displaySuccess('Le token a bien été validé.');
             await this.$router.push('/login');
         } catch (error) {
             if (error.code === 403)
@@ -106,7 +98,7 @@ export default class Token extends Vue {
             else if (error.code === 406)
                 this.messageState.displayError('Le token saisi est invalide.');
             else
-                this.messageState.displayError("Le token n'a pas pu être confirmé.");
+                this.messageState.displayError("Le token n'a pas pu être validé.");
             this.tokenForm.hasError = true;
         }
     }

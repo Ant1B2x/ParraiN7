@@ -61,7 +61,6 @@
                 </div>
             </form>
         </div>
-        <MessageState ref="MessageState"/>
     </div>
 </template>
 
@@ -70,7 +69,7 @@
 </style>
 
 <script lang="ts">
-import {Component, Prop, Ref, Vue} from 'vue-property-decorator';
+import {Component, Prop, Vue} from 'vue-property-decorator';
 import app from "@/feathers-client";
 import MessageState from "@/components/MessageState.vue";
 
@@ -97,15 +96,11 @@ export class User {
     }
 }
 
-@Component({
-    components: {
-        MessageState,
-    }
-})
+@Component
 export default class Users extends Vue {
 
     @Prop() user?: User | null;
-    @Ref('MessageState') messageState!: MessageState;
+    @Prop() messageState!: MessageState;
 
     private users: User[] = [];
     private usersOriginal: User[] = [];

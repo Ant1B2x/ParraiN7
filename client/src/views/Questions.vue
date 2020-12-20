@@ -78,7 +78,6 @@
                 </div>
             </div>
         </div>
-        <MessageState ref="MessageState"/>
     </div>
 </template>
 
@@ -87,7 +86,7 @@
 </style>
 
 <script lang="ts">
-import {Component, Prop, Ref, Vue} from 'vue-property-decorator';
+import {Component, Prop, Vue} from 'vue-property-decorator';
 import app from '@/feathers-client';
 import {User} from '@/views/Users.vue';
 import MessageState from '@/components/MessageState.vue';
@@ -112,11 +111,7 @@ export class Question {
     }
 }
 
-@Component({
-    components: {
-        MessageState
-    }
-})
+@Component
 export default class Questions extends Vue {
 
     questions: Question[] = [];
@@ -128,7 +123,7 @@ export default class Questions extends Vue {
     idEditedQuestion: number | undefined;
 
     @Prop() user?: User | null;
-    @Ref('MessageState') messageState!: MessageState;
+    @Prop() messageState!: MessageState;
 
     async mounted() {
         await this.loadQuestions();

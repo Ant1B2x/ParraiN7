@@ -50,8 +50,6 @@
             </div>
         </div>
 
-        <MessageState ref="MessageState"/>
-
     </div>
 </template>
 
@@ -60,7 +58,7 @@
 </style>
 
 <script lang="ts">
-import {Component, Vue, Prop, Ref} from 'vue-property-decorator';
+import {Component, Vue, Prop} from 'vue-property-decorator';
 import Rating from "@/components/Rating.vue"
 import MessageState from "@/components/MessageState.vue";
 import app from "@/feathers-client";
@@ -107,13 +105,12 @@ export class Godson {
 @Component({
     components: {
         Rating,
-        MessageState,
     }
 })
 export default class Rankings extends Vue {
 
     @Prop() user?: User | null;
-    @Ref('MessageState') messageState!: MessageState;
+    @Prop() messageState!: MessageState;
 
     godsons: Godson[] = [];
     godsonsOriginal: Godson[] = [];
