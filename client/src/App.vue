@@ -67,31 +67,5 @@ export default class App extends Vue {
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-.master-class {
-  display: flex;
-  flex-flow: column;
-  min-height: 100vh;
-}
-
-.content {
-  flex-grow: 1; /* 4 */
-}
-
-/* Hide scrollbar on website */
-html {
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
-  scrollbar-width: none; /* Firefox */
-}
-
-html::-webkit-scrollbar {
-  display: none; /* Safari and Chrome */
-}
+@import "views/css/App.css";
 </style>

@@ -16,14 +16,6 @@
   max-width: 150px;
 }
 
-.rankingArea .separator {
-  width: 100%;
-  background-color: lightgrey;
-  border-top: 1px solid rgba(0, 0, 0, .1);
-  /* margin-top: 50px;
-  margin-bottom: 50px; */
-}
-
 .rankingArea .questionList {
   min-width: 500px;
   margin: auto;
@@ -52,16 +44,6 @@
   padding-bottom: 1.5rem !important
 }
 
-.arrows {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-around;
-}
-
-.buttons {
-  margin-bottom: 1.5rem;
-}
-
 @media (max-width: 600px) {
   .rankingArea .questionList {
     min-width: unset;
@@ -69,6 +51,12 @@
   .rankingArea .questionList .card {
     width: 100%;
     max-width: 500px;
+  }
+}
+
+@media (max-width: 767px) {
+  .arrows {
+    display: none;
   }
 }
 

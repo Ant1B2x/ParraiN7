@@ -25,7 +25,7 @@
 
         </form>
         <!-- Ligne séparatrice -->
-        <hr/>
+        <hr class="separator"/>
         <form>
             <div class="form-group">
                 <label class="form-control-label" for="searchByQuestionInput">Recherche par :</label>

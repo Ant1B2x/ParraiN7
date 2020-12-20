@@ -1,33 +1,32 @@
 <template>
-    <div class="rankingArea">
+        <div class="rankingArea">
 
         <div class="text-muted mb-5">Note selon tes préférences</div>
 
         <form>
             <div class="row justify-content-center">
-                <div class="col col-md-1 align-self-center mb-1 order-1 order-md-0">
+                <div class="arrows col col-md-2 align-self-center mb-1 order-1 order-md-0">
                     <font-awesome-icon icon="arrow-left" :style="{ color: '#171347' }" size="2x" v-on:click="previousGodson()"/>
                 </div>
                 <div class="col-md-auto order-0 order-md-1">
                     <label>
-                        <select class="custom-select" v-model="currentIndex" @change="checkBooleans">
+                        <select class="custom-select text-lg" v-model="currentIndex" @change="checkBooleans">
                             <option selected disabled>Choisissez un filleul</option>
                             <option v-for="godson in godsons" :value="godsons.indexOf(godson)" :key="godson.id">Filleul #{{godsons.indexOf(godson)+1}}</option>
                         </select>
                     </label>
                 </div>
-                <div class="col col-md-1 align-self-center mb-1 order-2 order-md-2">
+                <div class="arrows col col-md-2 align-self-center mb-1 order-2 order-md-2">
                     <font-awesome-icon icon="arrow-right" :style="{ color: '#171347' }" size="2x" v-on:click="nextGodson()"/>
                 </div>
             </div>
         </form>
 
         <div v-if="godsons[this.currentIndex]">
-            <h2 style="color: #152c5b;">Filleul #{{this.currentIndex+1}}</h2>
             <Rating :grade="godsons[this.currentIndex].rank" :maxStars="5" :hasCounter="true" @updatedStars="changeRanking"/>
         </div>
 
-        <div class="buttons">
+        <div class="mb-5">
             <button type="button" class="btn btn-danger" v-on:click="removeVote" :disabled="!this.isRankRemovable">Supprimer</button>
             <button type="button" class="btn btn-primary" v-on:click="sendVote" :disabled="!this.isRankDifferent">Valider</button>
         </div>

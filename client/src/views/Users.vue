@@ -15,7 +15,7 @@
         <!-- Ligne séparatrice -->
         <hr class="separator"/>
 
-        <div class="text-muted mb-5">Modification d'un utilisateur, vous modifier vous-même vous déconnectera</div>
+        <div class="text-muted">Modification d'un utilisateur, vous modifier vous-même vous déconnectera</div>
 
         <!-- Afficher users existantes -->
         <div class="userInformation" v-if="selectedUser">
@@ -54,7 +54,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="buttons">
+                <div class="buttons mt-5">
                     <button type="button" class="btn btn-danger" v-if="this.user.id !== this.selectedUser.id" v-on:click="removeUser">Supprimer</button>
                     <button type="button" class="btn btn-warning" :disabled="!userChanged" v-on:click="resetUser">Réinitialiser</button>
                     <button type="button" class="btn btn-primary" :disabled="!userChanged" v-on:click="sendUserModifications">Valider</button>

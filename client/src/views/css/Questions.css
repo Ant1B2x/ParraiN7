@@ -16,14 +16,6 @@
   max-width: 150px;
 }
 
-.questionArea .separator {
-  width: 100%;
-  background-color: lightgrey;
-  border-top: 1px solid rgba(0, 0, 0, .1);
-  margin-top: 50px;
-  margin-bottom: 50px;
-}
-
 .questionArea .questionList {
   min-width: 500px;
   margin: auto;
