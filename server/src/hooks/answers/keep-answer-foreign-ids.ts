@@ -6,7 +6,8 @@ import {AnswerData} from '../../services/answers/answers.class';
 // ensure that userId and questionId cannot be modified for an answer
 export default (options = {}): Hook => {
     return async (context: HookContext): Promise<HookContext> => {
-        const answer: AnswerData = await context.app.service('answers').get(context.id);
+        const loggedUser = context.params.user;
+        const answer: AnswerData = await context.app.service('answers').get(context.id, {user: loggedUser});
         context.data['userId'] = answer.userId;
         context.data['questionId'] = answer.questionId;
 
